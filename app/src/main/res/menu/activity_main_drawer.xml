@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Strona Główna" />
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Historia" />
+        <item
+            android:id="@+id/nav_raports"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Raporty" />
+        <item
+            android:id="@+id/nav_categories"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Kategorie" />
+        <item
+            android:id="@+id/nav_zlecenie"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Zlecenia stałe" />
+        <item
+            android:id="@+id/nav_template"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Szablony" />
+        <item
+            android:id="@+id/nav_wallet"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Portfele" />
+        <item
+            android:id="@+id/nav_shop_list"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Listy zakupów" />
+        <item
+            android:id="@+id/nav_eksport"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Import i eksport" />
+        <item
+            android:id="@+id/nav_edit"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Personalizacja" />
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Pomoc &amp; opinia" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Ustawienia" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>
+
+</menu>
