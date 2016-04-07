@@ -99,6 +99,10 @@ public class MainActivity extends AppCompatActivity
                 toolbar.setTitle("Raporty");
                 fragment = new RaportPage();
                 break;
+            case R.id.nav_categories:
+                toolbar.setTitle("");
+                fragment = new NewOperation();
+                break;
             default:
                 toolbar.setTitle("Default");
                 fragment = new DefaultPage();
@@ -130,7 +134,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
         // Set other dialog properties
-
+//        builder.set
         // Create the AlertDialog
         AlertDialog dialog = builder.create();
         dialog.show();
