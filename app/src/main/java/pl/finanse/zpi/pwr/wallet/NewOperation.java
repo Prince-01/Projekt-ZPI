@@ -27,9 +27,12 @@ public class NewOperation extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.new_operation, container, false);
-        TextView text = (TextView) view.findViewById(R.id.newOperationLabel);
+
+        /*TextView text = (TextView) view.findViewById(R.id.newOperationLabel);
         Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Montserrat-Regular.otf");
-        text.setTypeface(tf);
+        text.setTypeface(tf);*/
+        
+
         // Inflate the layout for this fragment
         setupUI(view);
         return view;
