@@ -16,17 +16,17 @@ import java.io.IOException;
  */
 public class NewOperation extends Fragment {
     public NewOperation() {
-        // Required empty public constructor
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = getView();
-        TextView text = (TextView) getActivity().findViewById(R.id.newOperationLabel);
+        View view = inflater.inflate(R.layout.new_operation, container, false);
+        TextView text = (TextView) view.findViewById(R.id.newOperationLabel);
         Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Montserrat-Regular.otf");
         text.setTypeface(tf);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.new_operation, container, false);
+        return view;
     }
 }
