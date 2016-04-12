@@ -10,4 +10,5 @@
     <string name="PLN">zł</string>
     <string name="txt_new_operation">Nowa operacja</string>
     <string name="search_title">Wyszukaj</string>
+    <string name="kategorie">Kategorie</string>
 </resources>

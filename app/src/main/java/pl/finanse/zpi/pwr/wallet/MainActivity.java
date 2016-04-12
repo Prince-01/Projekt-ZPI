@@ -21,6 +21,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import pl.finanse.zpi.pwr.wallet.view.CategoriesView;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Toolbar toolbar;
@@ -107,9 +109,13 @@ public class MainActivity extends AppCompatActivity
                 toolbar.setTitle("Raporty");
                 fragment = new RaportPage();
                 break;
-            case R.id.nav_categories:
+            case R.id.nav_history:
                 toolbar.setTitle("");
                 fragment = new NewOperation();
+                break;
+            case R.id.nav_categories:
+                toolbar.setTitle("Kategorie");
+                fragment = new CategoriesView();
                 break;
             default:
                 toolbar.setTitle("Default");
