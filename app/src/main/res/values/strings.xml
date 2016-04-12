@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyMenu</string>
+    <string name="app_name">Wallet</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -7,4 +7,8 @@
     <string name="action_settings">Settings</string>
     <string name="add">Dodaj</string>
     <string name="cancel">Anuluj</string>
+    <string name="PLN">zł</string>
+    <string name="txt_new_operation">Nowa operacja</string>
+    <string name="search_title">Wyszukaj</string>
+    <string name="kategorie">Kategorie</string>
 </resources>

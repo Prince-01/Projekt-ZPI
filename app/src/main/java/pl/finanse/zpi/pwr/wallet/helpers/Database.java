@@ -1,12 +1,18 @@
 package pl.finanse.zpi.pwr.wallet.helpers;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
+
+import java.util.LinkedList;
+import java.util.List;
 
 import pl.finanse.zpi.pwr.wallet.model.Position;
+import pl.finanse.zpi.pwr.wallet.view.Category;
 
 /**
  * Created by Kamil on 01.04.2016.
@@ -40,7 +46,41 @@ public class Database {
         dbConn.close();
     }
 
-    public static void AddNewPosition(Position position) {
+    /**
+     * pobiera tablice kategorii z bazy danych na podstawie ich nadkategorii
+     * zeby uzyskac wszystkie glowne kategorie, jako parametr podajemy "NULL"
+     * @param catName
+     * @return tablica kategorii z bazy danych
+     */
+    public static Category[] GetCategories(Context context,String catName){
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+//        String query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii = ?";
+//        String[] arr= {catName};
+//        Cursor c = db.rawQuery(query,arr);
+        String query = "SELECT Nazwa FROM Kategorie";
+        String[] arr= {};
+        Cursor c = db.rawQuery(query,arr);
+
+        int index = c.getColumnIndex("Nazwa");
+        Category[] cat = new Category[ c.getCount()];
+        Toast.makeText(context,""+c.getCount(),Toast.LENGTH_SHORT).show();
+        int i=0;
+        while(c.moveToNext()){
+            cat[i++] = new Category(c.getString(index),0);
+        }
+        Close();
+        return cat;
+    }
+    public static void AddNewCategory(Context context, Category cat,String nadKategoria) {
+        if(nadKategoria == null)
+            nadKategoria = "NULL";
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = "INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES (?,?)";
+        String[] arr= {cat.categoryName,nadKategoria};
+        db.rawQuery(query,arr);
+        Close();
 
     }
 
@@ -49,6 +89,14 @@ public class Database {
 
         private DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
             super(context, name, factory, version);
+        }
+        //wywolyane tylko raz, podczas tworzenia bazy danych
+        private void CreateDataForFirstUse(SQLiteDatabase db){
+            //tutaj tworzenie kategorii wbudowanych
+            String query = "INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Spozywka',NULL);" +
+                    "INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Samochod',NULL);" +
+                    "INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Inne',NULL);";
+            db.execSQL(query);
         }
 
         /**
@@ -66,6 +114,7 @@ public class Database {
                     "CREATE UNIQUE INDEX Porady_IdPorady ON Porady (IdPorady);" +
                     "CREATE UNIQUE INDEX Pozycje_IdPozycji ON Pozycje (IdPozycji);";
             db.execSQL(create);
+            CreateDataForFirstUse(db);
         }
 
         /**

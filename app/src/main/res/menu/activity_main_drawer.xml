@@ -4,43 +4,43 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_home_24dp"
             android:title="Strona Główna" />
         <item
             android:id="@+id/nav_history"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_restore_24dp"
             android:title="Historia" />
         <item
             android:id="@+id/nav_raports"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_report_24dp"
             android:title="Raporty" />
         <item
             android:id="@+id/nav_categories"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_category_24dp"
             android:title="Kategorie" />
         <item
             android:id="@+id/nav_zlecenie"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_order_24dp"
             android:title="Zlecenia stałe" />
         <item
             android:id="@+id/nav_template"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_star_24dp"
             android:title="Szablony" />
         <item
             android:id="@+id/nav_wallet"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_credit_card_24dp"
             android:title="Portfele" />
         <item
             android:id="@+id/nav_shop_list"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_add_shopping_cart_24dp"
             android:title="Listy zakupów" />
         <item
             android:id="@+id/nav_eksport"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_import_export_24dp"
             android:title="Import i eksport" />
         <item
             android:id="@+id/nav_edit"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_account_box_24dp"
             android:title="Personalizacja" />
         <item
             android:id="@+id/nav_help"
@@ -48,7 +48,7 @@
             android:title="Pomoc &amp; opinia" />
         <item
             android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_settings_24dp"
             android:title="Ustawienia" />
     </group>
 
