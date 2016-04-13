@@ -93,8 +93,8 @@ public class Database {
         //wywolyane tylko raz, podczas tworzenia bazy danych
         private void CreateDataForFirstUse(SQLiteDatabase db){
             //tutaj tworzenie kategorii wbudowanych
-            String query = "INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Spozywka',NULL);" +
-                    "INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Samochod',NULL);" +
+            String query = "INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Spozywka',NULL) " +
+                    "INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Samochod',NULL) " +
                     "INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Inne',NULL);";
             db.execSQL(query);
         }
