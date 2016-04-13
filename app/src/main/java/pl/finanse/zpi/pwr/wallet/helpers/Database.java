@@ -58,10 +58,11 @@ public class Database {
 //        String query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii = ?";
 //        String[] arr= {catName};
 //        Cursor c = db.rawQuery(query,arr);
-        String query = "SELECT Nazwa FROM Kategorie";
-        String[] arr= {};
+        String query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii = ?";
+        String[] arr= {catName};
+        //String[] col = {"Nazwa"};
+        //Cursor c = db.query("Kategorie",col,"NazwaNadkategorii = '"+catName+"'",null,null,null,null);
         Cursor c = db.rawQuery(query,arr);
-
         int index = c.getColumnIndex("Nazwa");
         Category[] cat = new Category[ c.getCount()];
         Toast.makeText(context,""+c.getCount(),Toast.LENGTH_SHORT).show();
@@ -77,11 +78,20 @@ public class Database {
             nadKategoria = "NULL";
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
-        String query = "INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES (?,?)";
-        String[] arr= {cat.categoryName,nadKategoria};
+        String query = "INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii','IdObrazka') VALUES (?,?,?)";
+        String[] arr= {cat.categoryName,nadKategoria,Integer.toString(cat.icon)};
         db.rawQuery(query,arr);
         Close();
-
+    }
+    public static void RemoveCategory(Context context, Category kategoria) {
+        if(kategoria == null)
+            throw new RuntimeException("Spoko takie usuwanie NULLa");
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = "UPDATE Kategorie SET CzyUsunieto=1 WHERE Nazwa = ?;";
+        String[] arr= {kategoria.categoryName};
+        db.rawQuery(query,arr);
+        Close();
     }
 
 
@@ -93,10 +103,10 @@ public class Database {
         //wywolyane tylko raz, podczas tworzenia bazy danych
         private void CreateDataForFirstUse(SQLiteDatabase db){
             //tutaj tworzenie kategorii wbudowanych
-            String query = "INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Spozywka',NULL);" +
-                    "INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Samochod',NULL);" +
-                    "INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Inne',NULL);";
-            db.execSQL(query);
+            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Spozywka',NULL); ");
+            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Samochod',NULL); ");
+            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Inne',NULL);");
+            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Testowa','Inne');");
         }
 
         /**
@@ -104,12 +114,12 @@ public class Database {
          */
         @Override
         public void onCreate(SQLiteDatabase db) {
-            String create = "CREATE TABLE IF NOT EXISTS Kategorie (Nazwa varchar(255) NOT NULL, NazwaNadkategorii varchar(255), PRIMARY KEY (Nazwa), FOREIGN KEY(NazwaNadkategorii) REFERENCES Kategorie(Nazwa));" +
-                    "CREATE TABLE ListyZakupow (IdListy  INTEGER NOT NULL PRIMARY KEY, Nazwa varchar(255) NOT NULL UNIQUE, Pozycje varchar(4095) NOT NULL, CzyKupiono varchar(1023) NOT NULL, CzyUkryte blob, PozycjeIdPozycji integer(10) NOT NULL, FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));" +
-                    "CREATE TABLE Porady (IdPorady  INTEGER NOT NULL PRIMARY KEY, Nazwa varchar(255) NOT NULL, Link varchar(255) NOT NULL);" +
-                    "CREATE TABLE Portfele (Nazwa varchar(255) NOT NULL, Stan double(10) NOT NULL, Waluta varchar(3) DEFAULT 'PLN' NOT NULL, PRIMARY KEY (Nazwa));" +
-                    "CREATE TABLE Pozycje (IdPozycji  INTEGER NOT NULL PRIMARY KEY, Nazwa varchar(255), Wartosc double(20), Data date, Komentarz integer(511), CzyPrzychod blob NOT NULL, CzyUlubiona blob NOT NULL, CzyStale blob NOT NULL, KategorieNazwa varchar(255) NOT NULL, PortfeleNazwa varchar(255) NOT NULL, ListyZakupowIdListy integer(10), FOREIGN KEY(KategorieNazwa) REFERENCES Kategorie(Nazwa), FOREIGN KEY(PortfeleNazwa) REFERENCES Portfele(Nazwa));" +
-                    "CREATE TABLE ZleceniaStale (Nazwa varchar(255) NOT NULL, DataOd date NOT NULL, DataDo date, PozycjeIdPozycji integer(10) NOT NULL, Cyklicznosc integer(10) NOT NULL, Czestotliwosc integer(10) NOT NULL, DniCyklicznosci varchar(127), PRIMARY KEY (Nazwa), FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));" +
+            String create = "CREATE TABLE IF NOT EXISTS Kategorie (Nazwa varchar(255) NOT NULL, NazwaNadkategorii varchar(255), CzyUsuniete blob DEFAULT '0' NOT NULL, IdObrazka integer(20), PRIMARY KEY (Nazwa), FOREIGN KEY(NazwaNadkategorii) REFERENCES Kategorie(Nazwa));" +
+                    "CREATE TABLE IF NOT EXISTS ListyZakupow (IdListy  INTEGER NOT NULL PRIMARY KEY, Nazwa varchar(255) NOT NULL UNIQUE, Pozycje varchar(4095) NOT NULL, CzyKupiono varchar(1023) NOT NULL, CzyUkryte blob, PozycjeIdPozycji integer(10) NOT NULL, FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));" +
+                    "CREATE TABLE IF NOT EXISTS Porady (IdPorady  INTEGER NOT NULL PRIMARY KEY, Nazwa varchar(255) NOT NULL, Link varchar(255) NOT NULL);" +
+                    "CREATE TABLE IF NOT EXISTS Portfele (Nazwa varchar(255) NOT NULL, Stan double(10) NOT NULL, Waluta varchar(3) DEFAULT 'PLN' NOT NULL, PRIMARY KEY (Nazwa));" +
+                    "CREATE TABLE IF NOT EXISTS Pozycje (IdPozycji  INTEGER NOT NULL PRIMARY KEY, Nazwa varchar(255), Wartosc double(20), Data date, Komentarz integer(511), CzyPrzychod blob NOT NULL, CzyUlubiona blob NOT NULL, CzyStale blob NOT NULL, KategorieNazwa varchar(255) NOT NULL, PortfeleNazwa varchar(255) NOT NULL, ListyZakupowIdListy integer(10), FOREIGN KEY(KategorieNazwa) REFERENCES Kategorie(Nazwa), FOREIGN KEY(PortfeleNazwa) REFERENCES Portfele(Nazwa));" +
+                    "CREATE TABLE IF NOT EXISTS ZleceniaStale (Nazwa varchar(255) NOT NULL, DataOd date NOT NULL, DataDo date, PozycjeIdPozycji integer(10) NOT NULL, Cyklicznosc integer(10) NOT NULL, Czestotliwosc integer(10) NOT NULL, DniCyklicznosci varchar(127), PRIMARY KEY (Nazwa), FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));" +
                     "CREATE UNIQUE INDEX ListyZakupow_IdListy ON ListyZakupow (IdListy);" +
                     "CREATE UNIQUE INDEX Porady_IdPorady ON Porady (IdPorady);" +
                     "CREATE UNIQUE INDEX Pozycje_IdPozycji ON Pozycje (IdPozycji);";

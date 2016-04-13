@@ -53,7 +53,7 @@ public class CategoriesAdapter extends ArrayAdapter<Category> {
 
         Category object = data[position];
         holder.txtTitle.setText(object.categoryName);
-        holder.imgIcon.setImageResource(object.icon);
+        //holder.imgIcon.setImageResource(object.icon);
 
         return row;
     }
