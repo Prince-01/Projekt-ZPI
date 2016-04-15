@@ -75,10 +75,10 @@ public class Database {
         Cursor c = db.rawQuery(query,arr);
         int index = c.getColumnIndex("Nazwa");
         Category[] cat = new Category[ c.getCount()];
-        Toast.makeText(context,""+c.getCount(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context,""+c.getCount(),Toast.LENGTH_SHORT).show();
         int i=0;
         while(c.moveToNext()){
-            cat[i++] = new Category(c.getString(index),0);
+            cat[i++] = new Category(c.getString(index),0, arr.length == 0 ? "" : arr[0]);
         }
         Close();
         return cat;
@@ -93,16 +93,15 @@ public class Database {
 //        String[] arr= {catName};
 //        Cursor c = db.rawQuery(query,arr);
         String query = null;
-        query = "SELECT Nazwa FROM Kategorie";
-        String[] col = {"Nazwa"};
+        query = "SELECT Nazwa, NazwaNadkategorii FROM Kategorie";
         //Cursor c = db.query("Kategorie",col,"NazwaNadkategorii = '"+catName+"'",null,null,null,null);
         Cursor c = db.rawQuery(query,null);
-        int index = c.getColumnIndex("Nazwa");
+        int nazIndex = c.getColumnIndex("Nazwa");
+        int nazNadkatInd = c.getColumnIndex("NazwaNadkategorii");
         Category[] cat = new Category[ c.getCount()];
-        Toast.makeText(context,""+c.getCount(),Toast.LENGTH_SHORT).show();
         int i=0;
         while(c.moveToNext()){
-            cat[i++] = new Category(c.getString(index),0);
+            cat[i++] = new Category(c.getString(nazIndex),0,c.getString(nazNadkatInd));
         }
         Close();
         return cat;
