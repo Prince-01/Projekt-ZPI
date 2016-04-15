@@ -3,12 +3,27 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="28sp"
-        android:text="@string/kategorie"
-        android:id="@+id/categoriesHeader" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/categoryHeadIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="left"
+            android:src="@drawable/ic_reply_24dp" />
+
+        <TextView
+            android:id="@+id/categoryHeadText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="22sp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_toRightOf="@+id/categoryHeadIcon" />
+
+    </RelativeLayout>
 
     <ListView
         android:layout_width="match_parent"

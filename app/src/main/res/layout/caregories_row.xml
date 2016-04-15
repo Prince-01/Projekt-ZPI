@@ -3,6 +3,7 @@
     android:layout_height="?android:attr/listPreferredItemHeight">
 
     <RelativeLayout
+        android:id="@+id/categoryRowLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
