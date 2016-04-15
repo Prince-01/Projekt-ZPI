@@ -42,7 +42,7 @@ public class CategoriesView extends Fragment {
         Tutaj był błąd  android.R.layout.list_content ---> R.layout.caregories_row (To moje! :P)
          */
 
-        CategoriesAdapter adapter = new CategoriesAdapter(getActivity(), R.layout.caregories_row, categoriesData);
+        CategoriesAdapter adapter = new CategoriesAdapter(getActivity(), R.layout.categories_row, categoriesData);
         categoriesListView.setAdapter(adapter);
         //tutaj nadpsywanie funkcjonalnosci plusa
         return view;

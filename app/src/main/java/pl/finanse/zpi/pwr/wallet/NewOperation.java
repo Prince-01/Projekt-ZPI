@@ -13,11 +13,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Toast;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -48,8 +53,10 @@ public class NewOperation extends Fragment {
         /*TextView text = (TextView) view.findViewById(R.id.newOperationLabel);
         Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Montserrat-Regular.otf");
         text.setTypeface(tf);*/
-        
-
+        Button button = (Button)view.findViewById(R.id.datePickerBtn);
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getActivity());
+        button.setText(dateFormat.format(date));
         // Inflate the layout for this fragment
         setupUI(view);
         return view;
@@ -81,5 +88,9 @@ public class NewOperation extends Fragment {
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    public void chooseDateClicked(View view) {
+        Toast.makeText(getActivity(),"date picker dialog",2).show();
     }
 }

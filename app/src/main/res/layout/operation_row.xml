@@ -2,28 +2,11 @@
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight">
 
-    <RelativeLayout
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/operationDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:textSize="22sp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/fab_margin" />
-
-        <TextView
-            android:id="@+id/operationTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
-            android:paddingTop="2px"
-            android:layout_below="@id/operationDate"
-            android:layout_marginLeft="@dimen/fab_margin" />
+        android:layout_height="match_parent">
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -31,22 +14,41 @@
             android:layout_centerVertical="true"
             android:background="@null"
             android:tint="#ffffff"
-            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/fab_margin"
             android:src="@drawable/ic_info_24dp"
             android:id="@+id/imageButton" />
 
+        <LinearLayout
+            android:id="@+id/linearLay"
+            android:layout_marginTop="@dimen/list_margin"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_alignLeft="@+id/imageButton">
+            <TextView
+                android:id="@+id/operationName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffffff"
+                android:textSize="22sp"
+                android:layout_centerVertical="true" />
+
+            <TextView
+                android:id="@+id/operationTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+        </LinearLayout>
+
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/operationCost"
-            android:layout_centerVertical="true"
-            android:layout_gravity="right|left"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-    </RelativeLayout>
-
+            android:id="@+id/operationCost" />
+    </LinearLayout>
 
 
 </FrameLayout>
