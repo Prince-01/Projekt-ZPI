@@ -83,6 +83,31 @@ public class Database {
         Close();
         return cat;
     }
+
+    public static Category[] GetAllCategories(Context context){
+
+
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+//        String query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii = ?";
+//        String[] arr= {catName};
+//        Cursor c = db.rawQuery(query,arr);
+        String query = null;
+        query = "SELECT Nazwa FROM Kategorie";
+        String[] col = {"Nazwa"};
+        //Cursor c = db.query("Kategorie",col,"NazwaNadkategorii = '"+catName+"'",null,null,null,null);
+        Cursor c = db.rawQuery(query,null);
+        int index = c.getColumnIndex("Nazwa");
+        Category[] cat = new Category[ c.getCount()];
+        Toast.makeText(context,""+c.getCount(),Toast.LENGTH_SHORT).show();
+        int i=0;
+        while(c.moveToNext()){
+            cat[i++] = new Category(c.getString(index),0);
+        }
+        Close();
+        return cat;
+    }
+
     public static void AddNewCategory(Context context, Category cat,String nadKategoria) {
         if(nadKategoria == null)
             nadKategoria = "NULL";

@@ -33,7 +33,7 @@ public class OperationsAdapter extends ArrayAdapter<Operation> {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new RowBeanHolder();
-            holder.dateLabel = (TextView) row.findViewById(R.id.operationDate);
+            holder.nameLabel = (TextView) row.findViewById(R.id.operationName);
             holder.categoryName = (TextView) row.findViewById(R.id.operationTitle);
             holder.cost = (TextView) row.findViewById(R.id.operationCost);
             row.setTag(holder);
@@ -42,15 +42,15 @@ public class OperationsAdapter extends ArrayAdapter<Operation> {
         }
         Operation object = data[position];
 //        SimpleDateFormat sdf = new SimpleDateFormat(String.valueOf(DateFormat.getDateInstance()), Locale.ENGLISH);
-//        holder.dateLabel.setText(sdf.format(object.date));
-        holder.dateLabel.setText("8 marca 2016");
+//        holder.nameLabel.setText(sdf.format(object.date));
+        holder.nameLabel.setText("Nazwa");
         holder.categoryName.setText(object.operationName);
         holder.cost.setText(String.valueOf(object.cost));
         return row;
     }
 
     static class RowBeanHolder {
-        TextView dateLabel;
+        TextView nameLabel;
         TextView categoryName;
         TextView cost;
     }
