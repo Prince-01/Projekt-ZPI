@@ -48,19 +48,29 @@ public class Database {
 
     /**
      * pobiera tablice kategorii z bazy danych na podstawie ich nadkategorii
-     * zeby uzyskac wszystkie glowne kategorie, jako parametr podajemy "NULL"
+     * zeby uzyskac wszystkie glowne kategorie, jako parametr podajemy nulla
      * @param catName
      * @return tablica kategorii z bazy danych
      */
     public static Category[] GetCategories(Context context,String catName){
+
+
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
 //        String query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii = ?";
 //        String[] arr= {catName};
 //        Cursor c = db.rawQuery(query,arr);
-        String query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii = ?";
-        String[] arr= {catName};
-        //String[] col = {"Nazwa"};
+        String query = null;
+        String[] arr = null;
+        if(catName == null){
+            query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii IS NULL";
+            arr = new String[0];
+        }else{
+            query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii = ?";
+            arr = new String[]{catName};
+
+        }
+        String[] col = {"Nazwa"};
         //Cursor c = db.query("Kategorie",col,"NazwaNadkategorii = '"+catName+"'",null,null,null,null);
         Cursor c = db.rawQuery(query,arr);
         int index = c.getColumnIndex("Nazwa");
@@ -114,7 +124,8 @@ public class Database {
          */
         @Override
         public void onCreate(SQLiteDatabase db) {
-            String create = "CREATE TABLE IF NOT EXISTS Kategorie (Nazwa varchar(255) NOT NULL, NazwaNadkategorii varchar(255), CzyUsuniete blob DEFAULT '0' NOT NULL, IdObrazka integer(20), PRIMARY KEY (Nazwa), FOREIGN KEY(NazwaNadkategorii) REFERENCES Kategorie(Nazwa));" +
+            String create =
+                    "CREATE TABLE IF NOT EXISTS Kategorie (Nazwa varchar(255) NOT NULL, NazwaNadkategorii varchar(255), CzyUsuniete blob DEFAULT '0' NOT NULL, IdObrazka integer(20), PRIMARY KEY (Nazwa), FOREIGN KEY(NazwaNadkategorii) REFERENCES Kategorie(Nazwa));" +
                     "CREATE TABLE IF NOT EXISTS ListyZakupow (IdListy  INTEGER NOT NULL PRIMARY KEY, Nazwa varchar(255) NOT NULL UNIQUE, Pozycje varchar(4095) NOT NULL, CzyKupiono varchar(1023) NOT NULL, CzyUkryte blob, PozycjeIdPozycji integer(10) NOT NULL, FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));" +
                     "CREATE TABLE IF NOT EXISTS Porady (IdPorady  INTEGER NOT NULL PRIMARY KEY, Nazwa varchar(255) NOT NULL, Link varchar(255) NOT NULL);" +
                     "CREATE TABLE IF NOT EXISTS Portfele (Nazwa varchar(255) NOT NULL, Stan double(10) NOT NULL, Waluta varchar(3) DEFAULT 'PLN' NOT NULL, PRIMARY KEY (Nazwa));" +

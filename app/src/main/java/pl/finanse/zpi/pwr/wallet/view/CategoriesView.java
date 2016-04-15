@@ -36,7 +36,7 @@ public class CategoriesView extends Fragment {
 
         //przypisawnie liscie adaptera i danych
         categoriesListView = (ListView) view.findViewById(R.id.listViewCategories);
-        categoriesData = Database.GetCategories(getActivity(),"NULL");//tworzenie aktualnej listy kategorii
+        categoriesData = Database.GetCategories(getActivity(),null);//tworzenie aktualnej listy kategorii, na poczatku z glownymi
 
         /*
         Tutaj był błąd  android.R.layout.list_content ---> R.layout.caregories_row (To moje! :P)
