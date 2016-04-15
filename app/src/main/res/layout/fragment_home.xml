@@ -6,8 +6,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Sweet home Alabama"
-        android:id="@+id/textView2"
+        android:text="Stan konta: -564,00 zł"
+        android:id="@+id/TotalBalance"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/negativeValue"
+        android:textStyle="bold"
+        android:textSize="30dp" />
+
+    <View android:layout_height="1px" android:layout_width="fill_parent" android:background="#ffffff"
+        android:layout_below="@+id/textView9"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/view" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Ostatnie operacje"
+        android:id="@+id/textView9"
+        android:layout_below="@+id/TotalBalance"
+        android:layout_centerHorizontal="true"
+        android:textSize="18dp" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lastOperationsListView"
+        android:layout_below="@+id/view"
         android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

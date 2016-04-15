@@ -5,20 +5,31 @@ import android.app.Fragment;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Debug;
+import android.provider.ContactsContract;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.Arrays;
+
+import pl.finanse.zpi.pwr.wallet.helpers.Database;
+import pl.finanse.zpi.pwr.wallet.view.CategoriesAdapter;
+import pl.finanse.zpi.pwr.wallet.view.Category;
 
 /**
  * Created by sebastiankotarski on 07.04.16.
  */
 public class NewOperation extends Fragment {
+    FloatingActionButton fab;
     public NewOperation() {
 
     }
@@ -27,6 +38,12 @@ public class NewOperation extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.new_operation, container, false);
+        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fab.setVisibility(View.INVISIBLE);
+        Spinner categoriesSpinner = (Spinner) view.findViewById(R.id.spinner);
+
+        ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(getActivity(), android.R.layout.simple_spinner_item, Database.GetAllCategories(getActivity()));
+        categoriesSpinner.setAdapter(adapter);
 
         /*TextView text = (TextView) view.findViewById(R.id.newOperationLabel);
         Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Montserrat-Regular.otf");
@@ -37,7 +54,11 @@ public class NewOperation extends Fragment {
         setupUI(view);
         return view;
     }
-
+    @Override
+    public void onDestroyView() {
+        fab.setVisibility(View.VISIBLE);
+        super.onDestroyView();
+    }
     public void setupUI(View view) {
         //Set up touch listener for non-text box views to hide keyboard.
         if(!(view instanceof EditText)) {

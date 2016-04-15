@@ -17,7 +17,7 @@
             android:textSize="30sp"
             android:ems="10"
             android:id="@+id/editText"
-            android:text="Kwota"
+            android:hint="Kwota"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/textView8"
             android:layout_toStartOf="@+id/textView8" />
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/editText2"
-            android:text="Tytuł(opcjonalnie)"
+            android:hint="Tytuł(opcjonalnie)"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
