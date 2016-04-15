@@ -95,7 +95,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="data"
-            android:id="@+id/datePickerBtn" />
+            android:onClick="chooseDateClicked"
+            android:id="@+id/datePickerBtn"
+            />
     </LinearLayout>
 
     <Button
