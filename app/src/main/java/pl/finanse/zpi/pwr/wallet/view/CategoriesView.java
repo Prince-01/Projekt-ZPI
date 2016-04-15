@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
@@ -36,14 +37,14 @@ public class CategoriesView extends Fragment {
 
         //przypisawnie liscie adaptera i danych
         categoriesListView = (ListView) view.findViewById(R.id.listViewCategories);
-        categoriesData = Database.GetCategories(getActivity(),null);//tworzenie aktualnej listy kategorii, na poczatku z glownymi
-
-        /*
-        Tutaj był błąd  android.R.layout.list_content ---> R.layout.caregories_row (To moje! :P)
-         */
-
-        CategoriesAdapter adapter = new CategoriesAdapter(getActivity(), R.layout.caregories_row, categoriesData);
-        categoriesListView.setAdapter(adapter);
+//        categoriesData = Database.GetCategories(getActivity(),null);//tworzenie aktualnej listy kategorii, na poczatku z glownymi
+//
+//        /*
+//        Tutaj był błąd  android.R.layout.list_content ---> R.layout.caregories_row (To moje! :P)
+//         */
+//
+//        CategoriesAdapter adapter = new CategoriesAdapter(getActivity(), R.layout.caregories_row, categoriesData);
+//        categoriesListView.setAdapter(adapter);
         //tutaj nadpsywanie funkcjonalnosci plusa
         return view;
     }
@@ -67,7 +68,7 @@ public void onStart(){
         tv.setText(newCategory == null ? "Kategorie" : newCategory);
         //TODO setonclick wracajace do nadkategorii
         //koniec ustawiania napisu
-        CategoriesAdapter adapter = new CategoriesAdapter(getActivity(), R.layout.caregories_row, categoriesData);
+        CategoriesAdapter adapter = new CategoriesAdapter(getActivity(), R.layout.categories_row, categoriesData);
         categoriesListView.setAdapter(adapter);
         categoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
