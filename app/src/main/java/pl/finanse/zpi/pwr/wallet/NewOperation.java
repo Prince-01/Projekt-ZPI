@@ -61,6 +61,8 @@ public class NewOperation extends Fragment {
         setupUI(view);
         return view;
     }
+
+
     @Override
     public void onDestroyView() {
         fab.setVisibility(View.VISIBLE);

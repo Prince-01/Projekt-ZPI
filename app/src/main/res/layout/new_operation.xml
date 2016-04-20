@@ -16,7 +16,7 @@
             android:inputType="numberDecimal"
             android:textSize="30sp"
             android:ems="10"
-            android:id="@+id/editText"
+            android:id="@+id/kwotaNowejKategorii"
             android:hint="Kwota"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/textView8"
@@ -39,7 +39,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/editText2"
+            android:id="@+id/tytulNowejOperacji"
             android:hint="Tytuł(opcjonalnie)"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
@@ -68,14 +68,15 @@
                 android:layout_height="wrap_content"
                 android:text="Wpływ"
                 android:id="@+id/radioButton"
-                android:layout_below="@+id/datePicker3"
+                android:layout_below="@+id/wplywNowejOperacji"
                 android:layout_alignLeft="@+id/datePicker3"
                 android:layout_alignStart="@+id/datePicker3" />
             <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Wydatek"
-                android:id="@+id/radioButton2" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wydatek"
+                    android:id="@+id/wydatekNowejOperacji"
+                    android:checked="true"/>
 
         </RadioGroup>
 
@@ -107,6 +108,8 @@
             android:id="@+id/button2"
             android:layout_gravity="center"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:onClick="onAddPosition"
+    />
 
     </LinearLayout>

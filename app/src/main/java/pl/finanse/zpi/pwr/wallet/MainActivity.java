@@ -19,14 +19,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
+import pl.finanse.zpi.pwr.wallet.helpers.Database;
+import pl.finanse.zpi.pwr.wallet.model.Position;
 import pl.finanse.zpi.pwr.wallet.view.CategoriesView;
+import pl.finanse.zpi.pwr.wallet.view.Category;
+import pl.finanse.zpi.pwr.wallet.view.Operation;
+
+import static android.R.attr.category;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -171,6 +176,38 @@ public class MainActivity extends AppCompatActivity
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "datePicker");
+    }
+
+    public void onAddPosition(View v) {
+        EditText kwota = (EditText) findViewById(R.id.kwotaNowejKategorii);
+        EditText tytul = (EditText) findViewById(R.id.tytulNowejOperacji);
+        Button date = (Button) findViewById(R.id.datePickerBtn);
+        Spinner categories = (Spinner) findViewById(R.id.spinner);
+        RadioButton wplyw = (RadioButton) findViewById(R.id.wplywNowejOperacji);
+
+        Category cat = (Category) categories.getSelectedItem();
+        String kw = kwota.getText().toString();
+        String ty = tytul.getText().toString();
+        Date dt = new Date(date.getText().toString());
+        boolean wp = false;
+
+        if(kw .equals("")) {
+            Toast.makeText(MainActivity.this, "Brak kwoty ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        float fkw = Float.parseFloat(kw);
+        if(fkw <= 0f) {
+            Toast.makeText(MainActivity.this, "Kwota musi byc wieksza od 0", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Operation operation = new Operation(ty, fkw, dt, wp, cat);
+
+        Database.AddQuickNewPosition(getApplicationContext(), operation);
+
+        DefaultPage newFragment = new DefaultPage();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.mainContent, newFragment).commit();
     }
 
     public static class DatePickerFragment extends DialogFragment
