@@ -1,10 +1,6 @@
 package pl.finanse.zpi.pwr.wallet;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.app.*;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,30 +14,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.*;
+import pl.finanse.zpi.pwr.wallet.helpers.Database;
+import pl.finanse.zpi.pwr.wallet.model.Category;
+import pl.finanse.zpi.pwr.wallet.model.Operation;
+import pl.finanse.zpi.pwr.wallet.model.Wallet;
+import pl.finanse.zpi.pwr.wallet.views.*;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import pl.finanse.zpi.pwr.wallet.helpers.Database;
-import pl.finanse.zpi.pwr.wallet.model.Wallet;
-import pl.finanse.zpi.pwr.wallet.views.CategoriesView;
-import pl.finanse.zpi.pwr.wallet.model.Category;
-import pl.finanse.zpi.pwr.wallet.model.Operation;
-import pl.finanse.zpi.pwr.wallet.views.CategoriesView;
-import pl.finanse.zpi.pwr.wallet.views.DefaultPage;
-import pl.finanse.zpi.pwr.wallet.views.HomePage;
-import pl.finanse.zpi.pwr.wallet.views.NewOperation;
-import pl.finanse.zpi.pwr.wallet.views.RaportPage;
-import pl.finanse.zpi.pwr.wallet.views.StandingOperationView;
-import pl.finanse.zpi.pwr.wallet.views.WalletView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
