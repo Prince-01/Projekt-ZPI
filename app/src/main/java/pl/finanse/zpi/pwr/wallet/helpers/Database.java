@@ -136,7 +136,6 @@ public class Database {
 
         Operation[] operations = new Operation[ c.getCount()];
         int i=0;
-        Toast.makeText(context, String.valueOf(c.getCount()), Toast.LENGTH_SHORT).show();
         while(c.moveToNext()){
             try {
                 operations[i++] = new Operation(c.getString(portIndex), c.getString(nazIndex),c.getFloat(wartIndex),(new SimpleDateFormat("yyyy-MM-dd")).parse(c.getString(datIndex)), c.getInt(przIndex) == 0 ? false : true, c.getString(knazIndex));
