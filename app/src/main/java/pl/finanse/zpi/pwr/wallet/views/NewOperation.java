@@ -43,7 +43,7 @@ public class NewOperation extends Fragment {
         ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(getActivity(), android.R.layout.simple_spinner_item, Database.GetAllCategories(getActivity()));
         categoriesSpinner.setAdapter(adapter);
 
-        /*TextView text = (TextView) view.findViewById(R.id.newOperationLabel);
+        /*TextView text = (TextView) view.findViewById(R.id.NewOperationLabel);
         Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Montserrat-Regular.otf");
         text.setTypeface(tf);*/
         Button button = (Button)view.findViewById(R.id.datePickerBtn);

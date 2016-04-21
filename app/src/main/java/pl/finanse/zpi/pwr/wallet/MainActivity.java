@@ -1,12 +1,10 @@
 package pl.finanse.zpi.pwr.wallet;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -136,34 +134,9 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    /*
-    Tego chyba nie używamy, co z tym??
-     */
-    public void showNewOperationForm() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        Toast.makeText(getApplicationContext(), "ELO ELO ELO", Toast.LENGTH_LONG).show();
-// Add the buttons
-        builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User cancelled the dialog
-            }
-        });
-        // Set other dialog properties
-//        builder.set
-        // Create the AlertDialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
     public void addNewOperation() {
         toolbar.setTitle(R.string.txt_new_operation);
         Fragment fragment = new NewOperation();
-
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.mainContent, fragment).commit();
     }

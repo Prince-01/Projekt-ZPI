@@ -28,7 +28,4 @@ public class Operation {
         this.cost = cost;
         this.date = date;
     }
-
-
-
 }
