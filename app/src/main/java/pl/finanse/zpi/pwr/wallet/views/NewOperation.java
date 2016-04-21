@@ -22,6 +22,7 @@ import java.util.Date;
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Category;
+import pl.finanse.zpi.pwr.wallet.model.Wallet;
 
 /**
  * Created by sebastiankotarski on 07.04.16.
@@ -38,10 +39,15 @@ public class NewOperation extends Fragment {
         View view = inflater.inflate(R.layout.new_operation, container, false);
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setVisibility(View.INVISIBLE);
-        Spinner categoriesSpinner = (Spinner) view.findViewById(R.id.spinner);
+        Spinner categoriesSpinner = (Spinner) view.findViewById(R.id.categoriesSpinner);
+        Spinner walletsSpinner = (Spinner) view.findViewById(R.id.walletsSpinner);
 
-        ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(getActivity(), android.R.layout.simple_spinner_item, Database.GetAllCategories(getActivity()));
-        categoriesSpinner.setAdapter(adapter);
+        ArrayAdapter<Category> categoryArrayAdapter = new ArrayAdapter<Category>(getActivity(), android.R.layout.simple_spinner_item,
+                Database.GetAllCategories(getActivity()));
+        categoriesSpinner.setAdapter(categoryArrayAdapter);
+        ArrayAdapter<Wallet> walletArrayAdapter = new ArrayAdapter<Wallet>(getActivity(), android.R.layout.simple_spinner_item,
+                Database.GetAllWallets(getActivity()));
+        walletsSpinner.setAdapter(walletArrayAdapter);
 
         /*TextView text = (TextView) view.findViewById(R.id.NewOperationLabel);
         Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Montserrat-Regular.otf");

@@ -11,15 +11,15 @@ import pl.finanse.zpi.pwr.wallet.model.Category;
  */
 public class Operation {
     public String operationName;
-    public Category category;
+    public String wallet;
+    public String category;
     public Date date;
     public float cost; //// TODO: 14.04.16 Money money
     public boolean isIncome;
 
-    //Do dodania
-    private Wallet wallet;
 
-    public Operation(String operationName, float cost, Date date, boolean isIncome, Category category) {
+    public Operation(String wallet, String operationName, float cost, Date date, boolean isIncome, String category) {
+        this.wallet = wallet;
         this.operationName = operationName;
         this.cost = cost;
         this.date = date;

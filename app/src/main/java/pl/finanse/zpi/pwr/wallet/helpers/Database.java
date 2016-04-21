@@ -1,5 +1,6 @@
 package pl.finanse.zpi.pwr.wallet.helpers;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -10,6 +11,12 @@ import android.widget.Toast;
 
 import pl.finanse.zpi.pwr.wallet.model.Category;
 import pl.finanse.zpi.pwr.wallet.model.Operation;
+import pl.finanse.zpi.pwr.wallet.model.Wallet;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Kamil on 01.04.2016.
@@ -80,16 +87,10 @@ public class Database {
     }
 
     public static Category[] GetAllCategories(Context context){
-
-
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
-//        String query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii = ?";
-//        String[] arr= {catName};
-//        Cursor c = db.rawQuery(query,arr);
         String query = null;
         query = "SELECT Nazwa, NazwaNadkategorii FROM Kategorie WHERE CzyUsunieto=0";
-        //Cursor c = db.query("Kategorie",col,"NazwaNadkategorii = '"+catName+"'",null,null,null,null);
         Cursor c = db.rawQuery(query,null);
         int nazIndex = c.getColumnIndex("Nazwa");
         int nazNadkatInd = c.getColumnIndex("NazwaNadkategorii");
@@ -100,6 +101,51 @@ public class Database {
         }
         Close();
         return cat;
+    }
+    public static Wallet[] GetAllWallets(Context context){
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = null;
+        query = "SELECT Nazwa, Stan, Waluta FROM Portfele";
+        Cursor c = db.rawQuery(query,null);
+        int nazIndex = c.getColumnIndex("Nazwa");
+        int stIndex = c.getColumnIndex("Stan");
+        int walIndex = c.getColumnIndex("Waluta");
+
+        Wallet[] wallets = new Wallet[ c.getCount()];
+        int i=0;
+        while(c.moveToNext()){
+            wallets[i++] = new Wallet(c.getString(nazIndex),c.getFloat(stIndex),c.getString(walIndex));
+        }
+        Close();
+        return wallets;
+    }
+
+    public static Operation[] GetAllPositions(Context context){
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = null;
+        query = "SELECT Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje";
+        Cursor c = db.rawQuery(query,null);
+        int nazIndex = c.getColumnIndex("Nazwa");
+        int wartIndex = c.getColumnIndex("Wartosc");
+        int datIndex = c.getColumnIndex("Data");
+        int przIndex = c.getColumnIndex("CzyPrzychod");
+        int knazIndex = c.getColumnIndex("KategorieNazwa");
+        int portIndex = c.getColumnIndex("PortfeleNazwa");
+
+        Operation[] operations = new Operation[ c.getCount()];
+        int i=0;
+        Toast.makeText(context, String.valueOf(c.getCount()), Toast.LENGTH_SHORT).show();
+        while(c.moveToNext()){
+            try {
+                operations[i++] = new Operation(c.getString(portIndex), c.getString(nazIndex),c.getFloat(wartIndex),(new SimpleDateFormat("yyyy-MM-dd")).parse(c.getString(datIndex)), c.getInt(przIndex) == 0 ? false : true, c.getString(knazIndex));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        Close();
+        return operations;
     }
 
     public static void AddNewCategory(Context context, Category cat,String nadKategoria) {
@@ -143,13 +189,17 @@ public class Database {
     }
 
     public static void AddQuickNewPosition(Context context, Operation operacja) {
-        String insert = "INSERT INTO Pozycje('Nazwa', 'Wartosc', 'Data', 'CzyPrzychod', 'KategorieNazwa') VALUES(?,?,?,?,?);";
 
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
-        String[] arr = { operacja.operationName, String.valueOf(operacja.cost), String.valueOf(operacja.date),
-        Integer.toString(operacja.isIncome ? 1 : 0), operacja.category.categoryName };
-        db.rawQuery(insert, arr);
+        ContentValues values = new ContentValues();
+        values.put("Nazwa", operacja.operationName);
+        values.put("Wartosc", operacja.cost);
+        values.put("Data", (new SimpleDateFormat("yyyy-MM-dd")).format(operacja.date));
+        values.put("CzyPrzychod", operacja.isIncome ? 1 : 0);
+        values.put("KategorieNazwa", operacja.category);
+        values.put("PortfeleNazwa", operacja.wallet);
+        db.insert("Pozycje", null, values);
         Close();
     }
 
@@ -203,6 +253,7 @@ public class Database {
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Testowa 7','Inne');");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Testowa 8','Testowa 7');");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Testowa 9','Testowa 7');");
+            db.execSQL("INSERT INTO Portfele ('Nazwa', 'Stan', 'Waluta') VALUES ('Moj portfel', 1280.0, 'PLN');");
         }
 
         /**
@@ -210,17 +261,19 @@ public class Database {
          */
         @Override
         public void onCreate(SQLiteDatabase db) {
-            String create =
-                    "CREATE TABLE IF NOT EXISTS Kategorie (Nazwa varchar(255) NOT NULL, NazwaNadkategorii varchar(255), CzyUsunieto INTEGER DEFAULT 0  NOT NULL, IdObrazka integer(20), PRIMARY KEY (Nazwa), FOREIGN KEY(NazwaNadkategorii) REFERENCES Kategorie(Nazwa));" +
-                    "CREATE TABLE IF NOT EXISTS ListyZakupow (IdListy  INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY, Nazwa varchar(255) NOT NULL UNIQUE, Pozycje varchar(4095) NOT NULL, CzyKupiono varchar(1023) NOT NULL, CzyUkryte INTEGER DEFAULT 0, PozycjeIdPozycji integer(10) NOT NULL, FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));" +
-                    "CREATE TABLE IF NOT EXISTS Porady (IdPorady INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY, Nazwa varchar(255) NOT NULL, Link varchar(255) NOT NULL);" +
-                    "CREATE TABLE IF NOT EXISTS Portfele (Nazwa varchar(255) NOT NULL, Stan double(10) NOT NULL, Waluta varchar(3) DEFAULT 'PLN' NOT NULL, PRIMARY KEY (Nazwa));" +
-                    "CREATE TABLE IF NOT EXISTS Pozycje (IdPozycji INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY, Nazwa varchar(255), Wartosc double(20), Data date, Komentarz integer(511), CzyPrzychod INTEGER DEFAULT 0 NOT NULL, CzyUlubiona INTEGER DEFAULT 0 NOT NULL, CzyStale INTEGER DEFAULT 0 NOT NULL, KategorieNazwa varchar(255) NOT NULL, PortfeleNazwa varchar(255) NOT NULL, ListyZakupowIdListy integer(10), FOREIGN KEY(KategorieNazwa) REFERENCES Kategorie(Nazwa), FOREIGN KEY(PortfeleNazwa) REFERENCES Portfele(Nazwa));" +
-                    "CREATE TABLE IF NOT EXISTS ZleceniaStale (Nazwa varchar(255) NOT NULL, DataOd date NOT NULL, DataDo date, PozycjeIdPozycji integer(10) NOT NULL, Cyklicznosc integer(10) NOT NULL, Czestotliwosc integer(10) NOT NULL, DniCyklicznosci varchar(127), PRIMARY KEY (Nazwa), FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));" +
-                    "CREATE UNIQUE INDEX ListyZakupow_IdListy ON ListyZakupow (IdListy);" +
-                    "CREATE UNIQUE INDEX Porady_IdPorady ON Porady (IdPorady);" +
-                    "CREATE UNIQUE INDEX Pozycje_IdPozycji ON Pozycje (IdPozycji);";
-            db.execSQL(create);
+            String[] create = new String[] {
+                    "CREATE TABLE IF NOT EXISTS Kategorie (Nazwa varchar(255) NOT NULL, NazwaNadkategorii varchar(255), CzyUsunieto INTEGER DEFAULT 0  NOT NULL, IdObrazka integer(20), PRIMARY KEY (Nazwa), FOREIGN KEY(NazwaNadkategorii) REFERENCES Kategorie(Nazwa));",
+                    "CREATE TABLE IF NOT EXISTS Portfele (Nazwa varchar(255) NOT NULL, Stan double(10) DEFAULT 0 NOT NULL, Waluta varchar(3) DEFAULT 'PLN' NOT NULL, PRIMARY KEY (Nazwa));",
+                    "CREATE TABLE IF NOT EXISTS Pozycje (IdPozycji INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255), Wartosc double(10) NOT NULL, Data date, Komentarz integer(511), CzyPrzychod INTEGER DEFAULT 0 NOT NULL, CzyUlubiona INTEGER DEFAULT 0 NOT NULL, CzyStale INTEGER DEFAULT 0 NOT NULL, KategorieNazwa varchar(255) NOT NULL, PortfeleNazwa varchar(255) NOT NULL, ListyZakupowIdListy integer(10), FOREIGN KEY(KategorieNazwa) REFERENCES Kategorie(Nazwa), FOREIGN KEY(PortfeleNazwa) REFERENCES Portfele(Nazwa));",
+                    "CREATE TABLE IF NOT EXISTS ListyZakupow (IdListy INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255) NOT NULL UNIQUE, Pozycje varchar(4095) NOT NULL, CzyKupiono varchar(1023) NOT NULL, CzyUkryte INTEGER DEFAULT 0, PozycjeIdPozycji integer(10) NOT NULL, FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));",
+                    "CREATE TABLE IF NOT EXISTS Porady (IdPorady INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255) NOT NULL, Link varchar(255) NOT NULL);",
+                    "CREATE TABLE IF NOT EXISTS ZleceniaStale (Nazwa varchar(255) NOT NULL, DataOd date NOT NULL, DataDo date, PozycjeIdPozycji integer(10) NOT NULL, Cyklicznosc integer(10) NOT NULL, Czestotliwosc integer(10) NOT NULL, DniCyklicznosci varchar(127), PRIMARY KEY (Nazwa), FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));",
+                    "CREATE UNIQUE INDEX ListyZakupow_IdListy ON ListyZakupow (IdListy);",
+                    "CREATE UNIQUE INDEX Porady_IdPorady ON Porady (IdPorady);",
+                    "CREATE UNIQUE INDEX Pozycje_IdPozycji ON Pozycje (IdPozycji);" };
+            for(String c : create)
+                db.execSQL(c);
+
             CreateDataForFirstUse(db);
         }
 

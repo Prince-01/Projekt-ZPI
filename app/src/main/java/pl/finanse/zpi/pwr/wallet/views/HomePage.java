@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import pl.finanse.zpi.pwr.wallet.R;
+import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Operation;
 import pl.finanse.zpi.pwr.wallet.adapters.OperationsAdapter;
 
@@ -42,19 +43,7 @@ public class HomePage extends Fragment {
     Tutaj tworzę kateogie na sztywno, to ma być wczytywane z bazy danych
      */
     private void makeData() {
-        operationsData = new Operation[] {
-                new Operation("Odkuarz",567.00f,Calendar.getInstance().getTime()),
-                new Operation("Latarka",567.00f,Calendar.getInstance().getTime()),
-                new Operation("Inne",567.00f,Calendar.getInstance().getTime()),
-                new Operation("nazwa1",567.00f,Calendar.getInstance().getTime()),
-                new Operation("nazwa2",567.00f,Calendar.getInstance().getTime()),
-                new Operation("nazwa3",567.00f,Calendar.getInstance().getTime()),
-                new Operation("nazwa4",567.00f,Calendar.getInstance().getTime()),
-                new Operation("nazwa5",567.00f,Calendar.getInstance().getTime()),
-                new Operation("nazwa6",567.00f,Calendar.getInstance().getTime()),
-                new Operation("nazwa7",567.00f,Calendar.getInstance().getTime()),
-                new Operation("nazwa8",567.00f,Calendar.getInstance().getTime())
-        };
+        operationsData = Database.GetAllPositions(getActivity().getApplicationContext());
     }
 
 
