@@ -16,6 +16,9 @@ public class Operation {
     public float cost; //// TODO: 14.04.16 Money money
     public boolean isIncome;
 
+    //Do dodania
+    private Wallet wallet;
+
     public Operation(String operationName, float cost, Date date, boolean isIncome, Category category) {
         this.operationName = operationName;
         this.cost = cost;
