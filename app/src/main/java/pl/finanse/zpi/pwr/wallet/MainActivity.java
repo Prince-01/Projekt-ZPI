@@ -25,18 +25,19 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import pl.finanse.zpi.pwr.wallet.helpers.Database;
-import pl.finanse.zpi.pwr.wallet.model.Position;
-import pl.finanse.zpi.pwr.wallet.view.CategoriesView;
-import pl.finanse.zpi.pwr.wallet.view.Category;
-import pl.finanse.zpi.pwr.wallet.view.Operation;
-
-import static android.R.attr.category;
+import pl.finanse.zpi.pwr.wallet.views.CategoriesView;
+import pl.finanse.zpi.pwr.wallet.model.Category;
+import pl.finanse.zpi.pwr.wallet.model.Operation;
+import pl.finanse.zpi.pwr.wallet.views.DefaultPage;
+import pl.finanse.zpi.pwr.wallet.views.HomePage;
+import pl.finanse.zpi.pwr.wallet.views.NewOperation;
+import pl.finanse.zpi.pwr.wallet.views.RaportPage;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Toolbar toolbar;
     SearchView mSearchView;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +47,11 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
-                //showNewOperationForm();
-
                 addNewOperation();
             }
         });
@@ -67,6 +64,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Fragment fragment = new HomePage();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.mainContent, fragment).commit();
     }
 
     @Override
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -107,8 +107,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-
         Fragment fragment = null;
 
         switch (id) {
@@ -120,10 +118,6 @@ public class MainActivity extends AppCompatActivity
                 toolbar.setTitle("Raporty");
                 fragment = new RaportPage();
                 break;
-            case R.id.nav_history:
-                toolbar.setTitle("");
-                fragment = new NewOperation();
-                break;
             case R.id.nav_categories:
                 toolbar.setTitle("Kategorie");
                 fragment = new CategoriesView();
@@ -132,18 +126,19 @@ public class MainActivity extends AppCompatActivity
                 toolbar.setTitle("Default");
                 fragment = new DefaultPage();
         }
-
+        //Replace mainContent with specified fragment
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.mainContent, fragment).commit();
 
         // Close the drawer
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    /*
+    Tego chyba nie używamy, co z tym??
+     */
     public void showNewOperationForm() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         Toast.makeText(getApplicationContext(), "ELO ELO ELO", Toast.LENGTH_LONG).show();
@@ -183,12 +178,13 @@ public class MainActivity extends AppCompatActivity
         EditText tytul = (EditText) findViewById(R.id.tytulNowejOperacji);
         Button date = (Button) findViewById(R.id.datePickerBtn);
         Spinner categories = (Spinner) findViewById(R.id.spinner);
-        RadioButton wplyw = (RadioButton) findViewById(R.id.wplywNowejOperacji);
+        //RadioButton wplyw = (RadioButton) findViewById(R.id.wplywNowejOperacji);
 
         Category cat = (Category) categories.getSelectedItem();
         String kw = kwota.getText().toString();
         String ty = tytul.getText().toString();
-        Date dt = new Date(date.getText().toString());
+        //Date dt = new Date(date.getText().toString());
+        Date dt = new Date();
         boolean wp = false;
 
         if(kw .equals("")) {
@@ -203,7 +199,7 @@ public class MainActivity extends AppCompatActivity
 
         Operation operation = new Operation(ty, fkw, dt, wp, cat);
 
-        Database.AddQuickNewPosition(getApplicationContext(), operation);
+        //Database.AddQuickNewPosition(getApplicationContext(), operation);
 
         DefaultPage newFragment = new DefaultPage();
         FragmentManager fragmentManager = getFragmentManager();

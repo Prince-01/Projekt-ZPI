@@ -1,12 +1,8 @@
-package pl.finanse.zpi.pwr.wallet;
+package pl.finanse.zpi.pwr.wallet.views;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.res.AssetManager;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Debug;
-import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,17 +14,14 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.io.IOException;
-import java.util.Arrays;
 
+import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
-import pl.finanse.zpi.pwr.wallet.view.CategoriesAdapter;
-import pl.finanse.zpi.pwr.wallet.view.Category;
+import pl.finanse.zpi.pwr.wallet.model.Category;
 
 /**
  * Created by sebastiankotarski on 07.04.16.

@@ -11,7 +11,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
         <EditText
-            android:layout_width="278dp"
+            android:layout_width="275dp"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
             android:textSize="30sp"
@@ -20,7 +20,8 @@
             android:hint="Kwota"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/textView8"
-            android:layout_toStartOf="@+id/textView8" />
+            android:layout_toStartOf="@+id/textView8"
+            android:gravity="right"/>
 
         <TextView
             android:layout_width="45dp"

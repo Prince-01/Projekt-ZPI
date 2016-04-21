@@ -1,4 +1,4 @@
-package pl.finanse.zpi.pwr.wallet.view;
+package pl.finanse.zpi.pwr.wallet.views;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -6,18 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import pl.finanse.zpi.pwr.wallet.R;
+import pl.finanse.zpi.pwr.wallet.adapters.CategoriesAdapter;
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
+import pl.finanse.zpi.pwr.wallet.model.Category;
 
 /**
  * Created by rober on 12.04.2016.

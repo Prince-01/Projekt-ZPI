@@ -5,15 +5,10 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
 
 
-import java.util.LinkedList;
-import java.util.List;
-
-import pl.finanse.zpi.pwr.wallet.model.Position;
-import pl.finanse.zpi.pwr.wallet.view.Category;
-import pl.finanse.zpi.pwr.wallet.view.Operation;
+import pl.finanse.zpi.pwr.wallet.model.Category;
+import pl.finanse.zpi.pwr.wallet.model.Operation;
 
 /**
  * Created by Kamil on 01.04.2016.

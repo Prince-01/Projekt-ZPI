@@ -1,6 +1,8 @@
-package pl.finanse.zpi.pwr.wallet.view;
+package pl.finanse.zpi.pwr.wallet.model;
 
 import java.util.Date;
+
+import pl.finanse.zpi.pwr.wallet.model.Category;
 
 /**
  * Created by sebastiankotarski on 14.04.16.

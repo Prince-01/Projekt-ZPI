@@ -1,4 +1,4 @@
-package pl.finanse.zpi.pwr.wallet.view;
+package pl.finanse.zpi.pwr.wallet.model;
 
 /**
  * Created by rober on 12.04.2016.

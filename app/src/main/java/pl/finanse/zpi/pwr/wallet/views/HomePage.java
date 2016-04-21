@@ -1,4 +1,4 @@
-package pl.finanse.zpi.pwr.wallet;
+package pl.finanse.zpi.pwr.wallet.views;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -10,8 +10,9 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-import pl.finanse.zpi.pwr.wallet.view.Operation;
-import pl.finanse.zpi.pwr.wallet.view.OperationsAdapter;
+import pl.finanse.zpi.pwr.wallet.R;
+import pl.finanse.zpi.pwr.wallet.model.Operation;
+import pl.finanse.zpi.pwr.wallet.adapters.OperationsAdapter;
 
 /**
  * Created by Robert on 2016-04-01.

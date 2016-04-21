@@ -1,4 +1,4 @@
-package pl.finanse.zpi.pwr.wallet.view;
+package pl.finanse.zpi.pwr.wallet.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import pl.finanse.zpi.pwr.wallet.R;
+import pl.finanse.zpi.pwr.wallet.model.Operation;
 
 /**
  * Created by sebastiankotarski on 14.04.16.
@@ -49,9 +50,9 @@ public class OperationsAdapter extends ArrayAdapter<Operation> {
         return row;
     }
 
-    static class RowBeanHolder {
-        TextView nameLabel;
-        TextView categoryName;
-        TextView cost;
+    public static class RowBeanHolder {
+        public TextView nameLabel;
+        public TextView categoryName;
+        public TextView cost;
     }
 }
