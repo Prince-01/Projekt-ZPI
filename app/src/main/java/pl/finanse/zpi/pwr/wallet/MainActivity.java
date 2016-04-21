@@ -30,6 +30,7 @@ import pl.finanse.zpi.pwr.wallet.views.DefaultPage;
 import pl.finanse.zpi.pwr.wallet.views.HomePage;
 import pl.finanse.zpi.pwr.wallet.views.NewOperation;
 import pl.finanse.zpi.pwr.wallet.views.RaportPage;
+import pl.finanse.zpi.pwr.wallet.views.WalletView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -119,6 +120,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_categories:
                 toolbar.setTitle("Kategorie");
                 fragment = new CategoriesView();
+                break;
+            case R.id.nav_wallet:
+                toolbar.setTitle("Portfele");
+                fragment = new WalletView();
                 break;
             default:
                 toolbar.setTitle("Default");

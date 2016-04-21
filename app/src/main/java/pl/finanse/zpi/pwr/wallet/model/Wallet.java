@@ -11,4 +11,8 @@ public class Wallet {
         this.name = name;
         state = 0;
     }
+
+    public String getName() {
+        return name;
+    }
 }
