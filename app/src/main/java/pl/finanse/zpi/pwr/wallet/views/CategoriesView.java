@@ -1,7 +1,9 @@
 package pl.finanse.zpi.pwr.wallet.views;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.adapters.CategoriesAdapter;
@@ -20,7 +23,7 @@ import pl.finanse.zpi.pwr.wallet.model.Category;
  */
 public class CategoriesView extends Fragment {
     private ListView categoriesListView;
-    Category[] categoriesData;
+   private  Category[] categoriesData;
 
     public CategoriesView() {
         // Required empty public constructor
@@ -57,13 +60,13 @@ public void onStart(){
      */
 
     public void setNewList(final String newCategory){
-        Category[] categoriesData = Database.GetCategories(getActivity(),newCategory);//tworzenie aktualnej listy kategorii, na poczatku z glownymi
-        if(categoriesData.length == 0) //gdy kategoria nie ma subkategorii
+        Category[] catTab = Database.GetCategories(getActivity(),newCategory);//tworzenie aktualnej listy kategorii, na poczatku z glownymi
+        if(catTab.length == 0) //gdy kategoria nie ma subkategorii
             return;
+        categoriesData = catTab;//tutaj zapamietywanie danych, zeby nie bylo, ze trzyammy sobie gowniana pusta tablice
         //ustawianie gornego napis
         final TextView tv = (TextView) getView().findViewById(R.id.categoryHeadText);
         tv.setText(newCategory == null ? "Kategorie" : newCategory);
-        //TODO setonclick wracajace do nadkategorii
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,8 +81,34 @@ public void onStart(){
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String catName = ((CategoriesAdapter.RowBeanHolder) view.getTag()).txtTitle.getText().toString();
                 setNewList(catName);
-               // Toast.makeText(getActivity(),((CategoriesAdapter.RowBeanHolder)view.getTag()).txtTitle.getText(),Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(),((CategoriesAdapter.RowBeanHolder)view.getTag()).txtTitle.getText(),Toast.LENGTH_SHORT).show();
             }
         });
+        categoriesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final Category cat = categoriesData[position];
+               // Toast.makeText(getActivity(), "Kliknieto dlugo", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
+                b.setMessage("Czy na pewno chcesz usunąć tą kategorię?");
+                b.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Database.RemoveCategory(getActivity(), cat);
+                        ReloadList();
+                    }
+                });
+                b.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                b.create().show();
+                return false;
+            }
+        });
+    }
+    public void ReloadList(){
+        setNewList(((TextView) getView().findViewById(R.id.categoryHeadText)).getText().toString());
     }
 }

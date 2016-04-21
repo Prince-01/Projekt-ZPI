@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 
 import pl.finanse.zpi.pwr.wallet.model.Category;
@@ -57,16 +58,16 @@ public class Database {
         String query = null;
         String[] arr = null;
         if(catName == null){
-            query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii IS NULL";
+            query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii IS NULL AND CzyUsunieto=0";
             arr = new String[0];
         }else{
-            query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii = ?";
+            query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii = ? AND CzyUsunieto=0";
             arr = new String[]{catName};
 
         }
         String[] col = {"Nazwa"};
         //Cursor c = db.query("Kategorie",col,"NazwaNadkategorii = '"+catName+"'",null,null,null,null);
-        Cursor c = db.rawQuery(query,arr);
+        Cursor c = db.rawQuery(query, arr);
         int index = c.getColumnIndex("Nazwa");
         Category[] cat = new Category[ c.getCount()];
         //Toast.makeText(context,""+c.getCount(),Toast.LENGTH_SHORT).show();
@@ -87,7 +88,7 @@ public class Database {
 //        String[] arr= {catName};
 //        Cursor c = db.rawQuery(query,arr);
         String query = null;
-        query = "SELECT Nazwa, NazwaNadkategorii FROM Kategorie";
+        query = "SELECT Nazwa, NazwaNadkategorii FROM Kategorie WHERE CzyUsunieto=0";
         //Cursor c = db.query("Kategorie",col,"NazwaNadkategorii = '"+catName+"'",null,null,null,null);
         Cursor c = db.rawQuery(query,null);
         int nazIndex = c.getColumnIndex("Nazwa");
@@ -142,7 +143,7 @@ public class Database {
     }
 
     public static void AddQuickNewPosition(Context context, Operation operacja) {
-        String insert = "INSERT INTO Pozycje('Nazwa', 'Wartosc', 'Data', 'CzyPrzychod', 'KategorieNazwa') VALUES(?,?,?,?,?)";
+        String insert = "INSERT INTO Pozycje('Nazwa', 'Wartosc', 'Data', 'CzyPrzychod', 'KategorieNazwa') VALUES(?,?,?,?,?);";
 
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
@@ -151,17 +152,36 @@ public class Database {
         db.rawQuery(insert, arr);
         Close();
     }
+
+    /**
+     * "usuowa" podajna kategorie z bazy danych, tak naprawde nie usuow, tylko ja ukrywa polem pomocniczym
+     * @param context
+     * @param kategoria
+     */
     public static void RemoveCategory(Context context, Category kategoria) {
+        Toast.makeText(context, "RemoveCategory", Toast.LENGTH_SHORT).show();
         if(kategoria == null)
             throw new RuntimeException("Spoko takie usuwanie NULLa");
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = "UPDATE Kategorie SET CzyUsunieto=1 WHERE Nazwa = ?;";
         String[] arr= {kategoria.categoryName};
-        db.rawQuery(query,arr);
+        db.rawQuery(query, arr);
         Close();
     }
 
+    /**
+     * przywraca widocznosc dla wszystkich usunietych kategorii
+     * @param context
+     * @return
+     */
+    public static void RestoreAllCategories(Context context){
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = "UPDATE Kategorie SET CzyUsunieto=0;";
+        db.rawQuery(query,new String[0]);
+        Close();
+    }
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -191,7 +211,7 @@ public class Database {
         @Override
         public void onCreate(SQLiteDatabase db) {
             String create =
-                    "CREATE TABLE IF NOT EXISTS Kategorie (Nazwa varchar(255) NOT NULL, NazwaNadkategorii varchar(255), CzyUsuniete INTEGER DEFAULT 0  NOT NULL, IdObrazka integer(20), PRIMARY KEY (Nazwa), FOREIGN KEY(NazwaNadkategorii) REFERENCES Kategorie(Nazwa));" +
+                    "CREATE TABLE IF NOT EXISTS Kategorie (Nazwa varchar(255) NOT NULL, NazwaNadkategorii varchar(255), CzyUsunieto INTEGER DEFAULT 0  NOT NULL, IdObrazka integer(20), PRIMARY KEY (Nazwa), FOREIGN KEY(NazwaNadkategorii) REFERENCES Kategorie(Nazwa));" +
                     "CREATE TABLE IF NOT EXISTS ListyZakupow (IdListy  INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY, Nazwa varchar(255) NOT NULL UNIQUE, Pozycje varchar(4095) NOT NULL, CzyKupiono varchar(1023) NOT NULL, CzyUkryte INTEGER DEFAULT 0, PozycjeIdPozycji integer(10) NOT NULL, FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));" +
                     "CREATE TABLE IF NOT EXISTS Porady (IdPorady INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY, Nazwa varchar(255) NOT NULL, Link varchar(255) NOT NULL);" +
                     "CREATE TABLE IF NOT EXISTS Portfele (Nazwa varchar(255) NOT NULL, Stan double(10) NOT NULL, Waluta varchar(3) DEFAULT 'PLN' NOT NULL, PRIMARY KEY (Nazwa));" +
