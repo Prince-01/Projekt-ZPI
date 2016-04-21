@@ -18,7 +18,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -31,10 +35,12 @@ import pl.finanse.zpi.pwr.wallet.model.Wallet;
 import pl.finanse.zpi.pwr.wallet.views.CategoriesView;
 import pl.finanse.zpi.pwr.wallet.model.Category;
 import pl.finanse.zpi.pwr.wallet.model.Operation;
+import pl.finanse.zpi.pwr.wallet.views.CategoriesView;
 import pl.finanse.zpi.pwr.wallet.views.DefaultPage;
 import pl.finanse.zpi.pwr.wallet.views.HomePage;
 import pl.finanse.zpi.pwr.wallet.views.NewOperation;
 import pl.finanse.zpi.pwr.wallet.views.RaportPage;
+import pl.finanse.zpi.pwr.wallet.views.StandingOperationView;
 import pl.finanse.zpi.pwr.wallet.views.WalletView;
 
 public class MainActivity extends AppCompatActivity
@@ -129,6 +135,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_wallet:
                 toolbar.setTitle("Portfele");
                 fragment = new WalletView();
+                break;
+            case R.id.nav_standing_operations:
+                toolbar.setTitle("Zlecenia stałe");
+                fragment = new StandingOperationView();
                 break;
             default:
                 toolbar.setTitle("Default");
