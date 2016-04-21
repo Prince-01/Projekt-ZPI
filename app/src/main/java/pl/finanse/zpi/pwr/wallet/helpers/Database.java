@@ -147,14 +147,27 @@ public class Database {
         return operations;
     }
 
-    public static void AddNewCategory(Context context, Category cat,String nadKategoria) {
-        if(nadKategoria == null)
-            nadKategoria = "NULL";
+    public static void AddNewWallet(Context context, Wallet wallet) {
+
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
-        String query = "INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii','IdObrazka') VALUES (?,?,?)";
-        String[] arr= {cat.categoryName,nadKategoria,Integer.toString(cat.icon)};
-        db.rawQuery(query,arr);
+        ContentValues values = new ContentValues();
+        values.put("Nazwa", wallet.getName());
+        values.put("Stan", wallet.getValue());
+        values.put("Waluta", wallet.getCurrency());
+        db.insert("Portfele", null, values);
+        Close();
+    }
+
+    public static void AddNewCategory(Context context, Category category) {
+
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        ContentValues values = new ContentValues();
+        values.put("Nazwa", category.categoryName);
+        values.put("NazwaNadkategorii", category.superCategory);
+        values.put("IdObrazka", category.icon);
+        db.insert("Kategorie", null, values);
         Close();
     }
 

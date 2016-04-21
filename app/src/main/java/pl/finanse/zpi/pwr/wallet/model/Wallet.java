@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Wallet {
     private String name;
     private float value; // TO DO: money
-    public String currency;
+    private String currency;
     private ArrayList<Operation> operations;
 
     public Wallet(String name) {
@@ -25,6 +25,8 @@ public class Wallet {
     public String getName() {
         return name;
     }
+    public String getCurrency() { return currency; }
+    public float getValue() { return value; }
 
     @Override
     public String toString() {
