@@ -1,6 +1,7 @@
 package pl.finanse.zpi.pwr.wallet.views;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ public class CategoriesView extends Fragment {
 
     public CategoriesView() {
         // Required empty public constructor
+
     }
 
     @Override
@@ -59,9 +61,15 @@ public void onStart(){
         if(categoriesData.length == 0) //gdy kategoria nie ma subkategorii
             return;
         //ustawianie gornego napis
-        TextView tv = (TextView) getView().findViewById(R.id.categoryHeadText);
+        final TextView tv = (TextView) getView().findViewById(R.id.categoryHeadText);
         tv.setText(newCategory == null ? "Kategorie" : newCategory);
         //TODO setonclick wracajace do nadkategorii
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setNewList(Database.GetParentCategory(getActivity(), tv.getText().toString()));
+            }
+        });
         //koniec ustawiania napisu
         CategoriesAdapter adapter = new CategoriesAdapter(getActivity(), R.layout.categories_row, categoriesData);
         categoriesListView.setAdapter(adapter);

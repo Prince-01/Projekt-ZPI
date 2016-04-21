@@ -49,8 +49,6 @@ public class Database {
      * @return tablica kategorii z bazy danych
      */
     public static Category[] GetCategories(Context context,String catName){
-
-
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
 //        String query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii = ?";
@@ -112,6 +110,35 @@ public class Database {
         String[] arr= {cat.categoryName,nadKategoria,Integer.toString(cat.icon)};
         db.rawQuery(query,arr);
         Close();
+    }
+
+    /**
+     * zwraca nadkategoire dla podanej kategorii
+     * @param cat
+     * @return
+     */
+    public static String GetParentCategory(Context context, String cat){
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = null;
+        String[] arr = null;
+        if(cat == null){
+            throw new NullPointerException("Wrzucasz nulla do wyszukiania śmieciu");
+        }else{
+            query = "SELECT NazwaNadkategorii FROM Kategorie WHERE Nazwa = ?";
+            arr = new String[]{cat};
+
+        }
+        String[] col = {"NazwaNadkategorii"};
+        //Cursor c = db.query("Kategorie",col,"NazwaNadkategorii = '"+catName+"'",null,null,null,null);
+        Cursor c = db.rawQuery(query,arr);
+        int index = c.getColumnIndex("NazwaNadkategorii");
+        //Toast.makeText(context,""+c.getCount(),Toast.LENGTH_SHORT).show();
+        while(c.moveToNext()){
+            Close();
+            return c.getString(index);
+        }
+       return null;
     }
 
     public static void AddQuickNewPosition(Context context, Operation operacja) {
