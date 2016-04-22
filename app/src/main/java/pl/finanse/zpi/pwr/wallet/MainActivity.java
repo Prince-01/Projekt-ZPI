@@ -1,6 +1,8 @@
 package pl.finanse.zpi.pwr.wallet;
 
 import android.app.*;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -212,5 +214,14 @@ public class MainActivity extends AppCompatActivity
             DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getActivity());
             button.setText(dateFormat.format(calendar.getTime()));
         }
+    }
+
+    /**
+     * sluzy do pobierania sharedpreferences, zeby wszystko bylo w 1 miejscu
+     * @param context
+     * @return
+     */
+    public static final SharedPreferences GetGlobalSharedPreferences(Context context){
+         return context.getSharedPreferences("ustawienia", Context.MODE_PRIVATE);
     }
 }

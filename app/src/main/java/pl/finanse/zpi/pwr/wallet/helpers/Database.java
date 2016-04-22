@@ -147,6 +147,11 @@ public class Database {
         return operations;
     }
 
+    /**
+     * dodaje nowy portfle do bazy danych
+     * @param context
+     * @param wallet
+     */
     public static void AddNewWallet(Context context, Wallet wallet) {
 
         if(!Open(context))
@@ -159,10 +164,15 @@ public class Database {
         Close();
     }
 
+    /**
+     * dodaje nowa kategorie do bazy danych, w przekazanej kategorii, musi byc usupelnoine pole superCategory
+     * @param context
+     * @param category
+     */
     public static void AddNewCategory(Context context, Category category) {
 
         if(!Open(context))
-            throw new RuntimeException("Blad podczas polaczenia z baza");
+        throw new RuntimeException("Blad podczas polaczenia z baza");
         ContentValues values = new ContentValues();
         values.put("Nazwa", category.categoryName);
         values.put("NazwaNadkategorii", category.superCategory);
