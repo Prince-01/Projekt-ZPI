@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,8 +20,10 @@ import android.widget.Spinner;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import pl.finanse.zpi.pwr.wallet.R;
+import pl.finanse.zpi.pwr.wallet.filters.ValueInputFilter;
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Category;
 import pl.finanse.zpi.pwr.wallet.model.Wallet;
@@ -49,9 +53,7 @@ public class NewOperation extends Fragment {
                 Database.GetAllWallets(getActivity()));
         walletsSpinner.setAdapter(walletArrayAdapter);
 
-        /*TextView text = (TextView) view.findViewById(R.id.NewOperationLabel);
-        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Montserrat-Regular.otf");
-        text.setTypeface(tf);*/
+        ((EditText)view.findViewById(R.id.kwotaNowejKategorii)).setFilters(new InputFilter[] { new ValueInputFilter(10,2) });
         Button button = (Button)view.findViewById(R.id.datePickerBtn);
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getActivity());
