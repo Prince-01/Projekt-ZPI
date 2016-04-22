@@ -299,14 +299,19 @@ public class MainActivity extends AppCompatActivity
     public void addNewCategory() {
         // custom dialog
         final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.new_wallet);
+        dialog.setContentView(R.layout.new_category);
         dialog.setTitle("Nowa kategoria");
 
         // set the custom dialog components - text, image and button
-        TextView text = (TextView) dialog.findViewById(R.id.newWalletName);
-        TextView text1 = (TextView)dialog.findViewById(R.id.textView10);
-        Spinner spinner = (Spinner)dialog.findViewById(R.id.currency_spinner);
-        Button dialogButton = (Button) dialog.findViewById(R.id.addWallet);
+        Spinner spinner = (Spinner)dialog.findViewById(R.id.parentCategory);
+        Spinner spinner2 = (Spinner)dialog.findViewById(R.id.iconForCategory);
+//        spinner2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//            }
+//        });
+        Button dialogButton = (Button) dialog.findViewById(R.id.addCategory);
         // if button is clicked, close the custom dialog
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
