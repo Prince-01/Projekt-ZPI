@@ -12,4 +12,7 @@
     <string name="search_title">Wyszukaj</string>
     <string name="kategorie">Kategorie</string>
     <string name="txt_new_standing_operation">Nowe zlecenie stałe</string>
+    <string name="nazwa_portfela_PL">Podaj nazwę portfela</string>
+    <string name="dodaj_portfel">Dodaj portfel</string>
+    <string name="waluta">Waluta:</string>
 </resources>

@@ -256,4 +256,8 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.mainContent, fragment).commit();
     }
+
+    public void addNewWallet() {
+
+    }
 }
