@@ -35,7 +35,6 @@
             android:layout_alignBottom="@+id/editText"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@+id/kwotaNowejKategorii"
             android:layout_toEndOf="@+id/kwotaNowejKategorii" />
     </RelativeLayout>
 
