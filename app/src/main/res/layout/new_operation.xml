@@ -53,7 +53,14 @@
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:id="@+id/spinner"
+            android:id="@+id/categoriesSpinner"
+            android:layout_below="@+id/editText2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/walletsSpinner"
             android:layout_below="@+id/editText2"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
@@ -63,7 +70,7 @@
             android:gravity="center"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:id="@+id/radioGroup"
+            android:id="@+id/wplywLubWydatekNowejOperacji"
             android:layout_alignParentBottom="true"
             android:layout_alignLeft="@+id/datePicker"
             android:layout_alignStart="@+id/datePicker">
