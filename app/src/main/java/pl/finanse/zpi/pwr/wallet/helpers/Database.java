@@ -65,10 +65,10 @@ public class Database {
         String query = null;
         String[] arr = null;
         if(catName == null){
-            query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii IS NULL AND CzyUsunieto=0";
+            query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii IS NULL";
             arr = new String[0];
         }else{
-            query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii = ? AND CzyUsunieto=0";
+            query = "SELECT Nazwa FROM Kategorie WHERE NazwaNadkategorii = ? ";
             arr = new String[]{catName};
 
         }
@@ -90,7 +90,7 @@ public class Database {
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = null;
-        query = "SELECT Nazwa, NazwaNadkategorii FROM Kategorie WHERE CzyUsunieto=0";
+        query = "SELECT Nazwa, NazwaNadkategorii FROM Kategorie";
         Cursor c = db.rawQuery(query,null);
         int nazIndex = c.getColumnIndex("Nazwa");
         int nazNadkatInd = c.getColumnIndex("NazwaNadkategorii");
@@ -125,7 +125,7 @@ public class Database {
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = null;
-        query = "SELECT Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje";
+        query = "SELECT Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje ORDER BY Data DESC, IdPozycji DESC";
         Cursor c = db.rawQuery(query,null);
         int nazIndex = c.getColumnIndex("Nazwa");
         int wartIndex = c.getColumnIndex("Wartosc");
@@ -221,6 +221,7 @@ public class Database {
      * @param kategoria
      */
     public static void RemoveCategory(Context context, Category kategoria) {
+        //TODO dorobic "triggera", ktory bedzie zmienial kategorie dla pozycji, jesli sie bedzie usuwalo kategoire
         Toast.makeText(context, "RemoveCategory", Toast.LENGTH_SHORT).show();
         if(kategoria == null)
             throw new RuntimeException("Spoko takie usuwanie NULLa");
@@ -228,7 +229,7 @@ public class Database {
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = "UPDATE Kategorie SET CzyUsunieto=1 WHERE Nazwa = ?;";
         String[] arr= {kategoria.categoryName};
-        db.rawQuery(query, arr);
+        db.execSQL(query, arr);
         Close();
     }
 
