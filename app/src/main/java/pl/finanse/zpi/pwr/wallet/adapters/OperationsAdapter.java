@@ -44,7 +44,8 @@ public class OperationsAdapter extends ArrayAdapter<Operation> {
         Operation object = data[position];
 //        SimpleDateFormat sdf = new SimpleDateFormat(String.valueOf(DateFormat.getDateInstance()), Locale.ENGLISH);
 //        holder.nameLabel.setText(sdf.format(object.date));
-        holder.nameLabel.setText("Nazwa");
+//        holder.nameLabel.setText("Nazwa");
+        holder.nameLabel.setText(object.category);
         holder.categoryName.setText(object.operationName);
         holder.cost.setText(String.valueOf(object.cost));
         return row;
