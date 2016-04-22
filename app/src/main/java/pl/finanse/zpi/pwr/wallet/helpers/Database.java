@@ -134,8 +134,8 @@ public class Database {
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = null;
         query = "SELECT Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje WHERE PortfeleNazwa = ? ORDER BY Data DESC, IdPozycji DESC";
-        String[] arr = {Wallet.GetActiveWallet(context)};
-        Cursor c = db.rawQuery(query,null);
+        String[] arr = {Wallet.GetActiveWallet(context).getName()};
+        Cursor c = db.rawQuery(query,arr);
         int nazIndex = c.getColumnIndex("Nazwa");
         int wartIndex = c.getColumnIndex("Wartosc");
         int datIndex = c.getColumnIndex("Data");
@@ -263,6 +263,26 @@ public class Database {
         String query = "UPDATE Kategorie SET CzyUsunieto=0;";
         db.rawQuery(query,new String[0]);
         Close();
+    }
+
+    public static Wallet GetWallet(Context context, String wname) {
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = null;
+        query = "SELECT Stan, Waluta FROM Portfele WHERE Nazwa = ?";
+        String[] arr = new String[] {wname};
+        Cursor c = db.rawQuery(query,arr);
+
+        int stIndex = c.getColumnIndex("Stan");
+        int walIndex = c.getColumnIndex("Waluta");
+
+        Wallet[] wallets = new Wallet[ c.getCount()];
+        int i=0;
+        while(c.moveToNext()){
+            wallets[i++] = new Wallet(wname, c.getFloat(stIndex), c.getString(walIndex));
+        }
+        Close();
+        return wallets[0];
     }
 
     private static class DatabaseHelper extends SQLiteOpenHelper {

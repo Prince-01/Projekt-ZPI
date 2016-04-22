@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(Wallet.GetActiveWallet(this) == null)
+            Wallet.SetActiveWallet(this, Database.GetAllWallets(this)[0].getName());
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

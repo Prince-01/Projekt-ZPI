@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 
 import java.util.ArrayList;
 
+import android.provider.ContactsContract;
 import pl.finanse.zpi.pwr.wallet.MainActivity;
+import pl.finanse.zpi.pwr.wallet.helpers.Database;
 
 /**
  * Created by rober on 21.04.2016.
@@ -15,6 +17,7 @@ public class Wallet {
     private float value; // TO DO: money
     private String currency;
     private ArrayList<Operation> operations;
+    private static Wallet currentWallet = null;
 
     public Wallet(String name) {
         this.name = name;
@@ -47,6 +50,7 @@ public class Wallet {
         SharedPreferences.Editor spe = MainActivity.GetGlobalSharedPreferences(context).edit();
         spe.putString("activeWallet",nazwa);
         spe.commit();
+        currentWallet = Database.GetWallet(context, nazwa);
     }
 
     /**
@@ -54,8 +58,11 @@ public class Wallet {
      * @param context
      * @return
      */
-    public static final String GetActiveWallet(Context context){
+    public static final Wallet GetActiveWallet(Context context){
+        if(currentWallet != null) return currentWallet;
         SharedPreferences sp = MainActivity.GetGlobalSharedPreferences(context);
-        return sp.getString("activeWallet","");
+        String wname = sp.getString("activeWallet","");
+        currentWallet = wname == "" ? null : Database.GetWallet(context, wname);
+        return currentWallet;
     }
 }
