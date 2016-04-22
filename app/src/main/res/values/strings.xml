@@ -15,6 +15,7 @@
     <string name="nazwa_portfela_PL">Podaj nazwę portfela</string>
     <string name="dodaj_portfel">Dodaj portfel</string>
     <string name="waluta">Waluta:</string>
+    <string name="nazwa_kategorii">Nazwa kategorii</string>
     <string-array name="examples">
         <item>Array item</item>
         <item>Array item</item>

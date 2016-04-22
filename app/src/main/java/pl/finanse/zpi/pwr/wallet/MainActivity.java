@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.*;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,12 +20,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
-import pl.finanse.zpi.pwr.wallet.helpers.Database;
-import pl.finanse.zpi.pwr.wallet.model.Category;
-import pl.finanse.zpi.pwr.wallet.model.Operation;
-import pl.finanse.zpi.pwr.wallet.model.Wallet;
-import pl.finanse.zpi.pwr.wallet.views.*;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -261,6 +261,9 @@ public class MainActivity extends AppCompatActivity
             case NEW_STANDING_OPERATION:
                 addNewStandingOperation();
                 break;
+            case NEW_CATEGORY:
+                addNewCategory();
+                break;
             case NEW_WALLET:
                 addNewWallet();
                 break;
@@ -285,6 +288,32 @@ public class MainActivity extends AppCompatActivity
         TextView text1 = (TextView)dialog.findViewById(R.id.textView10);
         Spinner spinner = (Spinner)dialog.findViewById(R.id.currency_spinner);
         Button dialogButton = (Button) dialog.findViewById(R.id.addWallet);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    public void addNewCategory() {
+        // custom dialog
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.new_category);
+        dialog.setTitle("Nowa kategoria");
+
+        // set the custom dialog components - text, image and button
+        Spinner spinner = (Spinner)dialog.findViewById(R.id.parentCategory);
+        Spinner spinner2 = (Spinner)dialog.findViewById(R.id.iconForCategory);
+//        spinner2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//            }
+//        });
+        Button dialogButton = (Button) dialog.findViewById(R.id.addCategory);
         // if button is clicked, close the custom dialog
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
