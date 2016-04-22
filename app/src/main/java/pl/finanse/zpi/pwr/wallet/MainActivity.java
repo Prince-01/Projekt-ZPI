@@ -23,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -261,6 +262,23 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void addNewWallet() {
+        // custom dialog
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.new_wallet);
+        dialog.setTitle("Nowy portfel");
 
+        // set the custom dialog components - text, image and button
+        TextView text = (TextView) dialog.findViewById(R.id.newWalletName);
+        TextView text1 = (TextView)dialog.findViewById(R.id.textView10);
+        Spinner spinner = (Spinner)dialog.findViewById(R.id.currency_spinner);
+        Button dialogButton = (Button) dialog.findViewById(R.id.addWallet);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }
