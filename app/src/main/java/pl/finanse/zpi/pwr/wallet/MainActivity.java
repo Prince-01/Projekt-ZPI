@@ -33,11 +33,26 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
+import pl.finanse.zpi.pwr.wallet.helpers.Database;
+import pl.finanse.zpi.pwr.wallet.model.Category;
+import pl.finanse.zpi.pwr.wallet.model.FabState;
+import pl.finanse.zpi.pwr.wallet.model.Operation;
+import pl.finanse.zpi.pwr.wallet.model.Wallet;
+import pl.finanse.zpi.pwr.wallet.views.CategoriesView;
+import pl.finanse.zpi.pwr.wallet.views.DefaultPage;
+import pl.finanse.zpi.pwr.wallet.views.HomePage;
+import pl.finanse.zpi.pwr.wallet.views.NewOperation;
+import pl.finanse.zpi.pwr.wallet.views.NewStandingOperation;
+import pl.finanse.zpi.pwr.wallet.views.RaportPage;
+import pl.finanse.zpi.pwr.wallet.views.StandingOperationView;
+import pl.finanse.zpi.pwr.wallet.views.WalletView;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Toolbar toolbar;
     SearchView mSearchView;
     FloatingActionButton fab;
+    private FabState fabState = FabState.NEW_OPERATION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +67,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addNewOperation();
+               onHandleClick();
             }
         });
 
@@ -112,26 +127,32 @@ public class MainActivity extends AppCompatActivity
         switch (id) {
             case R.id.nav_home:
                 toolbar.setTitle("Home");
+                fabState = FabState.NEW_OPERATION;
                 fragment = new HomePage();
                 break;
             case R.id.nav_raports:
                 toolbar.setTitle("Raporty");
+                fabState = FabState.NEW_OPERATION;
                 fragment = new RaportPage();
                 break;
             case R.id.nav_categories:
                 toolbar.setTitle("Kategorie");
+                fabState = FabState.NEW_CATEGORY;
                 fragment = new CategoriesView();
                 break;
             case R.id.nav_wallet:
                 toolbar.setTitle("Portfele");
+                fabState = FabState.NEW_WALLET;
                 fragment = new WalletView();
                 break;
             case R.id.nav_standing_operations:
                 toolbar.setTitle("Zlecenia stałe");
+                fabState = FabState.NEW_STANDING_OPERATION;
                 fragment = new StandingOperationView();
                 break;
             default:
                 toolbar.setTitle("Default");
+                fabState = FabState.NEW_OPERATION;
                 fragment = new DefaultPage();
         }
         //Replace mainContent with specified fragment
@@ -252,6 +273,23 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void addNewWallet() {
+        // custom dialog
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.new_wallet);
+        dialog.setTitle("Nowy portfel");
 
+        // set the custom dialog components - text, image and button
+        TextView text = (TextView) dialog.findViewById(R.id.newWalletName);
+        TextView text1 = (TextView)dialog.findViewById(R.id.textView10);
+        Spinner spinner = (Spinner)dialog.findViewById(R.id.currency_spinner);
+        Button dialogButton = (Button) dialog.findViewById(R.id.addWallet);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }
