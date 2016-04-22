@@ -62,7 +62,12 @@ public void onStart(){
     public void setNewList(final String newCategory){
         Category[] catTab = Database.GetCategories(getActivity(),newCategory);//tworzenie aktualnej listy kategorii, na poczatku z glownymi
         if(catTab.length == 0) //gdy kategoria nie ma subkategorii
-            return;
+            if(newCategory !=null) {
+               setNewList(Database.GetParentCategory(getActivity(), newCategory));//na wypadek usuwania, ostatniej kategorii
+                return;
+            }
+            else
+                return;//wywplywane gdy mamy wyswietlic
         categoriesData = catTab;//tutaj zapamietywanie danych, zeby nie bylo, ze trzyammy sobie gowniana pusta tablice
         //ustawianie gornego napis
         final TextView tv = (TextView) getView().findViewById(R.id.categoryHeadText);
@@ -84,6 +89,7 @@ public void onStart(){
                 // Toast.makeText(getActivity(),((CategoriesAdapter.RowBeanHolder)view.getTag()).txtTitle.getText(),Toast.LENGTH_SHORT).show();
             }
         });
+        if(newCategory!=null)//dodajemy usuwanie, tylko jak wyswietlamy kategoire ktore nie sa glowne
         categoriesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
