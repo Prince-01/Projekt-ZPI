@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
 
+import pl.finanse.zpi.pwr.wallet.MainActivity;
 import pl.finanse.zpi.pwr.wallet.model.Category;
 import pl.finanse.zpi.pwr.wallet.model.Operation;
 import pl.finanse.zpi.pwr.wallet.model.Wallet;
@@ -20,6 +21,8 @@ import java.util.Date;
 
 /**
  * Created by Kamil on 01.04.2016.
+ * NIE WYWOŁYWAĆ KURWA ŻADEJ METODY Z DATABASE W METODACH Z DATABASE, BO TO ŚMIERĆ!!!!!!!!!!!!
+ * nie dotyczy to open'a i close'a, ktore musza byc wywolane na poczatku i koncu kazdej metody z database
  */
 public class Database {
     private static SQLiteOpenHelper dbConn;//trzyma polaczenie z baza danych
@@ -121,11 +124,17 @@ public class Database {
         return wallets;
     }
 
+    /**
+     * pobiera pozycje dla alktulanego portfela
+     * @param context
+     * @return
+     */
     public static Operation[] GetAllPositions(Context context){
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = null;
-        query = "SELECT Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje ORDER BY Data DESC, IdPozycji DESC";
+        query = "SELECT Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje WHERE PortfeleNazwa = ? ORDER BY Data DESC, IdPozycji DESC";
+        String[] arr = {Wallet.GetActiveWallet(context)};
         Cursor c = db.rawQuery(query,null);
         int nazIndex = c.getColumnIndex("Nazwa");
         int wartIndex = c.getColumnIndex("Wartosc");
@@ -147,6 +156,11 @@ public class Database {
         return operations;
     }
 
+    /**
+     * dodaje nowy portfle do bazy danych
+     * @param context
+     * @param wallet
+     */
     public static void AddNewWallet(Context context, Wallet wallet) {
 
         if(!Open(context))
@@ -159,10 +173,15 @@ public class Database {
         Close();
     }
 
+    /**
+     * dodaje nowa kategorie do bazy danych, w przekazanej kategorii, musi byc usupelnoine pole superCategory
+     * @param context
+     * @param category
+     */
     public static void AddNewCategory(Context context, Category category) {
 
         if(!Open(context))
-            throw new RuntimeException("Blad podczas polaczenia z baza");
+        throw new RuntimeException("Blad podczas polaczenia z baza");
         ContentValues values = new ContentValues();
         values.put("Nazwa", category.categoryName);
         values.put("NazwaNadkategorii", category.superCategory);
