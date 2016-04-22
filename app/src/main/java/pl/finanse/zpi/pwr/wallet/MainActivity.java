@@ -1,5 +1,10 @@
 package pl.finanse.zpi.pwr.wallet;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.*;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -223,5 +228,30 @@ public class MainActivity extends AppCompatActivity
      */
     public static final SharedPreferences GetGlobalSharedPreferences(Context context){
          return context.getSharedPreferences("ustawienia", Context.MODE_PRIVATE);
+    }
+
+    private void onHandleClick() {
+        switch (fabState) {
+            case NEW_OPERATION:
+                addNewOperation();
+                break;
+            case NEW_STANDING_OPERATION:
+                addNewStandingOperation();
+                break;
+            case NEW_WALLET:
+                addNewWallet();
+                break;
+        }
+    }
+
+    public void addNewStandingOperation() {
+        toolbar.setTitle(R.string.txt_new_standing_operation);
+        Fragment fragment = new NewStandingOperation();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.mainContent, fragment).commit();
+    }
+
+    public void addNewWallet() {
+
     }
 }

@@ -2,6 +2,9 @@ package pl.finanse.zpi.pwr.wallet.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.provider.CalendarContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,8 @@ import android.widget.TextView;
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.model.Operation;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by sebastiankotarski on 14.04.16.
  */
@@ -18,6 +23,7 @@ public class OperationsAdapter extends ArrayAdapter<Operation> {
     Context context;
     int layoutResourceId;
     Operation data[] = null;
+    final DecimalFormat df = new DecimalFormat("#.00");
 
     public OperationsAdapter(Context context, int layoutResourceId, Operation[] data) {
         super(context, layoutResourceId, data);
@@ -47,7 +53,8 @@ public class OperationsAdapter extends ArrayAdapter<Operation> {
 //        holder.nameLabel.setText("Nazwa");
         holder.nameLabel.setText(object.category);
         holder.categoryName.setText(object.operationName);
-        holder.cost.setText(String.valueOf(object.cost));
+        holder.cost.setText(df.format(object.isIncome ? object.cost : -object.cost));
+        holder.cost.setTextColor(object.isIncome ? Color.GREEN : Color.RED);
         return row;
     }
 
