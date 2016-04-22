@@ -133,21 +133,22 @@ public class Database {
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = null;
-        query = "SELECT Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje WHERE PortfeleNazwa = ? ORDER BY Data DESC, IdPozycji DESC";
+        query = "SELECT IdPozycji, Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje WHERE PortfeleNazwa = ? ORDER BY Data DESC, IdPozycji DESC";
         String[] arr = {Wallet.GetActiveWallet(context).getName()};
         Cursor c = db.rawQuery(query,arr);
+        int idIndex = c.getColumnIndex("IdPozycji");
         int nazIndex = c.getColumnIndex("Nazwa");
         int wartIndex = c.getColumnIndex("Wartosc");
         int datIndex = c.getColumnIndex("Data");
         int przIndex = c.getColumnIndex("CzyPrzychod");
         int knazIndex = c.getColumnIndex("KategorieNazwa");
         int portIndex = c.getColumnIndex("PortfeleNazwa");
-
         Operation[] operations = new Operation[ c.getCount()];
+        Toast.makeText(context,"Liczba pozycji: "+operations.length,Toast.LENGTH_SHORT).show();
         int i=0;
         while(c.moveToNext()){
             try {
-                operations[i++] = new Operation(c.getString(portIndex), c.getString(nazIndex),c.getFloat(wartIndex),(new SimpleDateFormat("yyyy-MM-dd")).parse(c.getString(datIndex)), c.getInt(przIndex) == 0 ? false : true, c.getString(knazIndex));
+                operations[i++] = new Operation(c.getInt(idIndex),c.getString(portIndex), c.getString(nazIndex),c.getFloat(wartIndex),(new SimpleDateFormat("yyyy-MM-dd")).parse(c.getString(datIndex)), c.getInt(przIndex) == 0 ? false : true, c.getString(knazIndex));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -261,7 +262,7 @@ public class Database {
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = "UPDATE Kategorie SET CzyUsunieto=0;";
-        db.rawQuery(query,new String[0]);
+        db.rawQuery(query, new String[0]);
         Close();
     }
 
@@ -284,7 +285,14 @@ public class Database {
         Close();
         return wallets[0];
     }
-
+    public static void RemovePosition(Context context, Operation operation){
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = "DELETE FROM Pozycje WHERE IdPozycji= ?";
+        String[] arr = {Integer.toString(operation.id)};
+        db.execSQL(query, arr);
+        Close();
+    }
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
         private DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {

@@ -110,7 +110,7 @@ public void onStart(){
                     }
                 });
                 b.create().show();
-                return false;
+                return true;
             }
         });
     }

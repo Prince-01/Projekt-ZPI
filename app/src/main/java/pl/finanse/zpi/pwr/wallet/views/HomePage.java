@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -36,14 +38,22 @@ public class HomePage extends Fragment {
         makeData();
         OperationsAdapter adapter = new OperationsAdapter(getActivity(), R.layout.operation_row, operationsData);
         lastOperationsListView.setAdapter(adapter);
+        lastOperationsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                return true;
+            }
+        });
         return view;
     }
 
     /*
-    Tutaj tworzę kateogie na sztywno, to ma być wczytywane z bazy danych
+    Tutaj tworzę operacje na sztywno, to ma być wczytywane z bazy danych
      */
     private void makeData() {
         operationsData = Database.GetAllPositions(getActivity().getApplicationContext());
+        //Toast.makeText(getActivity(),"Ilosc portfeli "+Database.GetAllWallets(getActivity())[0],Toast.LENGTH_SHORT).show();
     }
 
 

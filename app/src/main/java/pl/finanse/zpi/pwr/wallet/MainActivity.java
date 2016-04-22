@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        Operation operation = new Operation(wal.getName(), ty, fkw, dt, wp, cat.categoryName);
+        Operation operation = new Operation(-1, wal.getName(), ty, fkw, dt, wp, cat.categoryName);
 
         Database.AddQuickNewPosition(getApplicationContext(), operation);
 
