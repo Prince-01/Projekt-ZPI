@@ -1,6 +1,10 @@
 package pl.finanse.zpi.pwr.wallet;
 
-import android.app.*;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -14,23 +18,38 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
-import pl.finanse.zpi.pwr.wallet.helpers.Database;
-import pl.finanse.zpi.pwr.wallet.model.Category;
-import pl.finanse.zpi.pwr.wallet.model.Operation;
-import pl.finanse.zpi.pwr.wallet.model.Wallet;
-import pl.finanse.zpi.pwr.wallet.views.*;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
+import pl.finanse.zpi.pwr.wallet.helpers.Database;
+import pl.finanse.zpi.pwr.wallet.model.Category;
+import pl.finanse.zpi.pwr.wallet.model.FabState;
+import pl.finanse.zpi.pwr.wallet.model.Operation;
+import pl.finanse.zpi.pwr.wallet.model.Wallet;
+import pl.finanse.zpi.pwr.wallet.views.CategoriesView;
+import pl.finanse.zpi.pwr.wallet.views.DefaultPage;
+import pl.finanse.zpi.pwr.wallet.views.HomePage;
+import pl.finanse.zpi.pwr.wallet.views.NewOperation;
+import pl.finanse.zpi.pwr.wallet.views.NewStandingOperation;
+import pl.finanse.zpi.pwr.wallet.views.RaportPage;
+import pl.finanse.zpi.pwr.wallet.views.StandingOperationView;
+import pl.finanse.zpi.pwr.wallet.views.WalletView;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Toolbar toolbar;
     SearchView mSearchView;
     FloatingActionButton fab;
+    private FabState fabState = FabState.NEW_OPERATION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addNewOperation();
+               onHandleClick();
             }
         });
 
@@ -105,26 +124,32 @@ public class MainActivity extends AppCompatActivity
         switch (id) {
             case R.id.nav_home:
                 toolbar.setTitle("Home");
+                fabState = FabState.NEW_OPERATION;
                 fragment = new HomePage();
                 break;
             case R.id.nav_raports:
                 toolbar.setTitle("Raporty");
+                fabState = FabState.NEW_OPERATION;
                 fragment = new RaportPage();
                 break;
             case R.id.nav_categories:
                 toolbar.setTitle("Kategorie");
+                fabState = FabState.NEW_CATEGORY;
                 fragment = new CategoriesView();
                 break;
             case R.id.nav_wallet:
                 toolbar.setTitle("Portfele");
+                fabState = FabState.NEW_WALLET;
                 fragment = new WalletView();
                 break;
             case R.id.nav_standing_operations:
                 toolbar.setTitle("Zlecenia stałe");
+                fabState = FabState.NEW_STANDING_OPERATION;
                 fragment = new StandingOperationView();
                 break;
             default:
                 toolbar.setTitle("Default");
+                fabState = FabState.NEW_OPERATION;
                 fragment = new DefaultPage();
         }
         //Replace mainContent with specified fragment
@@ -212,5 +237,30 @@ public class MainActivity extends AppCompatActivity
             DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getActivity());
             button.setText(dateFormat.format(calendar.getTime()));
         }
+    }
+
+    private void onHandleClick() {
+        switch (fabState) {
+            case NEW_OPERATION:
+                addNewOperation();
+                break;
+            case NEW_STANDING_OPERATION:
+                addNewStandingOperation();
+                break;
+            case NEW_WALLET:
+                addNewWallet();
+                break;
+        }
+    }
+
+    public void addNewStandingOperation() {
+        toolbar.setTitle(R.string.txt_new_standing_operation);
+        Fragment fragment = new NewStandingOperation();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.mainContent, fragment).commit();
+    }
+
+    public void addNewWallet() {
+
     }
 }

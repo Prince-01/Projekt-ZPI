@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -48,13 +50,23 @@ public class NewStandingOperation extends Fragment {
         Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Montserrat-Regular.otf");
         text.setTypeface(tf);*/
         Button startDateButton = (Button)view.findViewById(R.id.startDatePickerBtn);
-        Button endDateButton = (Button)view.findViewById(R.id.endDatePickerBtn);
+        final Button endDateButton = (Button)view.findViewById(R.id.endDatePickerBtn);
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getActivity());
         startDateButton.setText(dateFormat.format(date));
         endDateButton.setText(dateFormat.format(date));
+        endDateButton.setVisibility(View.INVISIBLE);
+        (view.findViewById(R.id.textView11)).setVisibility(View.INVISIBLE);
         // Inflate the layout for this fragment
         setupUI(view);
+        CheckBox checkbox = (CheckBox)view.findViewById(R.id.checkBox);
+        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            endDateButton.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
+                (getView().findViewById(R.id.textView11)).setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
+            }
+        });
         return view;
     }
 
