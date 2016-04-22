@@ -247,6 +247,9 @@ public class MainActivity extends AppCompatActivity
             case NEW_STANDING_OPERATION:
                 addNewStandingOperation();
                 break;
+            case NEW_WALLET:
+                addNewWallet();
+                break;
         }
     }
 
