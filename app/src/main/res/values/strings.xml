@@ -11,4 +11,5 @@
     <string name="txt_new_operation">Nowa operacja</string>
     <string name="search_title">Wyszukaj</string>
     <string name="kategorie">Kategorie</string>
+    <string name="txt_new_standing_operation">Nowe zlecenie stałe</string>
 </resources>
