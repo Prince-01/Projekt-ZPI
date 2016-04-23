@@ -6,7 +6,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Stan konta: -564,00 zł"
         android:id="@+id/TotalBalance"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"

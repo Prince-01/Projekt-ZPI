@@ -214,6 +214,8 @@ public class MainActivity extends AppCompatActivity
         Operation operation = new Operation(-1, wal.getName(), ty, fkw, dt, wp, cat.categoryName);
 
         Database.AddQuickNewPosition(getApplicationContext(), operation);
+        Database.UpdateWalletState(getApplicationContext(), operation.wallet, operation.isIncome ? operation.cost : -operation.cost);
+        Wallet.SetActiveWallet(getApplicationContext(), operation.wallet);
 
         HomePage newFragment = new HomePage();
         FragmentManager fragmentManager = getFragmentManager();

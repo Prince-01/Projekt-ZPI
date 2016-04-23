@@ -35,6 +35,9 @@ public class Wallet {
     }
     public String getCurrency() { return currency; }
     public float getValue() { return value; }
+    public void UpdateValueBy(float money) {
+        value += money;
+    }
 
     @Override
     public String toString() {
@@ -47,6 +50,7 @@ public class Wallet {
      * @param nazwa
      */
     public static final void SetActiveWallet(Context context, String nazwa){
+        if(currentWallet != null && currentWallet.getName().equals(nazwa)) return;
         SharedPreferences.Editor spe = MainActivity.GetGlobalSharedPreferences(context).edit();
         spe.putString("activeWallet",nazwa);
         spe.commit();

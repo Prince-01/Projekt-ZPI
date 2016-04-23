@@ -236,6 +236,26 @@ public class Database {
     }
 
     /**
+     * Funkcja, która dodaje do stanu wybranego portfela wartość ostatniej operacji
+     * @param context
+     * @param walletName nazawa portfela
+     * @param money wartość ostatniej operacji
+     */
+
+    public static void UpdateWalletState(Context context, String walletName, float money) {
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = "UPDATE Portfele SET Stan = Stan + ? WHERE Nazwa = ?;";
+        String[] arr= {String.valueOf(money), walletName};
+        db.execSQL(query, arr);
+        Close();
+
+        Wallet current = Wallet.GetActiveWallet(context);
+        if(current.getName().equals(walletName))
+            current.UpdateValueBy(money);
+    }
+
+    /**
      * "usuowa" podajna kategorie z bazy danych, tak naprawde nie usuow, tylko ja ukrywa polem pomocniczym
      * @param context
      * @param kategoria
