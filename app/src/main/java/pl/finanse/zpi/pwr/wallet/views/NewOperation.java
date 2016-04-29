@@ -1,11 +1,16 @@
 package pl.finanse.zpi.pwr.wallet.views;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,11 +18,14 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
 import android.widget.Spinner;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -26,23 +34,28 @@ import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.filters.ValueInputFilter;
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Category;
+import pl.finanse.zpi.pwr.wallet.model.Operation;
 import pl.finanse.zpi.pwr.wallet.model.Wallet;
 
 /**
  * Created by sebastiankotarski on 07.04.16.
  */
-public class NewOperation extends Fragment {
-    FloatingActionButton fab;
-    public NewOperation() {
+public class NewOperation extends Fragment implements View.OnClickListener {
+    private FloatingActionButton fab;
+    private View mainView;
 
-    }
+    public NewOperation() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.new_operation, container, false);
+        mainView = view;
+        setupButtons(view);
+
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setVisibility(View.INVISIBLE);
+
         Spinner categoriesSpinner = (Spinner) view.findViewById(R.id.categoriesSpinner);
         Spinner walletsSpinner = (Spinner) view.findViewById(R.id.walletsSpinner);
 
@@ -63,6 +76,25 @@ public class NewOperation extends Fragment {
         return view;
     }
 
+    private void setupButtons(View view) {
+        view.findViewById(R.id.datePickerBtn).setOnClickListener(this);
+        view.findViewById(R.id.addPositionBtn).setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.datePickerBtn:
+                showDatePickerDialog(v);
+                break;
+            case R.id.addPositionBtn:
+                onAddPosition(v);
+                break;
+            default:
+                Toast.makeText(getActivity(), "Nieobsługiwany przycisk! Somethings wrong! ", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
 
     @Override
     public void onDestroyView() {
@@ -93,7 +125,75 @@ public class NewOperation extends Fragment {
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
-    public void chooseDateClicked(View view) {
-        Toast.makeText(getActivity(),"date picker dialog",2).show();
+    public static class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            // Do something with the date chosen by the user
+            Button button = (Button)getActivity().findViewById(R.id.datePickerBtn);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(year, month, day);
+            DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getActivity());
+            button.setText(dateFormat.format(calendar.getTime()));
+        }
+    }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(), "datePicker");
+    }
+
+    public void onAddPosition(View v) {
+        EditText kwota = (EditText) mainView.findViewById(R.id.kwotaNowejKategorii);
+        EditText tytul = (EditText) mainView.findViewById(R.id.tytulNowejOperacji);
+        Button date = (Button) mainView.findViewById(R.id.datePickerBtn);
+        Spinner categories = (Spinner) mainView.findViewById(R.id.categoriesSpinner);
+        Spinner wallets = (Spinner) mainView.findViewById(R.id.walletsSpinner);
+        RadioButton wydatek = (RadioButton) mainView.findViewById(R.id.wydatekNowejOperacji);
+
+        Category cat = (Category) categories.getSelectedItem();
+        Wallet wal = (Wallet) wallets.getSelectedItem();
+        String kw = kwota.getText().toString();
+        String ty = tytul.getText().toString();
+        Date dt;
+        try {
+            dt = android.text.format.DateFormat.getDateFormat(getActivity()).parse(date.getText().toString());
+        } catch (ParseException e) {
+            Log.d("ERR", "Couldn't parse date.");
+            dt = new Date();
+            e.printStackTrace();
+        }
+        boolean wp = !wydatek.isChecked();
+
+        if(kw .equals("")) {
+            Toast.makeText(getActivity(), "Brak kwoty ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        float fkw = Float.parseFloat(kw);
+        if(fkw <= 0f) {
+            Toast.makeText(getActivity(), "Kwota musi byc wieksza od 0", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Operation operation = new Operation(-1, wal.getName(), ty, fkw, dt, wp, cat.categoryName);
+
+        Database.AddQuickNewPosition(getActivity(), operation);
+        Database.UpdateWalletState(getActivity(), operation.wallet, operation.isIncome ? operation.cost : -operation.cost);
+        Wallet.SetActiveWallet(getActivity(), operation.wallet);
+
+        HomePage newFragment = new HomePage();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.mainContent, newFragment).commit();
     }
 }

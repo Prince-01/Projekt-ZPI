@@ -87,14 +87,13 @@
                     android:text="Wydatek"
                     android:id="@+id/wydatekNowejOperacji"
                     android:checked="true"/>
-
         </RadioGroup>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:gravity="center">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -106,20 +105,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="data"
-            android:onClick="showDatePickerDialog"
-            android:id="@+id/datePickerBtn"
-            />
+            android:id="@+id/datePickerBtn" />
     </LinearLayout>
 
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dodaj operację"
-            android:id="@+id/button2"
+            android:id="@+id/addPositionBtn"
             android:layout_gravity="center"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:onClick="onAddPosition"
-    />
+            android:layout_centerHorizontal="true" />
 
     </LinearLayout>
