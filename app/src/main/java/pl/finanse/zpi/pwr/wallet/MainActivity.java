@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -167,13 +168,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void addNewOperation() {
-        toolbar.setTitle(R.string.txt_new_operation);
-        Fragment fragment = new NewOperation();
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.mainContent, fragment).commit();
-    }
-
     /**
      * sluzy do pobierania sharedpreferences, zeby wszystko bylo w 1 miejscu
      * @param context
@@ -200,6 +194,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void addNewOperation() {
+        toolbar.setTitle(R.string.txt_new_operation);
+        Fragment fragment = new NewOperation();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.mainContent, fragment).commit();
+    }
+
     public void addNewStandingOperation() {
         toolbar.setTitle(R.string.txt_new_standing_operation);
         Fragment fragment = new NewStandingOperation();
@@ -207,35 +208,18 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.beginTransaction().replace(R.id.mainContent, fragment).commit();
     }
 
-    public void addNewWallet() {
-        // custom dialog
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.new_wallet);
-        dialog.setTitle("Nowy portfel");
-
-        // set the custom dialog components - text, image and button
-        TextView text = (TextView) dialog.findViewById(R.id.newWalletName);
-        TextView text1 = (TextView)dialog.findViewById(R.id.textView10);
-        Spinner spinner = (Spinner)dialog.findViewById(R.id.currency_spinner);
-        Button dialogButton = (Button) dialog.findViewById(R.id.addWallet);
-        // if button is clicked, close the custom dialog
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
-
     public void addNewCategory() {
         // custom dialog
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.new_category);
-        dialog.setTitle("Nowa kategoria");
+        dialog.setTitle(R.string.new_cat_string);
 
         // set the custom dialog components - text, image and button
-        Spinner spinner = (Spinner)dialog.findViewById(R.id.parentCategory);
+        Spinner parentCategorySpinner = (Spinner)dialog.findViewById(R.id.parentCategory);
+        ArrayAdapter<Category> categoryArrayAdapter = new ArrayAdapter<Category>(this, android.R.layout.simple_spinner_item,
+                Database.GetAllCategories(this));
+        parentCategorySpinner.setAdapter(categoryArrayAdapter);
+
         Spinner spinner2 = (Spinner)dialog.findViewById(R.id.iconForCategory);
 //        spinner2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -245,6 +229,10 @@ public class MainActivity extends AppCompatActivity
 //        });
         Button dialogButton = (Button) dialog.findViewById(R.id.addCategory);
         // if button is clicked, close the custom dialog
+
+        /*
+        Dodawanie kategori do bazy
+         */
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -252,5 +240,40 @@ public class MainActivity extends AppCompatActivity
             }
         });
         dialog.show();
+    }
+
+    public void addNewWallet() {
+        // custom dialog
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.new_wallet);
+        dialog.setTitle(R.string.new_wallet_string);
+
+        // set the custom dialog components - text, image and button
+        TextView walletName = (TextView) dialog.findViewById(R.id.newWalletName);
+        Spinner currencySpinner = (Spinner)dialog.findViewById(R.id.currency_spinner);
+        /*
+        wypisanie walut z bazy w spinerze
+         */
+        Button dialogButton = (Button) dialog.findViewById(R.id.addWallet);
+        // if button is clicked, close the custom dialog
+        /*
+        Dodawanie portfela do bazy
+         */
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+
+    /*
+    Dodawanie zlecenia stałego do bazy
+     */
+    public void onAddPosition(View view) {
+
+
     }
 }

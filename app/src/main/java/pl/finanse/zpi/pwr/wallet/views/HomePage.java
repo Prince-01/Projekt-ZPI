@@ -24,7 +24,7 @@ import pl.finanse.zpi.pwr.wallet.model.Wallet;
 /**
  * Created by Robert on 2016-04-01.
  */
-public class HomePage extends Fragment {
+public class HomePage extends Fragment implements View.OnClickListener {
 
     private ListView lastOperationsListView;
     //TO DO
@@ -43,6 +43,10 @@ public class HomePage extends Fragment {
         makeData();
         OperationsAdapter adapter = new OperationsAdapter(getActivity(), R.layout.operation_row, operationsData);
         lastOperationsListView.setAdapter(adapter);
+
+        /*
+        ON LONG CLICK - usuwanie operacji z bazy wraz z pytaniem czy na pewno usunąć
+         */
         lastOperationsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -50,6 +54,12 @@ public class HomePage extends Fragment {
                 return true;
             }
         });
+
+        /*
+        on click, wyświetla informacje - layout jeszcze nie gotowy
+         */
+        //lastOperationsListView.setOnClickListener
+
         UpdateTotalBalance(view);
         return view;
     }
@@ -68,6 +78,11 @@ public class HomePage extends Fragment {
     private void makeData() {
         operationsData = Database.GetAllPositions(getActivity().getApplicationContext());
         //Toast.makeText(getActivity(),"Ilosc portfeli "+Database.GetAllWallets(getActivity())[0],Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 
 
