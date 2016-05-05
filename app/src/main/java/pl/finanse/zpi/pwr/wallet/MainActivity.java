@@ -1,8 +1,6 @@
 package pl.finanse.zpi.pwr.wallet;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -16,31 +14,21 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
 
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Category;
 import pl.finanse.zpi.pwr.wallet.model.FabState;
-import pl.finanse.zpi.pwr.wallet.model.Operation;
 import pl.finanse.zpi.pwr.wallet.model.Wallet;
 import pl.finanse.zpi.pwr.wallet.views.CategoriesView;
 import pl.finanse.zpi.pwr.wallet.views.DefaultPage;
+import pl.finanse.zpi.pwr.wallet.views.HistoryView;
 import pl.finanse.zpi.pwr.wallet.views.HomePage;
 import pl.finanse.zpi.pwr.wallet.views.NewOperation;
 import pl.finanse.zpi.pwr.wallet.views.NewStandingOperation;
@@ -152,6 +140,11 @@ public class MainActivity extends AppCompatActivity
                 toolbar.setTitle("Zlecenia stałe");
                 fabState = FabState.NEW_STANDING_OPERATION;
                 fragment = new StandingOperationView();
+                break;
+            case R.id.nav_history:
+                toolbar.setTitle("Historia");
+           //     fabState = FabState.NEW_OPERATION;
+                fragment = new HistoryView();
                 break;
             default:
                 toolbar.setTitle("Default");
