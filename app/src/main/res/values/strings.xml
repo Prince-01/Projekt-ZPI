@@ -18,6 +18,7 @@
     <string name="nazwa_kategorii">Nazwa kategorii</string>
     <string name="new_cat_string">Nowa kategoria</string>
     <string name="new_wallet_string">Nowy portfel</string>
+    <string name="edytuj_operacj_txt">Edytuj operację</string>
     <string-array name="examples">
         <item>Array item</item>
         <item>Array item</item>
