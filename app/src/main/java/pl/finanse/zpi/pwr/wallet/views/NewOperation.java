@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.design.widget.FloatingActionButton;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -26,8 +27,11 @@ import android.widget.Spinner;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import pl.finanse.zpi.pwr.wallet.R;
@@ -59,8 +63,32 @@ public class NewOperation extends Fragment implements View.OnClickListener {
         Spinner categoriesSpinner = (Spinner) view.findViewById(R.id.categoriesSpinner);
         Spinner walletsSpinner = (Spinner) view.findViewById(R.id.walletsSpinner);
 
-        ArrayAdapter<Category> categoryArrayAdapter = new ArrayAdapter<Category>(getActivity(), android.R.layout.simple_spinner_item,
-                Database.GetAllCategories(getActivity()));
+        Category[] categories = Database.GetAllCategories(getActivity());
+        Arrays.sort(categories);
+
+        int superCategories = 0;
+        List<Category> formattedCategories = new ArrayList<>();
+
+        for(int i = 0; i < categories.length; i++)
+        {
+            if(categories[i].superCategory == null)
+                formattedCategories.add(categories[i]);
+        }
+
+        for(int i = 0; i < formattedCategories.size(); i++)
+        {
+            Category c = formattedCategories.get(i);
+
+            List<Category> cat = GetSubcategoriesOf(categories, c);
+            formattedCategories.addAll(i + 1, cat);
+        }
+
+        List<String> categoriesStrings = new ArrayList<>();
+        for(Category c : formattedCategories)
+        categoriesStrings.add(CategoryFormattedWithDepth(c));
+
+        ArrayAdapter<String> categoryArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,
+                categoriesStrings);
         categoriesSpinner.setAdapter(categoryArrayAdapter);
         ArrayAdapter<Wallet> walletArrayAdapter = new ArrayAdapter<Wallet>(getActivity(), android.R.layout.simple_spinner_item,
                 Database.GetAllWallets(getActivity()));
@@ -75,6 +103,28 @@ public class NewOperation extends Fragment implements View.OnClickListener {
         setupUI(view);
         return view;
     }
+
+    public String CategoryFormattedWithDepth(Category c) {
+        return new String(new char[c.depth]).replace("\0", "\t\t") + c.categoryName;
+    }
+
+    public List<Category> GetSubcategoriesOf(Category[] categories, Category category) {
+        List<Category> result = new ArrayList<>();
+
+        for(Category c : categories) {
+            if(c.superCategory == null)
+                continue;
+
+            if (c.superCategory.equals(category.categoryName)) {
+                result.add(c);
+                c.depth = category.depth + 1;
+            }
+        }
+
+        return result;
+    }
+
+
 
     private void setupButtons(View view) {
         view.findViewById(R.id.datePickerBtn).setOnClickListener(this);
@@ -162,7 +212,7 @@ public class NewOperation extends Fragment implements View.OnClickListener {
         Spinner wallets = (Spinner) mainView.findViewById(R.id.walletsSpinner);
         RadioButton wydatek = (RadioButton) mainView.findViewById(R.id.wydatekNowejOperacji);
 
-        Category cat = (Category) categories.getSelectedItem();
+        String cat = (String) categories.getSelectedItem();
         Wallet wal = (Wallet) wallets.getSelectedItem();
         String kw = kwota.getText().toString();
         String ty = tytul.getText().toString();
@@ -186,10 +236,9 @@ public class NewOperation extends Fragment implements View.OnClickListener {
             return;
         }
 
-        Operation operation = new Operation(-1, wal.getName(), ty, fkw, dt, wp, cat.categoryName);
+        Operation operation = new Operation(-1, wal.getName(), ty, fkw, dt, wp, cat.trim());
 
         Database.AddQuickNewPosition(getActivity(), operation);
-        //Database.UpdateWalletState(getActivity(), operation.wallet, operation.isIncome ? operation.cost : -operation.cost);
         Wallet.SetActiveWallet(getActivity(), operation.wallet);
 
         HomePage newFragment = new HomePage();
