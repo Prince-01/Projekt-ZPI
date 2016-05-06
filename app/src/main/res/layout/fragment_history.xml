@@ -5,19 +5,69 @@
     android:layout_margin="0dp"
     android:layout_height="match_parent">
 
-    <CalendarView
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:showWeekNumber="false"
-        android:firstDayOfWeek="2"
-        android:id="@+id/calendarView"
-        android:dateTextAppearance="@android:style/TextAppearance.Medium"
-        android:layout_gravity="top" />
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="54dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Od:"
+            android:id="@+id/textView12"
+            android:gravity="center"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignBottom="@+id/button3"
+            android:layout_toStartOf="@+id/button3"
+            android:layout_toLeftOf="@+id/button3"
+            android:paddingLeft="10dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="data"
+            android:id="@+id/dateFromButton"
+            android:gravity="center"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="95dp"
+            android:layout_weight="0.40
+            "
+            android:paddingLeft="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Do:"
+            android:id="@+id/textView13"
+            android:gravity="center"
+            android:layout_alignParentTop="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="data"
+            android:id="@+id/dateToButton"
+            android:gravity="center"
+
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:paddingLeft="10dp"
+            android:layout_weight="0.40" />
+
+    </LinearLayout>
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="530dp"
         android:id="@+id/history_operations"
-        android:layout_gravity="center_horizontal" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </LinearLayout>
