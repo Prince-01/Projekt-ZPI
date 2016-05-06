@@ -56,6 +56,7 @@ public class OperationsAdapter extends ArrayAdapter<Operation> {
         holder.cost.setText(df.format(object.isIncome ? object.cost : -object.cost));
         holder.cost.setTextColor(object.isIncome ? Color.rgb(0,145,80) : Color.rgb(217, 30, 24));
         return row;
+        //saa
     }
 
     public static class RowBeanHolder {
