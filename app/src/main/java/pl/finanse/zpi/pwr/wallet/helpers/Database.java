@@ -256,18 +256,24 @@ public class Database {
     }
 
     /**
-     * "usuowa" podajna kategorie z bazy danych, tak naprawde nie usuow, tylko ja ukrywa polem pomocniczym
+     * usuowa podajna kategorie z bazy danych,
+     * musimy miec ustawiona superkategorie
      * @param context
      * @param kategoria
      */
     public static void RemoveCategory(Context context, Category kategoria) {
-        //TODO dorobic "triggera", ktory bedzie zmienial kategorie dla pozycji, jesli sie bedzie usuwalo kategoire
-        Toast.makeText(context, "RemoveCategory", Toast.LENGTH_SHORT).show();
+        Category[] cats = GetCategories(context,kategoria.toString());
+        for(int i=0;i<cats.length;i++)
+            RemoveCategory(context,cats[i]);//usuwanie rekurencyjne wyszstkich podkategorii
+       // Toast.makeText(context, "RemoveCategory", Toast.LENGTH_SHORT).show();
         if(kategoria == null)
             throw new RuntimeException("Spoko takie usuwanie NULLa");
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
-        String query = "UPDATE Kategorie SET CzyUsunieto=1 WHERE Nazwa = ?;";
+        String query2 = "UPDATE Pozycje SET KategorieNazwa = ? WHERE KategorieNazwa = ?";
+        String[] arr2={kategoria.superCategory,kategoria.categoryName};
+        db.execSQL(query2, arr2);
+        String query = "DELETE FROM Kategorie WHERE Nazwa = ?;";
         String[] arr= {kategoria.categoryName};
         db.execSQL(query, arr);
         Close();
