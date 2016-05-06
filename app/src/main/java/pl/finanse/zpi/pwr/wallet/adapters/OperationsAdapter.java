@@ -54,7 +54,7 @@ public class OperationsAdapter extends ArrayAdapter<Operation> {
         holder.nameLabel.setText(object.category);
         holder.categoryName.setText(object.operationName);
         holder.cost.setText(df.format(object.isIncome ? object.cost : -object.cost));
-        holder.cost.setTextColor(object.isIncome ? Color.GREEN : Color.RED);
+        holder.cost.setTextColor(object.isIncome ? Color.rgb(0,145,80) : Color.rgb(217, 30, 24));
         return row;
     }
 

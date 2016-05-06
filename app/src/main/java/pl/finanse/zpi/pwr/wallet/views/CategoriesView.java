@@ -27,7 +27,6 @@ public class CategoriesView extends Fragment {
 
     public CategoriesView() {
         // Required empty public constructor
-
     }
 
     @Override
@@ -37,22 +36,18 @@ public class CategoriesView extends Fragment {
 
         //przypisawnie liscie adaptera i danych
         categoriesListView = (ListView) view.findViewById(R.id.listViewCategories);
-//        categoriesData = Database.GetCategories(getActivity(),null);//tworzenie aktualnej listy kategorii, na poczatku z glownymi
-//
-//        /*
-//        Tutaj był błąd  android.R.layout.list_content ---> R.layout.caregories_row (To moje! :P)
-//         */
-//
-//        CategoriesAdapter adapter = new CategoriesAdapter(getActivity(), R.layout.caregories_row, categoriesData);
-//        categoriesListView.setAdapter(adapter);
-        //tutaj nadpsywanie funkcjonalnosci plusa
+        //  categoriesData = Database.GetCategories(getActivity(),null);//tworzenie aktualnej listy kategorii, na poczatku z glownymi
+
+        //  CategoriesAdapter adapter = new CategoriesAdapter(getActivity(), R.layout.caregories_row, categoriesData);
+        //  categoriesListView.setAdapter(adapter);
+
         return view;
     }
-public void onStart(){
-    super.onStart();
-    setNewList(null);//w tej metodzie nadajemy listenery dla wszystkich clickow!!!!
-}
 
+    public void onStart(){
+        super.onStart();
+        setNewList(null);//w tej metodzie nadajemy listenery dla wszystkich clickow!!!!
+    }
 
     /*
     OnLongClickItem

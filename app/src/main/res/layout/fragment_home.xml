@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
-
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/TotalBalance"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/negativeValue"
-        android:textStyle="bold"
-        android:textSize="30dp" />
+        android:background="#D2D7D3"
+        android:padding="22dp"
+        android:id="@+id/TotalBalanceBox">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/TotalBalance"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/negativeValue"
+            android:textStyle="bold"
+            android:textSize="23dp"
+            />
+    </RelativeLayout>
+
 
     <View android:layout_height="1px" android:layout_width="fill_parent" android:background="#ffffff"
         android:layout_below="@+id/textView9"
@@ -20,12 +28,13 @@
         android:id="@+id/view" />
 
     <TextView
+        android:layout_marginTop="@dimen/fab_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Ostatnie operacje"
+        android:text="@string/last_operation_txt"
         android:id="@+id/textView9"
-        android:layout_below="@+id/TotalBalance"
+        android:layout_below="@+id/TotalBalanceBox"
         android:layout_centerHorizontal="true"
         android:textSize="18dp" />
 

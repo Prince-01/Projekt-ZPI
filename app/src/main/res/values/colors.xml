@@ -3,5 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#1b8d2e</color>
-    <color name="negativeValue">#990000</color>
+    <color name="negativeValue">#EC644B</color>
+    <color name="shamrock">#2ECC71</color>
+
 </resources>

@@ -25,7 +25,7 @@ import pl.finanse.zpi.pwr.wallet.model.Wallet;
  * Created by Robert on 2016-04-01.
  */
 public class HomePage extends Fragment implements View.OnClickListener {
-
+    //2ECC71
     private ListView lastOperationsListView;
     //TO DO
     Operation operationsData[];
@@ -69,7 +69,8 @@ public class HomePage extends Fragment implements View.OnClickListener {
         float walletValue = Wallet.GetActiveWallet(getActivity()).getValue();
 
         totalBalance.setText("Stan konta: " + decimalFormat.format(walletValue) + " zł");
-        totalBalance.setTextColor(walletValue > 0 ? Color.GREEN : walletValue == 0 ? Color.WHITE : Color.RED);
+        totalBalance.setTextColor(walletValue > 0 ? Color.rgb(46,204,113) : walletValue == 0 ? Color.WHITE : Color.rgb(217, 30, 24));
+        //Color.GREEN
     }
 
     /*

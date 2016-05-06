@@ -23,6 +23,7 @@
 
     <LinearLayout
         android:orientation="vertical"
+        android:layout_marginLeft="@dimen/fab_margin"
         android:layout_width="229dp"
         android:layout_height="124dp">
 
@@ -39,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:text="ajfalfhkjagdf" />
+            android:text="We make your \nfinance better" />
     </LinearLayout>
 
 </LinearLayout>

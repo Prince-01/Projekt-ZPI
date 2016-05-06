@@ -20,6 +20,7 @@
     <string name="new_wallet_string">Nowy portfel</string>
     <string name="edytuj_operacj_txt">Edytuj operację</string>
     <string name="choose_date">Wybierz datę</string>
+    <string name="last_operation_txt">Ostatnie operacje</string>
     <string-array name="examples">
         <item>Array item</item>
         <item>Array item</item>

@@ -5,11 +5,12 @@
     <RelativeLayout
         android:id="@+id/categoryRowLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/list_margin">
         <ImageView
             android:id="@+id/categoryIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_gravity="left"
             android:src="@drawable/ic_menu_send" />
 
