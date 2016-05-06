@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.adapters.WalletAdapter;
+import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Wallet;
 
 /**
@@ -35,9 +36,6 @@ public class WalletView extends Fragment {
     }
 
     private void makeData() {
-        walletData = new Wallet[] {
-                new Wallet("Podstawowy"),
-                new Wallet("Domowy")
-        };
+        walletData = Database.GetAllWallets(getActivity());
     }
 }

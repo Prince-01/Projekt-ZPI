@@ -12,7 +12,7 @@ import pl.finanse.zpi.pwr.wallet.helpers.Database;
 /**
  * Created by rober on 21.04.2016.
  */
-public class Wallet {
+public class Wallet implements Comparable<Wallet> {
     private String name;
     private float value; // TO DO: money
     private String currency;
@@ -68,5 +68,10 @@ public class Wallet {
         String wname = sp.getString("activeWallet","");
         currentWallet = wname == "" ? null : Database.GetWallet(context, wname);
         return currentWallet;
+    }
+
+    @Override
+    public int compareTo(Wallet another) {
+        return name.compareTo(another.name);
     }
 }

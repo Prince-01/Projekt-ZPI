@@ -3,6 +3,7 @@ package pl.finanse.zpi.pwr.wallet;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,9 +20,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.util.List;
 import android.widget.Toast;
 
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
@@ -268,8 +274,8 @@ public class MainActivity extends AppCompatActivity
         dialog.setTitle(R.string.new_wallet_string);
 
         // set the custom dialog components - text, image and button
-        TextView walletName = (TextView) dialog.findViewById(R.id.newWalletName);
-        Spinner currencySpinner = (Spinner)dialog.findViewById(R.id.currency_spinner);
+        final TextView walletName = (TextView) dialog.findViewById(R.id.newWalletName);
+        final Spinner currencySpinner = (Spinner)dialog.findViewById(R.id.currency_spinner);
         /*
         wypisanie walut z bazy w spinerze
          */
@@ -281,7 +287,12 @@ public class MainActivity extends AppCompatActivity
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Wallet w = new Wallet(walletName.getText().toString(), 0, currencySpinner.getSelectedItem().toString());
+                Database.AddNewWallet(v.getContext(), w);
                 dialog.dismiss();
+                Fragment fragment = new WalletView();
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.mainContent, fragment).commit();
             }
         });
         dialog.show();
