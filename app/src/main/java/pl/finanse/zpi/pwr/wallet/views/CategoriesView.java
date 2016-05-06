@@ -93,7 +93,7 @@ public class CategoriesView extends Fragment {
                 // Toast.makeText(getActivity(),((CategoriesAdapter.RowBeanHolder)view.getTag()).txtTitle.getText(),Toast.LENGTH_SHORT).show();
             }
         });
-        if(newCategory!=null)//dodajemy usuwanie, tylko jak wyswietlamy kategoire ktore nie sa glowne
+        if(newCategory!=null && !newCategory.equals("Kategorie"))//dodajemy usuwanie, tylko jak wyswietlamy kategoire ktore nie sa glowne
         categoriesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {

@@ -10,8 +10,8 @@
         android:layout_marginBottom="@dimen/fab_margin">
         <ImageView
             android:id="@+id/categoryHeadIcon"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_gravity="left"
             android:tint="#ffffff"
             android:src="@drawable/ic_reply_24dp" />
