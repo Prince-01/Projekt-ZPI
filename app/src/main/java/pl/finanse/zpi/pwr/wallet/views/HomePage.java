@@ -55,6 +55,7 @@ public class HomePage extends Fragment {
     public void ReloadList() {
         Toast.makeText(getActivity(), "Dziala", Toast.LENGTH_SHORT).show();
         makeData();
+        makeData();
         OperationsAdapter adapter = new OperationsAdapter(getActivity(), R.layout.operation_row, operationsData);
         lastOperationsListView.setAdapter(adapter);
         lastOperationsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -101,9 +102,13 @@ public class HomePage extends Fragment {
     private void UpdateTotalBalance(View view) {
         TextView totalBalance = (TextView) view.findViewById(R.id.TotalBalance);
         float walletValue = Wallet.GetActiveWallet(getActivity()).getValue();
+        float sum = walletValue;
 
-        totalBalance.setText("Stan konta: " + decimalFormat.format(walletValue) + " zł");
-        totalBalance.setTextColor(walletValue > 0 ? Color.rgb(46, 204, 113) : walletValue == 0 ? Color.WHITE : Color.rgb(217, 30, 24));
+        for (Operation operation : operationsData)
+        sum += operation.cost < 0 ? -operation.cost : operation.cost;
+
+        totalBalance.setText("Stan konta: " + decimalFormat.format(sum) + " zł");
+        totalBalance.setTextColor(sum > 0 ? Color.rgb(46, 204, 113) : sum == 0 ? Color.WHITE : Color.rgb(217, 30, 24));
         //Color.GREEN
     }
 

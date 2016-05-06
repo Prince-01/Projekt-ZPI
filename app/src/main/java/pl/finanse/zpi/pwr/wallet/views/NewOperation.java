@@ -189,7 +189,7 @@ public class NewOperation extends Fragment implements View.OnClickListener {
         Operation operation = new Operation(-1, wal.getName(), ty, fkw, dt, wp, cat.categoryName);
 
         Database.AddQuickNewPosition(getActivity(), operation);
-        Database.UpdateWalletState(getActivity(), operation.wallet, operation.isIncome ? operation.cost : -operation.cost);
+        //Database.UpdateWalletState(getActivity(), operation.wallet, operation.isIncome ? operation.cost : -operation.cost);
         Wallet.SetActiveWallet(getActivity(), operation.wallet);
 
         HomePage newFragment = new HomePage();
