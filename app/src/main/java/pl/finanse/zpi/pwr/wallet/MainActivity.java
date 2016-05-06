@@ -219,13 +219,16 @@ public class MainActivity extends AppCompatActivity
 
         // set the custom dialog components - text, image and button
         Spinner parentCategorySpinner = (Spinner)dialog.findViewById(R.id.parentCategory);
-        Category[] cats = Database.GetAllCategories(this);
-        ArrayAdapter<Category> categoryArrayAdapter = new ArrayAdapter<Category>(this, android.R.layout.simple_spinner_item,
-               cats );
+        Object[] catTemp = Category.getAllFormattedCategoriesWithDepth(this).toArray();
+        String[] cats = new String[catTemp.length];
+        for(int i=0;i<cats.length;i++)
+            cats[i] = (String) catTemp[i];
+        ArrayAdapter<String> categoryArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,
+                cats );
         parentCategorySpinner.setAdapter(categoryArrayAdapter);
         //ustawianie zeby bylo domyslnie na inne
         for(int i=0;i<cats.length;i++)
-            if(cats[i].categoryName.equals("Inne")){
+            if(cats[i].equals("Inne")){
                 parentCategorySpinner.setSelection(i);
                 break;
             }
