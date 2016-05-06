@@ -144,7 +144,7 @@ public class Database {
         int knazIndex = c.getColumnIndex("KategorieNazwa");
         int portIndex = c.getColumnIndex("PortfeleNazwa");
         Operation[] operations = new Operation[ c.getCount()];
-        Toast.makeText(context,"Liczba pozycji: "+operations.length,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context,"Liczba pozycji: "+operations.length,Toast.LENGTH_SHORT).show();
         int i=0;
         while(c.moveToNext()){
             try {
@@ -305,7 +305,11 @@ public class Database {
         Close();
         return wallets[0];
     }
-    public static void RemovePosition(Context context, Operation operation){
+
+    /**
+     * usuwa wybrana operacje z bazy danych
+     */
+    public static void RemoveOperation(Context context, Operation operation){
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = "DELETE FROM Pozycje WHERE IdPozycji= ?";
@@ -340,6 +344,7 @@ public class Database {
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Inne',NULL);");
 
             db.execSQL("INSERT INTO Portfele ('Nazwa', 'Stan', 'Waluta') VALUES ('Moj portfel', 1280.0, 'PLN');");
+          //  db.execSQL("INSERT INTO Pozycje ('Nazwa', 'Wartosc', 'Data', 'Komentarz', 'CzyPrzychod','CzyUlubiona','CzyStale','KategorieNazwa','PortfeleNazwa','ListyZakupowIdListy') VALUES ('',12.5,'2015')");
         }
 
         /**

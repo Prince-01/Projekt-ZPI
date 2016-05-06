@@ -4,12 +4,15 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,12 +70,18 @@ public class CategoriesView extends Fragment {
         //ustawianie gornego napis
         final TextView tv = (TextView) getView().findViewById(R.id.categoryHeadText);
         tv.setText(newCategory == null ? "Kategorie" : newCategory);
-        tv.setOnClickListener(new View.OnClickListener() {
+
+        //ustawianie widocznej strzlki, jesli jestesmy nie w glownej kategorii
+        final ImageView iv = (ImageView) getView().findViewById(R.id.categoryHeadIcon);
+        iv.setVisibility(newCategory == null?View.INVISIBLE:View.VISIBLE);
+        final RelativeLayout gora =  (RelativeLayout) getView().findViewById(R.id.catCofnij);
+        gora.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setNewList(Database.GetParentCategory(getActivity(), tv.getText().toString()));
             }
         });
+
         //koniec ustawiania napisu
         CategoriesAdapter adapter = new CategoriesAdapter(getActivity(), R.layout.categories_row, categoriesData);
         categoriesListView.setAdapter(adapter);

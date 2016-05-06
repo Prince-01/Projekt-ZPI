@@ -5,7 +5,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/catCofnij"
+        android:layout_marginBottom="@dimen/fab_margin">
         <ImageView
             android:id="@+id/categoryHeadIcon"
             android:layout_width="36dp"
@@ -28,6 +30,6 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/listViewCategories" />
 </LinearLayout>
