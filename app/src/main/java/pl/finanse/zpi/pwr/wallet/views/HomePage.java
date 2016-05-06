@@ -33,6 +33,7 @@ public class HomePage extends Fragment {
     private ListView lastOperationsListView;
     //TO DO
     Operation operationsData[];
+    TextView totalBalance;
     public final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
 
     public HomePage() {
@@ -43,9 +44,9 @@ public class HomePage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        totalBalance = (TextView) view.findViewById(R.id.TotalBalance);
         lastOperationsListView = (ListView) view.findViewById(R.id.lastOperationsListView);
         ReloadList();//robi nam liste
-        UpdateTotalBalance(view);
         return view;
     }
 
@@ -53,8 +54,7 @@ public class HomePage extends Fragment {
      * updatuje nam liste, np po wykasowaniu operacji, oraz sluzy do ladowania samej srony
      */
     public void ReloadList() {
-        Toast.makeText(getActivity(), "Dziala", Toast.LENGTH_SHORT).show();
-        makeData();
+     //   Toast.makeText(getActivity(), "Dziala", Toast.LENGTH_SHORT).show();
         makeData();
         OperationsAdapter adapter = new OperationsAdapter(getActivity(), R.layout.operation_row, operationsData);
         lastOperationsListView.setAdapter(adapter);
@@ -62,7 +62,7 @@ public class HomePage extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 final Operation op = operationsData[position];
-                Toast.makeText(getActivity(), "Kliknieto dlugo", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getActivity(), "Kliknieto dlugo", Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
                 b.setMessage("Czy na pewno chcesz usunąć tą operację?");
                 b.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
@@ -91,7 +91,7 @@ public class HomePage extends Fragment {
 
             }
         });
-
+        UpdateTotalBalance();
     }
 
     /**
@@ -99,13 +99,12 @@ public class HomePage extends Fragment {
      *
      * @param view
      */
-    private void UpdateTotalBalance(View view) {
-        TextView totalBalance = (TextView) view.findViewById(R.id.TotalBalance);
+    private void UpdateTotalBalance() {
         float walletValue = Wallet.GetActiveWallet(getActivity()).getValue();
         float sum = walletValue;
 
         for (Operation operation : operationsData)
-        sum += operation.cost < 0 ? -operation.cost : operation.cost;
+        sum += operation.isIncome ? operation.cost : -operation.cost;
 
         totalBalance.setText("Stan konta: " + decimalFormat.format(sum) + " zł");
         totalBalance.setTextColor(sum > 0 ? Color.rgb(46, 204, 113) : sum == 0 ? Color.WHITE : Color.rgb(217, 30, 24));
