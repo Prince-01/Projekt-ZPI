@@ -62,9 +62,8 @@ public void ReloadList(){
     lastOperationsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-           // Toast.makeText(getActivity(),""+operationsData,Toast.LENGTH_SHORT).show();
             final Operation op = operationsData[position];
-            // Toast.makeText(getActivity(), "Kliknieto dlugo", Toast.LENGTH_SHORT).show();
+             Toast.makeText(getActivity(), "Kliknieto dlugo", Toast.LENGTH_SHORT).show();
             AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
             b.setMessage("Czy na pewno chcesz usunąć tą operację?");
             b.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
