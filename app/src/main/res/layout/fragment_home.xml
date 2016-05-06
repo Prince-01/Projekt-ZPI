@@ -4,19 +4,27 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#D2D7D3"
-        android:padding="22dp"
+        android:padding="6dp"
         android:id="@+id/TotalBalanceBox">
+        <TextView
+            android:text="@string/stan_konta_string"
+            android:id="@+id/textViewStan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/textViewStan"
             android:id="@+id/TotalBalance"
-            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:textColor="@color/negativeValue"
             android:textStyle="bold"
-            android:textSize="23dp"
+            android:textSize="28dp"
             />
     </RelativeLayout>
 

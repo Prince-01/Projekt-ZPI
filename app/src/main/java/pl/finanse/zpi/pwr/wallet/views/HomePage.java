@@ -107,7 +107,7 @@ public class HomePage extends Fragment {
         for (Operation operation : operationsData)
         sum += operation.isIncome ? operation.cost : -operation.cost;
 
-        totalBalance.setText("Stan konta: " + decimalFormat.format(sum) + " zł");
+        totalBalance.setText(decimalFormat.format(sum) + " zł");
         totalBalance.setTextColor(sum > 0 ? Color.rgb(46, 204, 113) : sum == 0 ? Color.WHITE : Color.rgb(217, 30, 24));
         //Color.GREEN
     }

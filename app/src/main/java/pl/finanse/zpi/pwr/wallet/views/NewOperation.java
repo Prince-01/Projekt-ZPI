@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.design.widget.FloatingActionButton;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -26,8 +27,11 @@ import android.widget.Spinner;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import pl.finanse.zpi.pwr.wallet.R;
@@ -59,8 +63,10 @@ public class NewOperation extends Fragment implements View.OnClickListener {
         Spinner categoriesSpinner = (Spinner) view.findViewById(R.id.categoriesSpinner);
         Spinner walletsSpinner = (Spinner) view.findViewById(R.id.walletsSpinner);
 
-        ArrayAdapter<Category> categoryArrayAdapter = new ArrayAdapter<Category>(getActivity(), android.R.layout.simple_spinner_item,
-                Database.GetAllCategories(getActivity()));
+        List<String> categoriesStrings = Category.getAllFormattedCategoriesWithDepth(getActivity());
+
+        ArrayAdapter<String> categoryArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,
+                categoriesStrings);
         categoriesSpinner.setAdapter(categoryArrayAdapter);
         ArrayAdapter<Wallet> walletArrayAdapter = new ArrayAdapter<Wallet>(getActivity(), android.R.layout.simple_spinner_item,
                 Database.GetAllWallets(getActivity()));
@@ -162,7 +168,7 @@ public class NewOperation extends Fragment implements View.OnClickListener {
         Spinner wallets = (Spinner) mainView.findViewById(R.id.walletsSpinner);
         RadioButton wydatek = (RadioButton) mainView.findViewById(R.id.wydatekNowejOperacji);
 
-        Category cat = (Category) categories.getSelectedItem();
+        String cat = (String) categories.getSelectedItem();
         Wallet wal = (Wallet) wallets.getSelectedItem();
         String kw = kwota.getText().toString();
         String ty = tytul.getText().toString();
@@ -186,10 +192,9 @@ public class NewOperation extends Fragment implements View.OnClickListener {
             return;
         }
 
-        Operation operation = new Operation(-1, wal.getName(), ty, fkw, dt, wp, cat.categoryName);
+        Operation operation = new Operation(-1, wal.getName(), ty, fkw, dt, wp, cat.trim());
 
         Database.AddQuickNewPosition(getActivity(), operation);
-        //Database.UpdateWalletState(getActivity(), operation.wallet, operation.isIncome ? operation.cost : -operation.cost);
         Wallet.SetActiveWallet(getActivity(), operation.wallet);
 
         HomePage newFragment = new HomePage();

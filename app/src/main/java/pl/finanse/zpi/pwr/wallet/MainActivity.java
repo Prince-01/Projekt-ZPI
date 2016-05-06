@@ -80,11 +80,19 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Fragment f = this.getFragmentManager().findFragmentById(R.id.mainContent);
+            if(!(f instanceof HomePage)) {
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.mainContent, new HomePage()).commit();
+                fabState = FabState.NEW_OPERATION;
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 

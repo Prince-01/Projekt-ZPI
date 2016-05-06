@@ -26,7 +26,7 @@ import pl.finanse.zpi.pwr.wallet.model.Category;
  */
 public class CategoriesView extends Fragment {
     private ListView categoriesListView;
-    private Category[] categoriesData;
+    private  Category[] categoriesData;
 
     public CategoriesView() {
         // Required empty public constructor
@@ -47,7 +47,7 @@ public class CategoriesView extends Fragment {
         return view;
     }
 
-    public void onStart() {
+    public void onStart(){
         super.onStart();
         setNewList(null);//w tej metodzie nadajemy listenery dla wszystkich clickow!!!!
     }
@@ -57,13 +57,14 @@ public class CategoriesView extends Fragment {
     Usuwa z pytaniem czy usunać (dialog box), uwaga usuwa tez podkategorie
      */
 
-    public void setNewList(final String newCategory) {
-        Category[] catTab = Database.GetCategories(getActivity(), newCategory);//tworzenie aktualnej listy kategorii, na poczatku z glownymi
-        if (catTab.length == 0) //gdy kategoria nie ma subkategorii
-            if (newCategory != null) {
-                setNewList(Database.GetParentCategory(getActivity(), newCategory));//na wypadek usuwania, ostatniej kategorii
+    public void setNewList(final String newCategory){
+        Category[] catTab = Database.GetCategories(getActivity(),newCategory);//tworzenie aktualnej listy kategorii, na poczatku z glownymi
+        if(catTab.length == 0) //gdy kategoria nie ma subkategorii
+            if(newCategory !=null) {
+               setNewList(Database.GetParentCategory(getActivity(), newCategory));//na wypadek usuwania, ostatniej kategorii
                 return;
-            } else
+            }
+            else
                 return;//wywplywane gdy mamy wyswietlic
         categoriesData = catTab;//tutaj zapamietywanie danych, zeby nie bylo, ze trzyammy sobie gowniana pusta tablice
         //ustawianie gornego napis
@@ -72,8 +73,8 @@ public class CategoriesView extends Fragment {
 
         //ustawianie widocznej strzlki, jesli jestesmy nie w glownej kategorii
         final ImageView iv = (ImageView) getView().findViewById(R.id.categoryHeadIcon);
-        iv.setVisibility(newCategory == null ? View.INVISIBLE : View.VISIBLE);
-        final RelativeLayout gora = (RelativeLayout) getView().findViewById(R.id.catCofnij);
+        iv.setVisibility(newCategory == null?View.INVISIBLE:View.VISIBLE);
+        final RelativeLayout gora =  (RelativeLayout) getView().findViewById(R.id.catCofnij);
         gora.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,36 +93,32 @@ public class CategoriesView extends Fragment {
                 // Toast.makeText(getActivity(),((CategoriesAdapter.RowBeanHolder)view.getTag()).txtTitle.getText(),Toast.LENGTH_SHORT).show();
             }
         });
-       // Toast.makeText(getActivity(), newCategory == null ? "Jest nullem" : newCategory, Toast.LENGTH_SHORT).show();
-        if (newCategory == null)
-            categoriesListView.setOnItemLongClickListener(null);
-        else//dodajemy usuwanie, tylko jak wyswietlamy kategoire ktore nie sa glowne
-            categoriesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                    final Category cat = categoriesData[position];
-                    // Toast.makeText(getActivity(), "Kliknieto dlugo", Toast.LENGTH_SHORT).show();
-                    AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
-                    b.setMessage("Czy na pewno chcesz usunąć tą kategorię?");
-                    b.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Database.RemoveCategory(getActivity(), cat);
-                            ReloadList();
-                        }
-                    });
-                    b.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-                    b.create().show();
-                    return true;
-                }
-            });
+        if(newCategory!=null)//dodajemy usuwanie, tylko jak wyswietlamy kategoire ktore nie sa glowne
+        categoriesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final Category cat = categoriesData[position];
+               // Toast.makeText(getActivity(), "Kliknieto dlugo", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
+                b.setMessage("Czy na pewno chcesz usunąć tą kategorię?");
+                b.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Database.RemoveCategory(getActivity(), cat);
+                        ReloadList();
+                    }
+                });
+                b.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                b.create().show();
+                return true;
+            }
+        });
     }
-
-    public void ReloadList() {
+    public void ReloadList(){
         setNewList(((TextView) getView().findViewById(R.id.categoryHeadText)).getText().toString());
     }
 }

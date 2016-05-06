@@ -335,6 +335,8 @@ public class Database {
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Samochód',NULL); ");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Przychody',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Wynagrodzenie','Przychody');");
+            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Roszczenia żydowskie','Przychody');");
+            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Lapowki','Wynagrodzenie');");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Jedzenie poza domem',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Transport',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Rozrywka',NULL);");
@@ -346,10 +348,20 @@ public class Database {
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Telefon i internet',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Rachunki',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Wakacje',NULL);");
+            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Alkohol',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Inne',NULL);");
+            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Abrakadabra','Inne');");
 
             db.execSQL("INSERT INTO Portfele ('Nazwa', 'Stan', 'Waluta') VALUES ('Moj portfel', 1280.0, 'PLN');");
-          //  db.execSQL("INSERT INTO Pozycje ('Nazwa', 'Wartosc', 'Data', 'Komentarz', 'CzyPrzychod','CzyUlubiona','CzyStale','KategorieNazwa','PortfeleNazwa','ListyZakupowIdListy') VALUES ('',12.5,'2015')");
+
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Chleb', 'Artykuły spożywcze', 'Moj portfel', '2016-04-21', 200, 1)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Murzyn', 'Zwierzęta', 'Moj portfel', '2016-03-12', 100, 1)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Ziemia', 'Roszczenia żydowskie', 'Moj portfel', '2016-04-12', 200000, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Różdżka', 'Abrakadabra', 'Moj portfel', '2016-04-21', 1500, 1)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Grenlandia', 'Lapowki', 'Moj portfel', '2016-04-21', 150000, 1)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wakacje 2012', 'Wakacje', 'Moj portfel', '2016-04-21', 12000, 1)");
+
+            //  db.execSQL("INSERT INTO Pozycje ('Nazwa', 'Wartosc', 'Data', 'Komentarz', 'CzyPrzychod','CzyUlubiona','CzyStale','KategorieNazwa','PortfeleNazwa','ListyZakupowIdListy') VALUES ('',12.5,'2015')");
         }
 
         /**
