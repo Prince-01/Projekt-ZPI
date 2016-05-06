@@ -63,29 +63,7 @@ public class NewOperation extends Fragment implements View.OnClickListener {
         Spinner categoriesSpinner = (Spinner) view.findViewById(R.id.categoriesSpinner);
         Spinner walletsSpinner = (Spinner) view.findViewById(R.id.walletsSpinner);
 
-        Category[] categories = Database.GetAllCategories(getActivity());
-        Arrays.sort(categories);
-
-        int superCategories = 0;
-        List<Category> formattedCategories = new ArrayList<>();
-
-        for(int i = 0; i < categories.length; i++)
-        {
-            if(categories[i].superCategory == null)
-                formattedCategories.add(categories[i]);
-        }
-
-        for(int i = 0; i < formattedCategories.size(); i++)
-        {
-            Category c = formattedCategories.get(i);
-
-            List<Category> cat = GetSubcategoriesOf(categories, c);
-            formattedCategories.addAll(i + 1, cat);
-        }
-
-        List<String> categoriesStrings = new ArrayList<>();
-        for(Category c : formattedCategories)
-        categoriesStrings.add(CategoryFormattedWithDepth(c));
+        List<String> categoriesStrings = Category.getAllFormattedCategoriesWithDepth(getActivity());
 
         ArrayAdapter<String> categoryArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,
                 categoriesStrings);
@@ -103,28 +81,6 @@ public class NewOperation extends Fragment implements View.OnClickListener {
         setupUI(view);
         return view;
     }
-
-    public String CategoryFormattedWithDepth(Category c) {
-        return new String(new char[c.depth]).replace("\0", "\t\t") + c.categoryName;
-    }
-
-    public List<Category> GetSubcategoriesOf(Category[] categories, Category category) {
-        List<Category> result = new ArrayList<>();
-
-        for(Category c : categories) {
-            if(c.superCategory == null)
-                continue;
-
-            if (c.superCategory.equals(category.categoryName)) {
-                result.add(c);
-                c.depth = category.depth + 1;
-            }
-        }
-
-        return result;
-    }
-
-
 
     private void setupButtons(View view) {
         view.findViewById(R.id.datePickerBtn).setOnClickListener(this);
