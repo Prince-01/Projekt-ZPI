@@ -284,6 +284,7 @@ public class Database {
      * @param context
      * @return
      */
+
     public static void RestoreAllCategories(Context context){
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
