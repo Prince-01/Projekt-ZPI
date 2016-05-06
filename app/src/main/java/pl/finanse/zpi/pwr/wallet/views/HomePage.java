@@ -47,6 +47,7 @@ public class HomePage extends Fragment {
         totalBalance = (TextView) view.findViewById(R.id.TotalBalance);
         lastOperationsListView = (ListView) view.findViewById(R.id.lastOperationsListView);
         ReloadList();//robi nam liste
+        UpdateTotalBalance();
         return view;
     }
 
@@ -54,7 +55,7 @@ public class HomePage extends Fragment {
      * updatuje nam liste, np po wykasowaniu operacji, oraz sluzy do ladowania samej srony
      */
     public void ReloadList() {
-     //   Toast.makeText(getActivity(), "Dziala", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Dziala", Toast.LENGTH_SHORT).show();
         makeData();
         OperationsAdapter adapter = new OperationsAdapter(getActivity(), R.layout.operation_row, operationsData);
         lastOperationsListView.setAdapter(adapter);
@@ -62,7 +63,7 @@ public class HomePage extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 final Operation op = operationsData[position];
-              //  Toast.makeText(getActivity(), "Kliknieto dlugo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Kliknieto dlugo", Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
                 b.setMessage("Czy na pewno chcesz usunąć tą operację?");
                 b.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
@@ -91,7 +92,7 @@ public class HomePage extends Fragment {
 
             }
         });
-        UpdateTotalBalance();
+
     }
 
     /**

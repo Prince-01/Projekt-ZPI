@@ -19,8 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Category;
@@ -209,9 +211,16 @@ public class MainActivity extends AppCompatActivity
 
         // set the custom dialog components - text, image and button
         Spinner parentCategorySpinner = (Spinner)dialog.findViewById(R.id.parentCategory);
+        Category[] cats = Database.GetAllCategories(this);
         ArrayAdapter<Category> categoryArrayAdapter = new ArrayAdapter<Category>(this, android.R.layout.simple_spinner_item,
-                Database.GetAllCategories(this));
+               cats );
         parentCategorySpinner.setAdapter(categoryArrayAdapter);
+        //ustawianie zeby bylo domyslnie na inne
+        for(int i=0;i<cats.length;i++)
+            if(cats[i].categoryName.equals("Inne")){
+                parentCategorySpinner.setSelection(i);
+                break;
+            }
 
         Spinner spinner2 = (Spinner)dialog.findViewById(R.id.iconForCategory);
 //        spinner2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -229,7 +238,13 @@ public class MainActivity extends AppCompatActivity
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               String nazwa = ((EditText)dialog.findViewById(R.id.newCategoryName)).getText().toString();
+                String superCat = ((Spinner)dialog.findViewById(R.id.parentCategory)).getSelectedItem().toString().trim();
+               Category cat = new Category(nazwa,0,superCat);
+                Database.AddNewCategory(v.getContext(), cat);
                 dialog.dismiss();
+               // Toast.makeText(v.getContext(), getFragmentManager().findFragmentById(R.id.mainContent).toString(), Toast.LENGTH_SHORT).show();
+                ((CategoriesView)getFragmentManager().findFragmentById(R.id.mainContent)).setNewList(null);
             }
         });
         dialog.show();

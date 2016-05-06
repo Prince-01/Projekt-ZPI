@@ -25,7 +25,6 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/fab_margin"
             android:layout_toRightOf="@+id/categoryHeadIcon" />
-
     </RelativeLayout>
 
     <ListView
