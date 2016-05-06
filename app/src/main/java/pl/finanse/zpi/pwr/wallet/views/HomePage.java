@@ -17,6 +17,7 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import org.w3c.dom.Text;
+
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Category;
@@ -33,6 +34,7 @@ public class HomePage extends Fragment {
     //TO DO
     Operation operationsData[];
     public final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+
     public HomePage() {
         // Required empty public constructor
     }
@@ -41,7 +43,7 @@ public class HomePage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        lastOperationsListView = (ListView)view.findViewById(R.id.lastOperationsListView);
+        lastOperationsListView = (ListView) view.findViewById(R.id.lastOperationsListView);
         ReloadList();//robi nam liste
         UpdateTotalBalance(view);
         return view;
@@ -50,54 +52,50 @@ public class HomePage extends Fragment {
     /**
      * updatuje nam liste, np po wykasowaniu operacji, oraz sluzy do ladowania samej srony
      */
-public void ReloadList(){
-    Toast.makeText(getActivity(),"Dziala",Toast.LENGTH_SHORT).show();
-    makeData();
-    OperationsAdapter adapter = new OperationsAdapter(getActivity(), R.layout.operation_row, operationsData);
-    lastOperationsListView.setAdapter(adapter);
-
-        /*
-        ON LONG CLICK - usuwanie operacji z bazy wraz z pytaniem czy na pewno usunąć
-         */
-    lastOperationsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-        @Override
-        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-           // Toast.makeText(getActivity(),""+operationsData,Toast.LENGTH_SHORT).show();
-            final Operation op = operationsData[position];
-            // Toast.makeText(getActivity(), "Kliknieto dlugo", Toast.LENGTH_SHORT).show();
-            AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
-            b.setMessage("Czy na pewno chcesz usunąć tą operację?");
-            b.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Database.RemoveOperation(getActivity(),op);
-                    ReloadList();
-                }
-            });
-            b.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-            b.create().show();
-            return true;
-        }
-    });
+    public void ReloadList() {
+        Toast.makeText(getActivity(), "Dziala", Toast.LENGTH_SHORT).show();
+        makeData();
+        OperationsAdapter adapter = new OperationsAdapter(getActivity(), R.layout.operation_row, operationsData);
+        lastOperationsListView.setAdapter(adapter);
+        lastOperationsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final Operation op = operationsData[position];
+                Toast.makeText(getActivity(), "Kliknieto dlugo", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
+                b.setMessage("Czy na pewno chcesz usunąć tą operację?");
+                b.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Database.RemoveOperation(getActivity(), op);
+                        ReloadList();
+                    }
+                });
+                b.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                b.create().show();
+                return true;
+            }
+        });
 
         /*
         on click, wyświetla informacje - layout jeszcze nie gotowy
          */
-    lastOperationsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Toast.makeText(getActivity(),"Dziala kurwa "+position,Toast.LENGTH_SHORT).show();
-        }
-    });
+        lastOperationsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-}
+            }
+        });
+
+    }
 
     /**
      * prawdopodobnie oblicza stan konta, spytac kamila
+     *
      * @param view
      */
     private void UpdateTotalBalance(View view) {

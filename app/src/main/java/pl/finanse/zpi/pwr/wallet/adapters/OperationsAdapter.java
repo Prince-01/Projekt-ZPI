@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.model.Operation;
@@ -34,6 +35,7 @@ public class OperationsAdapter extends ArrayAdapter<Operation> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         View row = convertView;
         RowBeanHolder holder = null;
         if (row == null) {
@@ -45,8 +47,10 @@ public class OperationsAdapter extends ArrayAdapter<Operation> {
             holder.cost = (TextView) row.findViewById(R.id.operationCost);
             row.setTag(holder);
         } else {
+
             holder = (RowBeanHolder) row.getTag();
         }
+       // Toast.makeText(row.getContext(),row.toString(),Toast.LENGTH_SHORT).show();
         Operation object = data[position];
 //        SimpleDateFormat sdf = new SimpleDateFormat(String.valueOf(DateFormat.getDateInstance()), Locale.ENGLISH);
 //        holder.nameLabel.setText(sdf.format(object.date));
