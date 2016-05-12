@@ -1,0 +1,49 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="120dp">
+
+    <RelativeLayout
+        android:id="@+id/templateRowLayout"
+        android:layout_width="match_parent"
+        android:layout_height="76dp">
+
+        <TextView
+            android:id="@+id/templateCategoryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="22sp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/fab_margin" />
+
+        <TextView
+            android:id="@+id/templateCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="22sp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+        <TextView
+            android:id="@+id/templateTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/templateName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="22sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/templateCost"
+            android:layout_alignEnd="@+id/templateCost" />
+
+    </RelativeLayout>
+
+
+</FrameLayout>

@@ -3,7 +3,6 @@ package pl.finanse.zpi.pwr.wallet;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,15 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.util.List;
-import android.widget.Toast;
 
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Category;
@@ -40,8 +33,10 @@ import pl.finanse.zpi.pwr.wallet.views.HistoryView;
 import pl.finanse.zpi.pwr.wallet.views.HomePage;
 import pl.finanse.zpi.pwr.wallet.views.NewOperation;
 import pl.finanse.zpi.pwr.wallet.views.NewStandingOperation;
+import pl.finanse.zpi.pwr.wallet.views.NewTemplate;
 import pl.finanse.zpi.pwr.wallet.views.RaportPage;
 import pl.finanse.zpi.pwr.wallet.views.StandingOperationView;
+import pl.finanse.zpi.pwr.wallet.views.TemplatesView;
 import pl.finanse.zpi.pwr.wallet.views.WalletView;
 
 public class MainActivity extends AppCompatActivity
@@ -157,9 +152,13 @@ public class MainActivity extends AppCompatActivity
                 fabState = FabState.NEW_STANDING_OPERATION;
                 fragment = new StandingOperationView();
                 break;
+            case R.id.nav_template:
+                toolbar.setTitle("Szablony");
+                fabState = FabState.NEW_TEMPLATE;
+                fragment = new TemplatesView();
+                break;
             case R.id.nav_history:
                 toolbar.setTitle("Historia");
-           //     fabState = FabState.NEW_OPERATION;
                 fragment = new HistoryView();
                 break;
             default:
@@ -200,6 +199,9 @@ public class MainActivity extends AppCompatActivity
             case NEW_WALLET:
                 addNewWallet();
                 break;
+            case NEW_TEMPLATE:
+                addNewTemplate();
+                break;
         }
     }
 
@@ -213,6 +215,13 @@ public class MainActivity extends AppCompatActivity
     public void addNewStandingOperation() {
         toolbar.setTitle(R.string.txt_new_standing_operation);
         Fragment fragment = new NewStandingOperation();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.mainContent, fragment).commit();
+    }
+
+    public void addNewTemplate() {
+        toolbar.setTitle(R.string.new_template);
+        Fragment fragment = new NewTemplate();
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.mainContent, fragment).commit();
     }

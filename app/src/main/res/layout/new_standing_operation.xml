@@ -19,7 +19,7 @@
             android:inputType="numberDecimal"
             android:textSize="30sp"
             android:ems="10"
-            android:id="@+id/kwotaNowejKategorii"
+            android:id="@+id/standingOperationCost"
             android:hint="Kwota"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/textView8"

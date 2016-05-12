@@ -10,6 +10,7 @@ import android.widget.ListView;
 import java.text.DecimalFormat;
 
 import pl.finanse.zpi.pwr.wallet.R;
+import pl.finanse.zpi.pwr.wallet.adapters.TemplateAdapter;
 import pl.finanse.zpi.pwr.wallet.model.Template;
 
 /**
@@ -18,7 +19,7 @@ import pl.finanse.zpi.pwr.wallet.model.Template;
 public class TemplatesView extends Fragment {
     private ListView templatesListView;
     //TO DO
-    Template templatesData[];
+    Template templatesData[] = new Template[2];
     public final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
 
     @Override
@@ -27,6 +28,8 @@ public class TemplatesView extends Fragment {
         View view = inflater.inflate(R.layout.fragment_templates, container, false);
         templatesListView = (ListView)view.findViewById(R.id.templatesListView);
         makeData();
+        TemplateAdapter adapter = new TemplateAdapter(getActivity(), R.layout.template_row, templatesData);
+        templatesListView.setAdapter(adapter);
         return view;
     }
     /*
