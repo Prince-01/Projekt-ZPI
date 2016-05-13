@@ -63,6 +63,7 @@ public class NewTemplate extends Fragment {
     }
 
 
+
     @Override
     public void onDestroyView() {
         fab.setVisibility(View.VISIBLE);
