@@ -2,9 +2,12 @@ package pl.finanse.zpi.pwr.wallet.views;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +59,7 @@ public class HomePage extends Fragment {
      */
     public void ReloadList() {
         makeData();
+        UpdateTotalBalance();
         OperationsAdapter adapter = new OperationsAdapter(getActivity(), R.layout.operation_row, operationsData);
         lastOperationsListView.setAdapter(adapter);
         lastOperationsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -87,17 +91,17 @@ public class HomePage extends Fragment {
         lastOperationsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                FragmentManager fragmentManager = getFragmentManager();
+                EditOperation eop = null;
+                fragmentManager.beginTransaction().replace(R.id.mainContent, eop = new EditOperation()).commit();
+                eop.operationToEdit = operationsData[position];
+                DrawerLayout drawer = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
             }
         });
 
     }
 
-    /**
-     * prawdopodobnie oblicza stan konta, spytac kamila
-     *
-     * @param view
-     */
     private void UpdateTotalBalance() {
         float walletValue = Wallet.GetActiveWallet(getActivity()).getValue();
         float sum = walletValue;
@@ -117,16 +121,4 @@ public class HomePage extends Fragment {
         operationsData = Database.GetAllPositions(getActivity().getApplicationContext());
         //Toast.makeText(getActivity(),"Ilosc portfeli "+Database.GetAllWallets(getActivity())[0],Toast.LENGTH_SHORT).show();
     }
-
-
-
-    /*
-    *Do ustawienia wartości stanu konta
-    *
-     */
-//    public void setAccountBalance(Money money) {
-//        TextView operationCost = ((TextView) getView().findViewById(R.id.operationCost));
-//        operationCost.setText(money.toString());
-//        operationCost.setTextColor(money < 0 ? :);
-//    }
 }

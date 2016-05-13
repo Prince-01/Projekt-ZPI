@@ -1,18 +1,20 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="120dp">
+    android:layout_height="140dp">
 
     <RelativeLayout
         android:id="@+id/standingOperationRowLayout"
         android:layout_width="match_parent"
-        android:layout_height="76dp">
+        android:layout_height="100dp">
 
         <TextView
             android:id="@+id/standingOperationcategoryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#ffffff"
-            android:textSize="22sp"
+            android:textSize="18sp"
+            android:layout_below="@+id/standingOperationTitle"
+            android:height="20dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/fab_margin" />
 
@@ -21,27 +23,46 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#ffffff"
-            android:textSize="22sp"
+            android:textSize="18sp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/fab_margin"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
         <TextView
             android:id="@+id/standingOperationTitle"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#ffffff"
-            android:textSize="22sp" />
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/standingOperationWallet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18sp"
+            android:textColor="@color/grey"
+            android:textSize="18sp"
+            android:layout_below="@+id/standingOperationcategoryText"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Co miesiąc"
+            android:textSize="18sp"
             android:id="@+id/standingOperationTimeInterval"
+
             android:layout_gravity="center_horizontal|bottom"
-            android:layout_below="@+id/standingOperationcategoryText"
-            android:layout_centerHorizontal="true" />
+            android:layout_below="@+id/standingOperationWallet"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:gravity="center_horizontal" />
 
     </RelativeLayout>
 

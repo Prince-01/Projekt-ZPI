@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.mainContent, new HomePage()).commit();
                 fabState = FabState.NEW_OPERATION;
+                toolbar.setTitle("Home");
             } else {
                 super.onBackPressed();
             }

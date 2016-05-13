@@ -15,7 +15,10 @@ import android.widget.Toast;
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.model.Operation;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by sebastiankotarski on 14.04.16.
@@ -45,9 +48,9 @@ public class OperationsAdapter extends ArrayAdapter<Operation> {
             holder.nameLabel = (TextView) row.findViewById(R.id.operationName);
             holder.categoryName = (TextView) row.findViewById(R.id.operationTitle);
             holder.cost = (TextView) row.findViewById(R.id.operationCost);
+            holder.date = (TextView) row.findViewById(R.id.operationDate);
             row.setTag(holder);
         } else {
-
             holder = (RowBeanHolder) row.getTag();
         }
        // Toast.makeText(row.getContext(),row.toString(),Toast.LENGTH_SHORT).show();
@@ -59,6 +62,10 @@ public class OperationsAdapter extends ArrayAdapter<Operation> {
         holder.categoryName.setText(object.operationName);
         holder.cost.setText(df.format(object.isIncome ? object.cost : -object.cost));
         holder.cost.setTextColor(object.isIncome ? Color.rgb(46, 204, 113) : Color.rgb(217, 30, 24));
+
+        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
+        holder.date.setText(dateFormat.format(object.date));
+
         return row;
         //saa
     }
@@ -67,5 +74,6 @@ public class OperationsAdapter extends ArrayAdapter<Operation> {
         public TextView nameLabel;
         public TextView categoryName;
         public TextView cost;
+        public TextView date;
     }
 }

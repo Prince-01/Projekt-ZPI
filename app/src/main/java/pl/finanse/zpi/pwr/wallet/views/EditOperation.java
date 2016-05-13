@@ -27,6 +27,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.filters.ValueInputFilter;
@@ -41,12 +42,20 @@ import pl.finanse.zpi.pwr.wallet.model.Wallet;
 public class EditOperation extends Fragment implements View.OnClickListener {
     private FloatingActionButton fab;
     private View mainView;
+    Operation operationToEdit;
+   private EditText kwotaEdytowana;
+   private EditText title;
+   private Spinner categoriesSpinner;
+  private  Spinner walletsSpinner;
+    private Button dateButton;
+    public EditOperation(){
 
-    public EditOperation() {}
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Toast.makeText(getActivity(),""+operationToEdit.id,Toast.LENGTH_SHORT).show();
         View view = inflater.inflate(R.layout.edit_operation, container, false);
         mainView = view;
         setupButtons(view);
@@ -54,21 +63,58 @@ public class EditOperation extends Fragment implements View.OnClickListener {
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setVisibility(View.INVISIBLE);
 
-        Spinner categoriesSpinner = (Spinner) view.findViewById(R.id.categoriesSpinner);
-        Spinner walletsSpinner = (Spinner) view.findViewById(R.id.walletsSpinner);
-
-        ArrayAdapter<Category> categoryArrayAdapter = new ArrayAdapter<Category>(getActivity(), android.R.layout.simple_spinner_item,
-                Database.GetAllCategories(getActivity()));
+        categoriesSpinner = (Spinner) view.findViewById(R.id.categoriesSpinner);
+        walletsSpinner = (Spinner) view.findViewById(R.id.walletsSpinner);
+        List<String> categoriesStrings = Category.getAllFormattedCategoriesWithDepth(getActivity());
+        int chosen = 0;
+        for(int i=0;i<categoriesStrings.size();i++)
+            if(categoriesStrings.get(i).trim().equals(operationToEdit.category)){
+                chosen = i;
+                break;
+            }
+        ArrayAdapter<String> categoryArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,
+                categoriesStrings);
         categoriesSpinner.setAdapter(categoryArrayAdapter);
+        categoriesSpinner.setSelection(chosen);
+        Wallet[] wallets = Database.GetAllWallets(getActivity());
+        for(int i=0;i<wallets.length;i++)
+            if(wallets[i].getName().equals(operationToEdit.wallet)){
+                chosen = i;
+                break;
+            }
         ArrayAdapter<Wallet> walletArrayAdapter = new ArrayAdapter<Wallet>(getActivity(), android.R.layout.simple_spinner_item,
-                Database.GetAllWallets(getActivity()));
+                wallets);
         walletsSpinner.setAdapter(walletArrayAdapter);
-
-        ((EditText)view.findViewById(R.id.kwotaNowejKategorii)).setFilters(new InputFilter[] { new ValueInputFilter(10,2) });
-        Button button = (Button)view.findViewById(R.id.datePickerBtn);
-        Date date = Calendar.getInstance().getTime();
+        walletsSpinner.setSelection(chosen);
+        kwotaEdytowana = ((EditText) view.findViewById(R.id.kwotaEdytowanejOperacji));
+        kwotaEdytowana.setFilters(new InputFilter[]{new ValueInputFilter(10, 2)});
+        kwotaEdytowana.setText(Float.toString(operationToEdit.cost));
+        title = ((EditText) view.findViewById(R.id.tytulEdytowanejOperacji));
+        title.setText(operationToEdit.operationName);
+        ((RadioButton)view.findViewById(operationToEdit.isIncome?R.id.radioButton:R.id.wydatekEdytowanejOperacji)).setChecked(true);
+        dateButton = (Button)view.findViewById(R.id.datePickerBtn);
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getActivity());
-        button.setText(dateFormat.format(date));
+        dateButton.setText(dateFormat.format(operationToEdit.date));
+        Button editBtn = ((Button)view.findViewById(R.id.editPositionBtn));
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                operationToEdit.cost = Float.parseFloat(kwotaEdytowana.getText().toString());
+                operationToEdit.operationName = title.getText().toString();
+                operationToEdit.category = categoriesSpinner.getSelectedItem().toString().trim();
+                operationToEdit.wallet = walletsSpinner.getSelectedItem().toString().trim();
+                operationToEdit.isIncome = !((RadioButton)getView().findViewById(R.id.wydatekEdytowanejOperacji)).isChecked();
+                try {
+                    operationToEdit.date = android.text.format.DateFormat.getDateFormat(getActivity()).parse(dateButton.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Database.EditPosition(getActivity(),operationToEdit);
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.mainContent, new HomePage()).commit();
+
+            }
+        });
         // Inflate the layout for this fragment
         setupUI(view);
         return view;
