@@ -17,6 +17,7 @@ import pl.finanse.zpi.pwr.wallet.model.Wallet;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -135,6 +136,38 @@ public class Database {
         String query = null;
         query = "SELECT IdPozycji, Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje WHERE PortfeleNazwa = ? ORDER BY Data DESC, IdPozycji DESC";
         String[] arr = {Wallet.GetActiveWallet(context).getName()};
+        Cursor c = db.rawQuery(query,arr);
+        int idIndex = c.getColumnIndex("IdPozycji");
+        int nazIndex = c.getColumnIndex("Nazwa");
+        int wartIndex = c.getColumnIndex("Wartosc");
+        int datIndex = c.getColumnIndex("Data");
+        int przIndex = c.getColumnIndex("CzyPrzychod");
+        int knazIndex = c.getColumnIndex("KategorieNazwa");
+        int portIndex = c.getColumnIndex("PortfeleNazwa");
+        Operation[] operations = new Operation[ c.getCount()];
+//        Toast.makeText(context,"Liczba pozycji: "+operations.length,Toast.LENGTH_SHORT).show();
+        int i=0;
+        while(c.moveToNext()){
+            try {
+                operations[i++] = new Operation(c.getInt(idIndex),c.getString(portIndex), c.getString(nazIndex),c.getFloat(wartIndex),(new SimpleDateFormat("yyyy-MM-dd")).parse(c.getString(datIndex)), c.getInt(przIndex) == 0 ? false : true, c.getString(knazIndex));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        Close();
+        return operations;
+    }
+
+    public static Operation[] GetChoosenPositions(Context context, Date from, Date to){
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = null;
+
+        query = "SELECT IdPozycji, Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje WHERE PortfeleNazwa = ? AND Data >= ? AND Data <= ? ORDER BY Data DESC, IdPozycji DESC";
+        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        (new SimpleDateFormat("yyyy-MM-dd")).format(to);
+        String[] arr = {Wallet.GetActiveWallet(context).getName(), sdf.format(from), sdf.format(to)};
         Cursor c = db.rawQuery(query,arr);
         int idIndex = c.getColumnIndex("IdPozycji");
         int nazIndex = c.getColumnIndex("Nazwa");
