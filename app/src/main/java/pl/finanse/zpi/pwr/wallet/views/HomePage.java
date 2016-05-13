@@ -59,6 +59,7 @@ public class HomePage extends Fragment {
      */
     public void ReloadList() {
         makeData();
+        UpdateTotalBalance();
         OperationsAdapter adapter = new OperationsAdapter(getActivity(), R.layout.operation_row, operationsData);
         lastOperationsListView.setAdapter(adapter);
         lastOperationsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -101,11 +102,6 @@ public class HomePage extends Fragment {
 
     }
 
-    /**
-     * prawdopodobnie oblicza stan konta, spytac kamila
-     *
-     * @param view
-     */
     private void UpdateTotalBalance() {
         float walletValue = Wallet.GetActiveWallet(getActivity()).getValue();
         float sum = walletValue;
@@ -125,16 +121,4 @@ public class HomePage extends Fragment {
         operationsData = Database.GetAllPositions(getActivity().getApplicationContext());
         //Toast.makeText(getActivity(),"Ilosc portfeli "+Database.GetAllWallets(getActivity())[0],Toast.LENGTH_SHORT).show();
     }
-
-
-
-    /*
-    *Do ustawienia wartości stanu konta
-    *
-     */
-//    public void setAccountBalance(Money money) {
-//        TextView operationCost = ((TextView) getView().findViewById(R.id.operationCost));
-//        operationCost.setText(money.toString());
-//        operationCost.setTextColor(money < 0 ? :);
-//    }
 }

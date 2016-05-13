@@ -89,6 +89,11 @@ public class Database {
         return cat;
     }
 
+    /**
+     * daje wszystkie wszystkie wszystkie wszystkie kurwa kategorie, bez wyjatku
+     * @param context
+     * @return
+     */
     public static Category[] GetAllCategories(Context context){
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
@@ -105,6 +110,12 @@ public class Database {
         Close();
         return cat;
     }
+
+    /**
+     * daje wszystkie portfele
+     * @param context
+     * @return
+     */
     public static Wallet[] GetAllWallets(Context context){
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
@@ -133,7 +144,7 @@ public class Database {
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = null;
-        query = "SELECT IdPozycji, Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje WHERE PortfeleNazwa = ? ORDER BY Data DESC, IdPozycji DESC";
+        query = "SELECT IdPozycji, Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje WHERE PortfeleNazwa = ? AND CzyStale = 0 ORDER BY Data DESC, IdPozycji DESC";
         String[] arr = {Wallet.GetActiveWallet(context).getName()};
         Cursor c = db.rawQuery(query,arr);
         int idIndex = c.getColumnIndex("IdPozycji");
@@ -220,6 +231,11 @@ public class Database {
        return null;
     }
 
+    /**
+     * dodaje SZYBKO nowa pozycje, albo moze nowa operacje, albo cos tam
+     * @param context
+     * @param operacja
+     */
     public static void AddQuickNewPosition(Context context, Operation operacja) {
 
         if(!Open(context))
@@ -234,6 +250,12 @@ public class Database {
         db.insert("Pozycje", null, values);
         Close();
     }
+
+    /**
+     * edytuje podana operacje, na podstawie jej ID
+     * @param context
+     * @param operacja
+     */
     public static void EditPosition(Context context, Operation operacja) {
 
         if(!Open(context))
@@ -255,7 +277,6 @@ public class Database {
      * @param walletName nazawa portfela
      * @param money wartość ostatniej operacji
      */
-
     public static void UpdateWalletState(Context context, String walletName, float money) {
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");

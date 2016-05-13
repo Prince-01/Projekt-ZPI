@@ -44,13 +44,26 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <TextView
-            android:layout_width="80dp"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/operationCost"
-            android:gravity="right"
-            android:layout_weight="0.20" />
+            android:layout_weight="0.20">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/operationCost"
+                android:gravity="right" />
+            <TextView
+                android:layout_width="100dp"
+                android:textSize="13dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/operationDate"
+                android:layout_below="@+id/operationCost"
+                android:gravity="right" />
+        </RelativeLayout>
+
     </LinearLayout>
 
 
