@@ -39,6 +39,7 @@ public class TemplateAdapter extends ArrayAdapter<Template> {
             holder.categoryName = (TextView) row.findViewById(R.id.templateCategoryText);
             holder.cost = (TextView) row.findViewById(R.id.templateCost);
             holder.title = (TextView) row.findViewById(R.id.templateName);
+            holder.wallet = (TextView)row.findViewById(R.id.templateWallet);
             row.setTag(holder);
         } else {
             holder = (RowBeanHolder) row.getTag();
@@ -48,6 +49,7 @@ public class TemplateAdapter extends ArrayAdapter<Template> {
         holder.title.setText("Nazwa operacji");
         holder.categoryName.setText("Kategoria");
         holder.cost.setText(String.valueOf(527) + " zł");
+        holder.wallet.setText("nazwa portfela");
         return row;
     }
 
@@ -56,5 +58,6 @@ public class TemplateAdapter extends ArrayAdapter<Template> {
         public TextView categoryName;
         public TextView cost;
         public TextView title;
+        public TextView wallet;
     }
 }

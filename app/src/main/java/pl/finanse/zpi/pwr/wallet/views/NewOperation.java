@@ -191,7 +191,6 @@ public class NewOperation extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity(), "Kwota musi byc wieksza od 0", Toast.LENGTH_SHORT).show();
             return;
         }
-
         Operation operation = new Operation(-1, wal.getName(), ty, fkw, dt, wp, cat.trim());
 
         Database.AddQuickNewPosition(getActivity(), operation);

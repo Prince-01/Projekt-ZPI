@@ -40,6 +40,7 @@ public class StandingOperationsAdapter  extends ArrayAdapter<StandingOperation> 
             holder.endDateLabel = (TextView) row.findViewById(R.id.standingOperationEndDate);
             holder.startDateLabel = (TextView) row.findViewById(R.id.standingOperationStartDate);
             holder.timeInterval = (TextView)row.findViewById(R.id.standingOperationTimeInterval);
+            holder.wallet = (TextView) row.findViewById(R.id.standingOperationWallet);
             row.setTag(holder);
         } else {
             holder = (RowBeanHolder) row.getTag();
@@ -51,6 +52,7 @@ public class StandingOperationsAdapter  extends ArrayAdapter<StandingOperation> 
         holder.startDateLabel.setText("Data rozpoczęcia: 22.04.2016");
         holder.endDateLabel.setText("Data zakończenia: 22.04.2017");
         holder.timeInterval.setText("Co miesiąc");
+        holder.wallet.setText("nazwa portfela");
         return row;
     }
 
@@ -61,5 +63,6 @@ public class StandingOperationsAdapter  extends ArrayAdapter<StandingOperation> 
         public TextView startDateLabel;
         public TextView endDateLabel;
         public TextView timeInterval;
+        public TextView wallet;
     }
 }

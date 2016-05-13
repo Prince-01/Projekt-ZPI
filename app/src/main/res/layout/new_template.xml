@@ -55,7 +55,7 @@
             android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tytulNowejOperacji"
+            android:id="@+id/tytulNowegoszablonu"
             android:hint="Tytuł(opcjonalnie)"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
@@ -90,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Wpływ"
-                android:id="@+id/radioButton"
+                android:id="@+id/wplywNowegoSzablonu"
                 android:layout_below="@+id/wplywNowejOperacji"
                 android:layout_alignLeft="@+id/datePicker3"
                 android:layout_alignStart="@+id/datePicker3" />
@@ -98,7 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Wydatek"
-                android:id="@+id/wydatekNowejOperacji"
+                android:id="@+id/wydatekNowegoSzablonu"
                 android:checked="true"/>
 
         </RadioGroup>

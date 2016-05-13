@@ -17,6 +17,7 @@ import pl.finanse.zpi.pwr.wallet.model.Wallet;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -168,6 +169,38 @@ public class Database {
         return operations;
     }
 
+    public static Operation[] GetChoosenPositions(Context context, Date from, Date to){
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = null;
+
+        query = "SELECT IdPozycji, Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje WHERE PortfeleNazwa = ? AND Data >= ? AND Data <= ? ORDER BY Data DESC, IdPozycji DESC";
+        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        (new SimpleDateFormat("yyyy-MM-dd")).format(to);
+        String[] arr = {Wallet.GetActiveWallet(context).getName(), sdf.format(from), sdf.format(to)};
+        Cursor c = db.rawQuery(query,arr);
+        int idIndex = c.getColumnIndex("IdPozycji");
+        int nazIndex = c.getColumnIndex("Nazwa");
+        int wartIndex = c.getColumnIndex("Wartosc");
+        int datIndex = c.getColumnIndex("Data");
+        int przIndex = c.getColumnIndex("CzyPrzychod");
+        int knazIndex = c.getColumnIndex("KategorieNazwa");
+        int portIndex = c.getColumnIndex("PortfeleNazwa");
+        Operation[] operations = new Operation[ c.getCount()];
+//        Toast.makeText(context,"Liczba pozycji: "+operations.length,Toast.LENGTH_SHORT).show();
+        int i=0;
+        while(c.moveToNext()){
+            try {
+                operations[i++] = new Operation(c.getInt(idIndex),c.getString(portIndex), c.getString(nazIndex),c.getFloat(wartIndex),(new SimpleDateFormat("yyyy-MM-dd")).parse(c.getString(datIndex)), c.getInt(przIndex) == 0 ? false : true, c.getString(knazIndex));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        Close();
+        return operations;
+    }
+
     /**
      * dodaje nowy portfle do bazy danych
      * @param context
@@ -251,6 +284,7 @@ public class Database {
         Close();
     }
 
+
     /**
      * edytuje podana operacje, na podstawie jej ID
      * @param context
@@ -267,10 +301,30 @@ public class Database {
         values.put("CzyPrzychod", operacja.isIncome ? 1 : 0);
         values.put("KategorieNazwa", operacja.category);
         values.put("PortfeleNazwa", operacja.wallet);
-        db.update("Pozycje", values, "IdPozycji = ?", new String[]{Integer.toString(operacja.id)});
+        db.update("Pozycje", values, "IdPozycji = ?", new String[]{Long.toString(operacja.id)});
         Close();
     }
+    /**
+     * dodaje nowy szablon do bazy danych
+     * @param context
+     * @param operacja
+     */
+    public static void AddNewTemplate(Context context, Operation operacja) {
 
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        ContentValues values = new ContentValues();
+        values.put("Nazwa", operacja.operationName);
+        values.put("Wartosc", operacja.cost);
+        values.put("Data", (new SimpleDateFormat("yyyy-MM-dd")).format(operacja.date));
+        values.put("CzyPrzychod", operacja.isIncome ? 1 : 0);
+        values.put("KategorieNazwa", operacja.category);
+        values.put("PortfeleNazwa", operacja.wallet);
+        values.put("CzySzablon",1);
+        db.insert("Pozycje", null, values);
+
+        Close();
+    }
     /**
      * Funkcja, która dodaje do stanu wybranego portfela wartość ostatniej operacji
      * @param context
@@ -355,7 +409,7 @@ public class Database {
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = "DELETE FROM Pozycje WHERE IdPozycji= ?";
-        String[] arr = {Integer.toString(operation.id)};
+        String[] arr = {Long.toString(operation.id)};
         db.execSQL(query, arr);
         Close();
     }
@@ -408,7 +462,7 @@ public class Database {
             String[] create = new String[] {
                     "CREATE TABLE IF NOT EXISTS Kategorie (Nazwa varchar(255) NOT NULL, NazwaNadkategorii varchar(255), CzyUsunieto INTEGER DEFAULT 0  NOT NULL, IdObrazka integer(20), PRIMARY KEY (Nazwa), FOREIGN KEY(NazwaNadkategorii) REFERENCES Kategorie(Nazwa));",
                     "CREATE TABLE IF NOT EXISTS Portfele (Nazwa varchar(255) NOT NULL, Stan double(10) DEFAULT 0 NOT NULL, Waluta varchar(3) DEFAULT 'PLN' NOT NULL, PRIMARY KEY (Nazwa));",
-                    "CREATE TABLE IF NOT EXISTS Pozycje (IdPozycji INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255), Wartosc double(10) NOT NULL, Data date, Komentarz integer(511), CzyPrzychod INTEGER DEFAULT 0 NOT NULL, CzyUlubiona INTEGER DEFAULT 0 NOT NULL, CzyStale INTEGER DEFAULT 0 NOT NULL, KategorieNazwa varchar(255) NOT NULL, PortfeleNazwa varchar(255) NOT NULL, ListyZakupowIdListy integer(10), FOREIGN KEY(KategorieNazwa) REFERENCES Kategorie(Nazwa), FOREIGN KEY(PortfeleNazwa) REFERENCES Portfele(Nazwa));",
+                    "CREATE TABLE IF NOT EXISTS Pozycje (IdPozycji INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255), Wartosc double(10) NOT NULL, Data date, Komentarz integer(511), CzyPrzychod INTEGER DEFAULT 0 NOT NULL, CzySzablon INTEGER DEFAULT 0 NOT NULL, CzyStale INTEGER DEFAULT 0 NOT NULL, KategorieNazwa varchar(255) NOT NULL, PortfeleNazwa varchar(255) NOT NULL, ListyZakupowIdListy integer(10), FOREIGN KEY(KategorieNazwa) REFERENCES Kategorie(Nazwa), FOREIGN KEY(PortfeleNazwa) REFERENCES Portfele(Nazwa));",
                     "CREATE TABLE IF NOT EXISTS ListyZakupow (IdListy INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255) NOT NULL UNIQUE, Pozycje varchar(4095) NOT NULL, CzyKupiono varchar(1023) NOT NULL, CzyUkryte INTEGER DEFAULT 0, PozycjeIdPozycji integer(10) NOT NULL, FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));",
                     "CREATE TABLE IF NOT EXISTS Porady (IdPorady INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255) NOT NULL, Link varchar(255) NOT NULL);",
                     "CREATE TABLE IF NOT EXISTS ZleceniaStale (Nazwa varchar(255) NOT NULL, DataOd date NOT NULL, DataDo date, PozycjeIdPozycji integer(10) NOT NULL, Cyklicznosc integer(10) NOT NULL, Czestotliwosc integer(10) NOT NULL, DniCyklicznosci varchar(127), PRIMARY KEY (Nazwa), FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));",
