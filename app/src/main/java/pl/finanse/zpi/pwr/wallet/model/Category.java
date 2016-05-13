@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
@@ -45,7 +46,7 @@ public class Category implements Comparable<Category> {
         Category[] categories = Database.GetAllCategories(context);
         Arrays.sort(categories);
 
-        List<Category> formattedCategories = new ArrayList<>();
+        List<Category> formattedCategories = new LinkedList<>();
 
         for(int i = 0; i < categories.length; i++)
         {
