@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -27,15 +28,16 @@ import pl.finanse.zpi.pwr.wallet.model.Operation;
  * Created by sebastiankotarski on 05.05.16.
  */
 public class HistoryView extends Fragment implements View.OnClickListener {
-    private ListView operationsListView;
+    private static ListView operationsListView;
     private Button dateFromButton;
     private Button dateToButton;
-    private Date fromDate;
-    private Date toDate;
+    public static Date fromDate;
+    public static Date toDate;
     private FloatingActionButton fab;
+    public static boolean isFrom = true;
 
     //TO DO
-    Operation operationsData[];
+    static Operation operationsData[];
     public final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
 
     @Override
@@ -54,9 +56,7 @@ public class HistoryView extends Fragment implements View.OnClickListener {
         dateToButton = (Button)view.findViewById(R.id.dateToButton);
         System.out.println("Btn" + dateToButton);
 
-        makeData(fromDate, toDate);
-        OperationsAdapter adapter = new OperationsAdapter(getActivity(), R.layout.operation_row, operationsData);
-        operationsListView.setAdapter(adapter);
+        makeData(getActivity(),fromDate, toDate);
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getActivity());
         dateFromButton.setText(dateFormat.format(fromDate));
         dateToButton.setText(dateFormat.format(toDate));
@@ -67,13 +67,26 @@ public class HistoryView extends Fragment implements View.OnClickListener {
 /*
 Wypełniamy listę dla wybranego przedzialu daty operacje
  */
-    private void makeData(Date from, Date to) {
-        operationsData = Database.GetAllPositions(getActivity().getApplicationContext());
+    public static void makeData(Context context, Date from, Date to) {
+        operationsData = Database.GetChoosenPositions(context, from, to);
+        OperationsAdapter adapter = new OperationsAdapter(context, R.layout.operation_row, operationsData);
+        operationsListView.setAdapter(adapter);
     }
 
     @Override
     public void onClick(View v) {
-        showDatePickerDialog(v);
+        int id = v.getId();
+        switch(id) {
+            case R.id.dateFromButton:
+                isFrom = true;
+                showDatePickerDialog(v);
+                break;
+            case R.id.dateToButton:
+                isFrom = false;
+                showDatePickerDialog(v);
+                break;
+        }
+
     }
 
     @Override
@@ -97,23 +110,29 @@ Wypełniamy listę dla wybranego przedzialu daty operacje
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
-/*
-Ustawiamy tekst na danym przycisku i wywołujemy makeData
 
- */
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            // Do something with the date chosen by the user
-//            Button button = (Button)getActivity().findViewById(R.id.datePickerBtn);
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.set(year, month, day);
-//            DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getActivity());
-//            button.setText(dateFormat.format(calendar.getTime()));
+            Button from = (Button)getActivity().findViewById(R.id.dateFromButton);
+            Button to = (Button)getActivity().findViewById(R.id.dateToButton);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(year, month, day);
+            DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getActivity());
+            if(HistoryView.isFrom) {
+                from.setText(dateFormat.format(calendar.getTime()));
+                fromDate = calendar.getTime();
+            } else {
+                to.setText(dateFormat.format(calendar.getTime()));
+                toDate = calendar.getTime();
+            }
+            makeData(getActivity(),fromDate,toDate);
         }
     }
 
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "datePicker");
+
+
     }
 
 }
