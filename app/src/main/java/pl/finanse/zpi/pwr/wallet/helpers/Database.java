@@ -89,11 +89,6 @@ public class Database {
         return cat;
     }
 
-    /**
-     * daje wszystkie wszystkie wszystkie wszystkie kurwa kategorie, bez wyjatku
-     * @param context
-     * @return
-     */
     public static Category[] GetAllCategories(Context context){
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
@@ -110,12 +105,6 @@ public class Database {
         Close();
         return cat;
     }
-
-    /**
-     * daje wszystkie portfele
-     * @param context
-     * @return
-     */
     public static Wallet[] GetAllWallets(Context context){
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
@@ -146,38 +135,6 @@ public class Database {
         String query = null;
         query = "SELECT IdPozycji, Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje WHERE PortfeleNazwa = ? ORDER BY Data DESC, IdPozycji DESC";
         String[] arr = {Wallet.GetActiveWallet(context).getName()};
-        Cursor c = db.rawQuery(query,arr);
-        int idIndex = c.getColumnIndex("IdPozycji");
-        int nazIndex = c.getColumnIndex("Nazwa");
-        int wartIndex = c.getColumnIndex("Wartosc");
-        int datIndex = c.getColumnIndex("Data");
-        int przIndex = c.getColumnIndex("CzyPrzychod");
-        int knazIndex = c.getColumnIndex("KategorieNazwa");
-        int portIndex = c.getColumnIndex("PortfeleNazwa");
-        Operation[] operations = new Operation[ c.getCount()];
-//        Toast.makeText(context,"Liczba pozycji: "+operations.length,Toast.LENGTH_SHORT).show();
-        int i=0;
-        while(c.moveToNext()){
-            try {
-                operations[i++] = new Operation(c.getInt(idIndex),c.getString(portIndex), c.getString(nazIndex),c.getFloat(wartIndex),(new SimpleDateFormat("yyyy-MM-dd")).parse(c.getString(datIndex)), c.getInt(przIndex) == 0 ? false : true, c.getString(knazIndex));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        Close();
-        return operations;
-    }
-
-    public static Operation[] GetChoosenPositions(Context context, Date from, Date to){
-        if(!Open(context))
-            throw new RuntimeException("Blad podczas polaczenia z baza");
-        String query = null;
-
-        query = "SELECT IdPozycji, Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje WHERE PortfeleNazwa = ? AND Data >= ? AND Data <= ? ORDER BY Data DESC, IdPozycji DESC";
-        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        (new SimpleDateFormat("yyyy-MM-dd")).format(to);
-        String[] arr = {Wallet.GetActiveWallet(context).getName(), sdf.format(from), sdf.format(to)};
         Cursor c = db.rawQuery(query,arr);
         int idIndex = c.getColumnIndex("IdPozycji");
         int nazIndex = c.getColumnIndex("Nazwa");
@@ -263,11 +220,6 @@ public class Database {
        return null;
     }
 
-    /**
-     * dodaje SZYBKO nowa pozycje, albo moze nowa operacje, albo cos tam
-     * @param context
-     * @param operacja
-     */
     public static void AddQuickNewPosition(Context context, Operation operacja) {
 
         if(!Open(context))
@@ -284,23 +236,23 @@ public class Database {
     }
 
     /**
-     * edytuje podana operacje, na podstawie jej ID
+     * Funkcja, która dodaje do stanu wybranego portfela wartość ostatniej operacji
      * @param context
-     * @param operacja
+     * @param walletName nazawa portfela
+     * @param money wartość ostatniej operacji
      */
-    public static void EditPosition(Context context, Operation operacja) {
 
+    public static void UpdateWalletState(Context context, String walletName, float money) {
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
-        ContentValues values = new ContentValues();
-        values.put("Nazwa", operacja.operationName);
-        values.put("Wartosc", operacja.cost);
-        values.put("Data", (new SimpleDateFormat("yyyy-MM-dd")).format(operacja.date));
-        values.put("CzyPrzychod", operacja.isIncome ? 1 : 0);
-        values.put("KategorieNazwa", operacja.category);
-        values.put("PortfeleNazwa", operacja.wallet);
-        db.update("Pozycje", values, "IdPozycji = ?", new String[]{Integer.toString(operacja.id)});
+        String query = "UPDATE Portfele SET Stan = Stan + ? WHERE Nazwa = ?;";
+        String[] arr= {String.valueOf(money), walletName};
+        db.execSQL(query, arr);
         Close();
+
+        Wallet current = Wallet.GetActiveWallet(context);
+        if(current.getName().equals(walletName))
+            current.UpdateValueBy(money);
     }
 
     /**
@@ -372,6 +324,33 @@ public class Database {
         db.execSQL(query, arr);
         Close();
     }
+
+    public static void RemoveWallet(Context context, Wallet pornfel) {
+               // Toast.makeText(context, "RemoveCategory", Toast.LENGTH_SHORT).show();
+                if(pornfel == null)
+                    throw new RuntimeException("Spoko takie usuwanie NULLa");
+                if(!Open(context))
+                    throw new RuntimeException("Blad podczas polaczenia z baza");
+                String query = "DELETE FROM Portfele WHERE Nazwa = ?;";
+                String[] arr= {pornfel.getName()};
+                db.execSQL(query, arr);
+                Close();
+    }
+
+    public static int GetNumberOfPositionsForWallet(Context context, Wallet wallet) {
+                if(!Open(context))
+                    throw new RuntimeException("Blad podczas polaczenia z baza");
+                String query = null;
+                query = "SELECT COUNT(*) FROM Pozycje WHERE PortfeleNazwa = ?";
+                String[] arr = {wallet.getName()};
+                Cursor c = db.rawQuery(query,arr);
+                int w = -1;
+                c.moveToFirst();
+                w = c.getInt(0);
+                Close();
+                return w;
+            }
+
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
         private DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
