@@ -2,9 +2,12 @@ package pl.finanse.zpi.pwr.wallet.views;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,7 +90,12 @@ public class HomePage extends Fragment {
         lastOperationsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                FragmentManager fragmentManager = getFragmentManager();
+                EditOperation eop = null;
+                fragmentManager.beginTransaction().replace(R.id.mainContent, eop = new EditOperation()).commit();
+                eop.operationToEdit = operationsData[position];
+                DrawerLayout drawer = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
             }
         });
 

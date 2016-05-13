@@ -234,6 +234,20 @@ public class Database {
         db.insert("Pozycje", null, values);
         Close();
     }
+    public static void EditPosition(Context context, Operation operacja) {
+
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        ContentValues values = new ContentValues();
+        values.put("Nazwa", operacja.operationName);
+        values.put("Wartosc", operacja.cost);
+        values.put("Data", (new SimpleDateFormat("yyyy-MM-dd")).format(operacja.date));
+        values.put("CzyPrzychod", operacja.isIncome ? 1 : 0);
+        values.put("KategorieNazwa", operacja.category);
+        values.put("PortfeleNazwa", operacja.wallet);
+        db.update("Pozycje", values, "IdPozycji = ?", new String[]{Integer.toString(operacja.id)});
+        Close();
+    }
 
     /**
      * Funkcja, która dodaje do stanu wybranego portfela wartość ostatniej operacji
