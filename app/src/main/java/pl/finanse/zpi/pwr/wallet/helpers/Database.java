@@ -284,7 +284,6 @@ public class Database {
         Close();
     }
 
-
     /**
      * edytuje podana operacje, na podstawie jej ID
      * @param context
@@ -301,36 +300,17 @@ public class Database {
         values.put("CzyPrzychod", operacja.isIncome ? 1 : 0);
         values.put("KategorieNazwa", operacja.category);
         values.put("PortfeleNazwa", operacja.wallet);
-        db.update("Pozycje", values, "IdPozycji = ?", new String[]{Long.toString(operacja.id)});
+        db.update("Pozycje", values, "IdPozycji = ?", new String[]{Integer.toString(operacja.id)});
         Close();
     }
-    /**
-     * dodaje nowy szablon do bazy danych
-     * @param context
-     * @param operacja
-     */
-    public static void AddNewTemplate(Context context, Operation operacja) {
 
-        if(!Open(context))
-            throw new RuntimeException("Blad podczas polaczenia z baza");
-        ContentValues values = new ContentValues();
-        values.put("Nazwa", operacja.operationName);
-        values.put("Wartosc", operacja.cost);
-        values.put("Data", (new SimpleDateFormat("yyyy-MM-dd")).format(operacja.date));
-        values.put("CzyPrzychod", operacja.isIncome ? 1 : 0);
-        values.put("KategorieNazwa", operacja.category);
-        values.put("PortfeleNazwa", operacja.wallet);
-        values.put("CzySzablon",1);
-        db.insert("Pozycje", null, values);
-
-        Close();
-    }
     /**
      * Funkcja, która dodaje do stanu wybranego portfela wartość ostatniej operacji
      * @param context
      * @param walletName nazawa portfela
      * @param money wartość ostatniej operacji
      */
+
     public static void UpdateWalletState(Context context, String walletName, float money) {
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
@@ -409,10 +389,57 @@ public class Database {
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = "DELETE FROM Pozycje WHERE IdPozycji= ?";
-        String[] arr = {Long.toString(operation.id)};
+        String[] arr = {Integer.toString(operation.id)};
         db.execSQL(query, arr);
         Close();
     }
+
+    public static void RemoveWallet(Context context, Wallet pornfel) {
+               // Toast.makeText(context, "RemoveCategory", Toast.LENGTH_SHORT).show();
+                if(pornfel == null)
+                    throw new RuntimeException("Spoko takie usuwanie NULLa");
+                if(!Open(context))
+                    throw new RuntimeException("Blad podczas polaczenia z baza");
+                String query = "DELETE FROM Portfele WHERE Nazwa = ?;";
+                String[] arr= {pornfel.getName()};
+                db.execSQL(query, arr);
+                Close();
+    }
+
+    public static int GetNumberOfPositionsForWallet(Context context, Wallet wallet) {
+                if(!Open(context))
+                    throw new RuntimeException("Blad podczas polaczenia z baza");
+                String query = null;
+                query = "SELECT COUNT(*) FROM Pozycje WHERE PortfeleNazwa = ?";
+                String[] arr = {wallet.getName()};
+                Cursor c = db.rawQuery(query,arr);
+                int w = -1;
+                c.moveToFirst();
+                w = c.getInt(0);
+                Close();
+                return w;
+            }
+
+    /**
+     +      * edytuje podana operacje, na podstawie jej ID
+     +      * @param context
+     +      * @param operacja
+     +      */
+         public static void EditPosition(Context context, Operation operacja) {
+
+                 if(!Open(context))
+                     throw new RuntimeException("Blad podczas polaczenia z baza");
+                 ContentValues values = new ContentValues();
+                 values.put("Nazwa", operacja.operationName);
+                 values.put("Wartosc", operacja.cost);
+                 values.put("Data", (new SimpleDateFormat("yyyy-MM-dd")).format(operacja.date));
+                 values.put("CzyPrzychod", operacja.isIncome ? 1 : 0);
+                 values.put("KategorieNazwa", operacja.category);
+                 values.put("PortfeleNazwa", operacja.wallet);
+                 db.update("Pozycje", values, "IdPozycji = ?", new String[]{Integer.toString(operacja.id)});
+                 Close();
+             }
+
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
         private DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {

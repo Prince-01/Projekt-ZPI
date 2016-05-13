@@ -97,18 +97,22 @@ Wypełniamy listę dla wybranego przedzialu daty operacje
 
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
-
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            //TO DO
-            //WYŚWIETLIC DATĘ Z DATE
+            Button from = (Button)getActivity().findViewById(R.id.dateFromButton);
+            Button to = (Button)getActivity().findViewById(R.id.dateToButton);
+            String date;
+            if(HistoryView.isFrom) {
+                date = from.getText().toString();
+            } else {
+                date = to.getText().toString();
+            }
             final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
+            int year = Integer.parseInt(date.substring(6));
+            int month = Integer.parseInt(date.substring(3,5));// c.get(Calendar.MONTH);
+            int day = Integer.parseInt(date.substring(0,2));
             // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, year, month, day);
+            return new DatePickerDialog(getActivity(), this, year, month-1, day);
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {

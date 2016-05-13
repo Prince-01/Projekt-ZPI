@@ -27,7 +27,7 @@ public class OperationsAdapter extends ArrayAdapter<Operation> {
     Context context;
     int layoutResourceId;
     Operation data[] = null;
-    final DecimalFormat df = new DecimalFormat("#.00");
+    final DecimalFormat df = new DecimalFormat("#0.00");
 
     public OperationsAdapter(Context context, int layoutResourceId, Operation[] data) {
         super(context, layoutResourceId, data);
