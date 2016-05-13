@@ -2,6 +2,7 @@ package pl.finanse.zpi.pwr.wallet.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class WalletAdapter extends ArrayAdapter<Wallet> {
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new RowBeanHolder();
             holder.name = (TextView) row.findViewById(R.id.walletName);
+
             row.setTag(holder);
         } else {
             holder = (RowBeanHolder) row.getTag();
@@ -43,6 +45,8 @@ public class WalletAdapter extends ArrayAdapter<Wallet> {
         Wallet object = data[position];
 //        SimpleDateFormat sdf = new SimpleDateFormat(String.valueOf(DateFormat.getDateInstance()), Locale.ENGLISH);
 //        holder.nameLabel.setText(sdf.format(object.date));
+        if(Wallet.GetActiveWallet(context).getName().equals(object.getName()))
+            row.setBackgroundColor(context.getResources().getColor(R.color.shamrock));
         holder.name.setText(object.getName());
         return row;
     }

@@ -1,5 +1,6 @@
 package pl.finanse.zpi.pwr.wallet.helpers;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -236,26 +237,6 @@ public class Database {
     }
 
     /**
-     * Funkcja, która dodaje do stanu wybranego portfela wartość ostatniej operacji
-     * @param context
-     * @param walletName nazawa portfela
-     * @param money wartość ostatniej operacji
-     */
-
-    public static void UpdateWalletState(Context context, String walletName, float money) {
-        if(!Open(context))
-            throw new RuntimeException("Blad podczas polaczenia z baza");
-        String query = "UPDATE Portfele SET Stan = Stan + ? WHERE Nazwa = ?;";
-        String[] arr= {String.valueOf(money), walletName};
-        db.execSQL(query, arr);
-        Close();
-
-        Wallet current = Wallet.GetActiveWallet(context);
-        if(current.getName().equals(walletName))
-            current.UpdateValueBy(money);
-    }
-
-    /**
      * usuowa podajna kategorie z bazy danych,
      * musimy miec ustawiona superkategorie
      * @param context
@@ -275,6 +256,18 @@ public class Database {
         db.execSQL(query2, arr2);
         String query = "DELETE FROM Kategorie WHERE Nazwa = ?;";
         String[] arr= {kategoria.categoryName};
+        db.execSQL(query, arr);
+        Close();
+    }
+
+    public static void RemoveWallet(Context context, Wallet pornfel) {
+        // Toast.makeText(context, "RemoveCategory", Toast.LENGTH_SHORT).show();
+        if(pornfel == null)
+            throw new RuntimeException("Spoko takie usuwanie NULLa");
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = "DELETE FROM Portfele WHERE Nazwa = ?;";
+        String[] arr= {pornfel.getName()};
         db.execSQL(query, arr);
         Close();
     }
@@ -324,6 +317,21 @@ public class Database {
         db.execSQL(query, arr);
         Close();
     }
+
+    public static int GetNumberOfPositionsForWallet(Context context, Wallet wallet) {
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = null;
+        query = "SELECT COUNT(*) FROM Pozycje WHERE PortfeleNazwa = ?";
+        String[] arr = {wallet.getName()};
+        Cursor c = db.rawQuery(query,arr);
+        int w = -1;
+        c.moveToFirst();
+        w = c.getInt(0);
+        Close();
+        return w;
+    }
+
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
         private DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
