@@ -425,7 +425,7 @@ public class Database {
      +      * @param context
      +      * @param operacja
      +      */
-         public static void EditPosition(Context context, Operation operacja) {
+         /*public static void EditPosition(Context context, Operation operacja) {
 
                  if(!Open(context))
                      throw new RuntimeException("Blad podczas polaczenia z baza");
@@ -438,7 +438,7 @@ public class Database {
                  values.put("PortfeleNazwa", operacja.wallet);
                  db.update("Pozycje", values, "IdPozycji = ?", new String[]{Integer.toString(operacja.id)});
                  Close();
-             }
+             }*/
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
 

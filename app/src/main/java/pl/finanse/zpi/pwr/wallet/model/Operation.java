@@ -10,7 +10,7 @@ import pl.finanse.zpi.pwr.wallet.model.Category;
  *
  */
 public class Operation {
-    public long id;
+    public int id;
     public String operationName;
     public String wallet;
     public String category;
@@ -19,7 +19,7 @@ public class Operation {
     public boolean isIncome;
 
 
-    public Operation(long id, String wallet, String operationName, float cost, Date date, boolean isIncome, String category) {
+    public Operation(int id, String wallet, String operationName, float cost, Date date, boolean isIncome, String category) {
         this.id = id;
         this.wallet = wallet;
         this.operationName = operationName;

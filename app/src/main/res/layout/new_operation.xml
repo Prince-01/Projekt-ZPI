@@ -65,14 +65,18 @@
 
     <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
-            android:gravity="center"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:orientation="horizontal"
-            android:id="@+id/wplywLubWydatekNowejOperacji"
-            android:layout_alignParentBottom="true"
-            android:layout_alignLeft="@+id/datePicker"
-            android:layout_alignStart="@+id/datePicker">
+            android:id="@+id/wplywLubWydatekNowejOperacji">
+            <ImageView
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_is_income"
+            android:tint="#fff"/>
             <RadioButton
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Wpływ"
@@ -81,26 +85,29 @@
                 android:layout_alignLeft="@+id/datePicker3"
                 android:layout_alignStart="@+id/datePicker3" />
             <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Wydatek"
-                    android:id="@+id/wydatekNowejOperacji"
-                    android:checked="true"/>
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wydatek"
+                android:id="@+id/wydatekNowejOperacji"
+                android:checked="true"/>
         </RadioGroup>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
-        <TextView
+        android:layout_marginLeft="@dimen/activity_horizontal_margin">
+
+        <ImageView
+            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Wybierz datę:"
-            android:id="@+id/textView7" />
+            android:src="@drawable/ic_calendar"
+            android:tint="#fff"/>
 
         <Button
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="data"
@@ -108,12 +115,21 @@
     </LinearLayout>
 
     <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dodaj operację"
-            android:id="@+id/addPositionBtn"
-            android:layout_gravity="center"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_operation_txt"
+        android:id="@+id/addPositionBtn"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
-    </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/templets"
+        android:id="@+id/useTemplateBtn"
+        android:layout_gravity="right"
+        android:layout_marginRight="10dp"/>
+
+</LinearLayout>

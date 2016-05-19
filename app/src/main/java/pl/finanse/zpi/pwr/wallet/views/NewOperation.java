@@ -72,6 +72,14 @@ public class NewOperation extends Fragment implements View.OnClickListener {
                 Database.GetAllWallets(getActivity()));
         walletsSpinner.setAdapter(walletArrayAdapter);
 
+        int walletIndex = 0;
+        Wallet[] temp = Database.GetAllWallets(getActivity());
+        for(int i = 0; i < temp.length ; i++) {
+            if(temp[i].getName().equals(Wallet.GetActiveWallet(getActivity()).getName()))
+                walletIndex = i;
+        }
+        walletsSpinner.setSelection(walletIndex,true);
+
         ((EditText)view.findViewById(R.id.kwotaNowejKategorii)).setFilters(new InputFilter[] { new ValueInputFilter(10,2) });
         Button button = (Button)view.findViewById(R.id.datePickerBtn);
         Date date = Calendar.getInstance().getTime();
@@ -85,6 +93,7 @@ public class NewOperation extends Fragment implements View.OnClickListener {
     private void setupButtons(View view) {
         view.findViewById(R.id.datePickerBtn).setOnClickListener(this);
         view.findViewById(R.id.addPositionBtn).setOnClickListener(this);
+        view.findViewById(R.id.useTemplateBtn).setOnClickListener(this);
     }
 
     @Override
@@ -96,10 +105,19 @@ public class NewOperation extends Fragment implements View.OnClickListener {
             case R.id.addPositionBtn:
                 onAddPosition(v);
                 break;
+            case R.id.useTemplateBtn:
+                onTemplateUse(v);
+                break;
             default:
                 Toast.makeText(getActivity(), "Nieobsługiwany przycisk! Somethings wrong! ", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private void onTemplateUse(View v) {
+        TemplatesView newFragment = new TemplatesView();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.mainContent, newFragment).commit();
     }
 
     @Override
@@ -167,6 +185,8 @@ public class NewOperation extends Fragment implements View.OnClickListener {
         Spinner categories = (Spinner) mainView.findViewById(R.id.categoriesSpinner);
         Spinner wallets = (Spinner) mainView.findViewById(R.id.walletsSpinner);
         RadioButton wydatek = (RadioButton) mainView.findViewById(R.id.wydatekNowejOperacji);
+
+        Wallet.SetActiveWallet(getActivity(), Database.GetAllWallets(getActivity())[(int)wallets.getSelectedItemId()].getName());
 
         String cat = (String) categories.getSelectedItem();
         Wallet wal = (Wallet) wallets.getSelectedItem();

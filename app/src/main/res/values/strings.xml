@@ -23,6 +23,8 @@
     <string name="choose_date">Wybierz datę</string>
     <string name="last_operation_txt">Ostatnie operacje</string>
     <string name="stan_konta_string">Stan konta:</string>
+    <string name="templets">Szablony</string>
+    <string name="add_operation_txt">Ok</string>
     <string-array name="examples">
         <item>Array item</item>
         <item>Array item</item>
