@@ -2,34 +2,34 @@ package pl.finanse.zpi.pwr.wallet.views;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Category;
+import pl.finanse.zpi.pwr.wallet.model.Operation;
+import pl.finanse.zpi.pwr.wallet.model.StandingOperation;
+import pl.finanse.zpi.pwr.wallet.model.Wallet;
 
 /**
  * Dodawanie nowego stalego zlecenia
  * Created by sebastiankotarski on 21.04.16.
  */
-public class NewStandingOperation extends Fragment {
+public class NewStandingOperation extends Fragment implements View.OnClickListener {
     FloatingActionButton fab;
 
     public NewStandingOperation() {
@@ -43,8 +43,22 @@ public class NewStandingOperation extends Fragment {
         fab.setVisibility(View.INVISIBLE);
         Spinner categoriesSpinner = (Spinner) view.findViewById(R.id.spinner);
 
-        ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(getActivity(), android.R.layout.simple_spinner_item, Database.GetAllCategories(getActivity()));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, Category.getAllFormattedCategoriesWithDepth(getActivity()));
         categoriesSpinner.setAdapter(adapter);
+
+        Spinner walletsSpinner = (Spinner) view.findViewById(R.id.walletsSpinner);
+
+        ArrayAdapter<Wallet> walletArrayAdapter = new ArrayAdapter<Wallet>(getActivity(), android.R.layout.simple_spinner_item,
+                Database.GetAllWallets(getActivity()));
+        walletsSpinner.setAdapter(walletArrayAdapter);
+
+        int walletIndex = 0;
+        Wallet[] temp = Database.GetAllWallets(getActivity());
+        for(int i = 0; i < temp.length ; i++) {
+            if(temp[i].getName().equals(Wallet.GetActiveWallet(getActivity()).getName()))
+                walletIndex = i;
+        }
+        walletsSpinner.setSelection(walletIndex,true);
 
         /*TextView text = (TextView) view.findViewById(R.id.NewOperationLabel);
         Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Montserrat-Regular.otf");
@@ -67,6 +81,42 @@ public class NewStandingOperation extends Fragment {
                 (getView().findViewById(R.id.textView11)).setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
             }
         });
+
+        final TextView til = (TextView) view.findViewById(R.id.timeIntervalLabel);
+        SeekBar tisb = (SeekBar) view.findViewById(R.id.timeInterval);
+
+        ((Button) view.findViewById(R.id.button2)).setOnClickListener(this);
+
+        tisb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(progress < 14)
+                    til.setText("Co tydzień");
+                else if(progress < 28)
+                    til.setText("Co dwa tygodnie");
+                else if(progress < 42)
+                    til.setText("Co miesiąc");
+                else if(progress < 56)
+                    til.setText("Co dwa miesiące");
+                else if(progress < 70)
+                    til.setText("Co kwartał");
+                else if(progress < 84)
+                    til.setText("Co pół roku");
+                else
+                    til.setText("Co rok");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
         return view;
     }
 
@@ -102,5 +152,71 @@ public class NewStandingOperation extends Fragment {
 
     public void chooseDateClicked(View view) {
         Toast.makeText(getActivity(), "date picker dialog", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onAddStandingOperation(View mainView) {
+        Toast.makeText(getActivity(), "NOT FULLY IMPLEMENTED", Toast.LENGTH_SHORT).show();
+        EditText kwota = (EditText) mainView.findViewById(R.id.standingOperationCost);
+        EditText tytul = (EditText) mainView.findViewById(R.id.standingOperationTitle);
+        Button start = (Button) mainView.findViewById(R.id.startDatePickerBtn);
+        Button end = (Button) mainView.findViewById(R.id.endDatePickerBtn);
+        CheckBox czyDataZak = (CheckBox) mainView.findViewById(R.id.checkBox);
+        Spinner categories = (Spinner) mainView.findViewById(R.id.spinner);
+        Spinner wallets = (Spinner) mainView.findViewById(R.id.walletsSpinner);
+        RadioButton wydatek = (RadioButton) mainView.findViewById(R.id.wydatekNowejOperacji);
+        SeekBar tisb = (SeekBar) mainView.findViewById(R.id.timeInterval);
+
+        Wallet.SetActiveWallet(getActivity(), Database.GetAllWallets(getActivity())[(int)wallets.getSelectedItemId()].getName());
+
+        String cat = (String) categories.getSelectedItem();
+        Wallet wal = (Wallet) wallets.getSelectedItem();
+        String kw = kwota.getText().toString();
+        String ty = tytul.getText().toString();
+        Date beg;
+        Date ending = null;
+        try {
+            beg = android.text.format.DateFormat.getDateFormat(getActivity()).parse(start.getText().toString());
+        } catch (ParseException e) {
+            Log.d("ERR", "Couldn't parse date.");
+            beg = new Date();
+            e.printStackTrace();
+        }
+        if(czyDataZak.isChecked()) {
+            try {
+                ending = android.text.format.DateFormat.getDateFormat(getActivity()).parse(end.getText().toString());
+            } catch (ParseException e) {
+                Log.d("ERR", "Couldn't parse date.");
+                ending = new Date();
+                e.printStackTrace();
+            }
+        }
+
+        boolean wp = !wydatek.isChecked();
+
+        if(kw .equals("")) {
+            Toast.makeText(getActivity(), "Brak kwoty ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        float fkw = Float.parseFloat(kw);
+        if(fkw <= 0f) {
+            Toast.makeText(getActivity(), "Kwota musi byc wieksza od 0", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        StandingOperation standingOperation = new StandingOperation(-1, wal.getName(), ty, fkw, beg, ending, tisb.getProgress(), wp, cat.trim());
+
+        Database.AddNewStandingOperation(getActivity(), standingOperation);
+        Wallet.SetActiveWallet(getActivity(), standingOperation.wallet);
+
+        HomePage newFragment = new HomePage();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.mainContent, newFragment).commit();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.button2:
+                onAddStandingOperation(v);
+        }
     }
 }
