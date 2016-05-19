@@ -49,6 +49,8 @@ public class HomePage extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         totalBalance = (TextView) view.findViewById(R.id.TotalBalance);
         lastOperationsListView = (ListView) view.findViewById(R.id.lastOperationsListView);
+        TextView walletName = (TextView) view.findViewById(R.id.walletNameInHome);
+        walletName.setText(Wallet.GetActiveWallet(getActivity()).getName());
         ReloadList();//robi nam liste
         UpdateTotalBalance();
         return view;
