@@ -2,10 +2,15 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryLight">#C5CAE9</color>
+    <color name="textColor">#FFFFFF</color>
     <color name="grey">#848484</color>
-    <color name="colorAccent">#1b8d2e</color>
+    <color name="colorAccent">#7C4DFF</color>
     <color name="negativeValue">#EC644B</color>
     <color name="shamrock">#2ECC71</color>
     <color name="white">#FFFFFF</color>
+    <color name="primaryText">#212121</color>
+    <color name="secondaryText">#727272</color>
+    <color name="dividerColor">#B6B6B6</color>
 
 </resources>

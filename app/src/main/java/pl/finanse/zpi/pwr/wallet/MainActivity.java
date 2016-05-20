@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -22,6 +23,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.lang.reflect.Field;
 
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Category;
@@ -49,6 +52,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        System.out.println("APPLICATION RUNNING");
+        FontsOverride.setDefaultFont(this, "DEFAULT", "fonts/Montserrat-Light.otf");
+        FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/Montserrat-Light.otf");
+        FontsOverride.setDefaultFont(this, "MONTSERRAT", "fonts/Montserrat-Light.otf");
+        FontsOverride.setDefaultFont(this, "SERIF", "fonts/Montserrat-Light.otf");
+        FontsOverride.setDefaultFont(this, "SANS_SERIF", "fonts/Montserrat-Light.otf");
+
+
+
         if(Wallet.GetActiveWallet(this) == null)
             Wallet.SetActiveWallet(this, Database.GetAllWallets(this)[0].getName());
         setContentView(R.layout.activity_main);
@@ -315,5 +328,29 @@ public class MainActivity extends AppCompatActivity
     public void onAddPosition(View view) {
 
 
+    }
+
+    static final class FontsOverride {
+
+        public static void setDefaultFont(Context context,
+                                          String staticTypefaceFieldName, String fontAssetName) {
+            final Typeface regular = Typeface.createFromAsset(context.getAssets(),
+                    fontAssetName);
+            replaceFont(staticTypefaceFieldName, regular);
+        }
+
+        protected static void replaceFont(String staticTypefaceFieldName,
+                                          final Typeface newTypeface) {
+            try {
+                final Field staticField = Typeface.class
+                        .getDeclaredField(staticTypefaceFieldName);
+                staticField.setAccessible(true);
+                staticField.set(null, newTypeface);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
