@@ -436,8 +436,15 @@ public class Database {
         values.put("CzyPrzychod", operacja.isIncome ? 1 : 0);
         values.put("KategorieNazwa", operacja.category);
         values.put("PortfeleNazwa", operacja.wallet);
-        values.put("CzyStale","1");
-        db.insert("Pozycje", null, values);
+        values.put("CzyStale", 1);
+        long idPoz = db.insert("Pozycje", null, values);//dodanie do tablicy pozycji
+        values = new ContentValues();
+        values.put("Nazwa",operacja.operationName);
+        values.put("DataOd",operacja.begin.toString());
+        values.put("DataDo",operacja.end.toString());
+        values.put("Interwal",operacja.interval.toString());
+        values.put("PozycjeIdPozycji",idPoz);
+        db.insert("ZleceniaStale",null,values);//dodanie do zlecen stalych
         Close();
     }
 
@@ -494,7 +501,7 @@ public class Database {
                     "CREATE TABLE IF NOT EXISTS Pozycje (IdPozycji INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255), Wartosc double(10) NOT NULL, Data date, Komentarz integer(511), CzyPrzychod INTEGER DEFAULT 0 NOT NULL, CzySzablon INTEGER DEFAULT 0 NOT NULL, CzyStale INTEGER DEFAULT 0 NOT NULL, KategorieNazwa varchar(255) NOT NULL, PortfeleNazwa varchar(255) NOT NULL, ListyZakupowIdListy integer(10), FOREIGN KEY(KategorieNazwa) REFERENCES Kategorie(Nazwa), FOREIGN KEY(PortfeleNazwa) REFERENCES Portfele(Nazwa));",
                     "CREATE TABLE IF NOT EXISTS ListyZakupow (IdListy INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255) NOT NULL UNIQUE, Pozycje varchar(4095) NOT NULL, CzyKupiono varchar(1023) NOT NULL, CzyUkryte INTEGER DEFAULT 0, PozycjeIdPozycji integer(10) NOT NULL, FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));",
                     "CREATE TABLE IF NOT EXISTS Porady (IdPorady INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255) NOT NULL, Link varchar(255) NOT NULL);",
-                    "CREATE TABLE IF NOT EXISTS ZleceniaStale (Nazwa varchar(255) NOT NULL, DataOd date NOT NULL, DataDo date, PozycjeIdPozycji integer(10) NOT NULL, Cyklicznosc integer(10) NOT NULL, Czestotliwosc integer(10) NOT NULL, DniCyklicznosci varchar(127), PRIMARY KEY (Nazwa), FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));",
+                    "CREATE TABLE IF NOT EXISTS ZleceniaStale (Nazwa varchar(255) NOT NULL, DataOd date NOT NULL, DataDo date, PozycjeIdPozycji integer(10) NOT NULL, Interwal varchar(10), PRIMARY KEY (Nazwa), FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));",
                     "CREATE UNIQUE INDEX ListyZakupow_IdListy ON ListyZakupow (IdListy);",
                     "CREATE UNIQUE INDEX Porady_IdPorady ON Porady (IdPorady);",
                     "CREATE UNIQUE INDEX Pozycje_IdPozycji ON Pozycje (IdPozycji);" };

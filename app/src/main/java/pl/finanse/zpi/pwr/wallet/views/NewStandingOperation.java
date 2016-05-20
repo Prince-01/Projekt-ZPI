@@ -165,13 +165,13 @@ public class NewStandingOperation extends Fragment implements View.OnClickListen
         Spinner wallets = (Spinner) mainView.findViewById(R.id.walletsSpinner);
         RadioButton wydatek = (RadioButton) mainView.findViewById(R.id.wydatekNowejOperacji);
         SeekBar tisb = (SeekBar) mainView.findViewById(R.id.timeInterval);
-
-        Wallet.SetActiveWallet(getActivity(), Database.GetAllWallets(getActivity())[(int)wallets.getSelectedItemId()].getName());
-
         String cat = (String) categories.getSelectedItem();
         Wallet wal = (Wallet) wallets.getSelectedItem();
         String kw = kwota.getText().toString();
         String ty = tytul.getText().toString();
+
+        Wallet.SetActiveWallet(getActivity(), Database.GetAllWallets(getActivity())[(int)wallets.getSelectedItemPosition()].getName());
+
         Date beg;
         Date ending = null;
         try {
