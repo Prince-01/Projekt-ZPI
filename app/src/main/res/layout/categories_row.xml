@@ -4,8 +4,8 @@
         android:id="@+id/categoryRowLayout"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/listPreferredItemHeight">
-        android:layout_marginTop="@dimen/list_margin">
         <ImageView
+            android:layout_marginStart="@dimen/list_margin"
             android:id="@+id/categoryIcon"
             android:contentDescription="@string/desc_category_icon"
             android:layout_centerVertical="true"
@@ -13,7 +13,7 @@
             android:layout_height="@dimen/category_icon_dim"
             android:layout_gravity="start"
             android:tint="@color/white"
-            android:src="@drawable/ic_menu_send" />
+            android:src="@drawable/ic_menu_send"/>
         <TextView
             android:id="@+id/categoryText"
             android:layout_width="wrap_content"
