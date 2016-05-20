@@ -32,7 +32,7 @@ public class StandingOperationView extends Fragment {
         return view;
     }
     private void makeData() {
-        standingOperations = new StandingOperation[]{new StandingOperation(), new StandingOperation()};
+        standingOperations = new StandingOperation[0];
     }
 
 }
