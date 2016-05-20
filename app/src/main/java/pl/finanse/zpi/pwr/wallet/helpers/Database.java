@@ -422,8 +422,23 @@ public class Database {
                 return w;
             }
 
-    public static void AddNewStandingOperation(Activity activity, StandingOperation standingOperation) {
+    /**
+     * dodaje nowa operacje zlecena stalego
 
+     */
+    public static void AddNewStandingOperation(Context context, StandingOperation operacja) {
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        ContentValues values = new ContentValues();
+        values.put("Nazwa", operacja.operationName);
+        values.put("Wartosc", operacja.cost);
+        values.put("Data", (new SimpleDateFormat("yyyy-MM-dd")).format(operacja.date));
+        values.put("CzyPrzychod", operacja.isIncome ? 1 : 0);
+        values.put("KategorieNazwa", operacja.category);
+        values.put("PortfeleNazwa", operacja.wallet);
+        values.put("CzyStale","1");
+        db.insert("Pozycje", null, values);
+        Close();
     }
 
 

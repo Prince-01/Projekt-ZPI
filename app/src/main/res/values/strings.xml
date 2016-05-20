@@ -26,6 +26,10 @@
     <string name="stan_konta_string">Stan konta:</string>
     <string name="templets">Szablony</string>
     <string name="add_operation_txt">Ok</string>
+    <string name="desc_category_icon">category icon</string>
+    <string name="coming_soon">Coming soon!</string>
+    <string name="sweet_home_alabama">Sweet home Alabama</string>
+    <string name="desc_user_icon">user icon</string>
     <string-array name="examples">
         <item>Array item</item>
         <item>Array item</item>
