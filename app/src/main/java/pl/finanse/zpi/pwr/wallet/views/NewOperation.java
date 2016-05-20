@@ -75,8 +75,10 @@ public class NewOperation extends Fragment implements View.OnClickListener {
         int walletIndex = 0;
         Wallet[] temp = Database.GetAllWallets(getActivity());
         for(int i = 0; i < temp.length ; i++) {
-            if(temp[i].getName().equals(Wallet.GetActiveWallet(getActivity()).getName()))
+            if(temp[i].getName().equals(Wallet.GetActiveWallet(getActivity()).getName())) {
                 walletIndex = i;
+                break;
+            }
         }
         walletsSpinner.setSelection(walletIndex,true);
 

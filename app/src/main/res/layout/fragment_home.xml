@@ -6,26 +6,34 @@
         android:layout_height="wrap_content"
         android:padding="6dp"
         android:id="@+id/TotalBalanceBox">
-        <ImageView
-            android:id="@+id/imWallet"
-            android:layout_toLeftOf="@+id/walletNameInHome"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/walletNameLay"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/wallet"
-            android:tint="#fff"/>
-        <TextView
-            android:layout_marginLeft="@dimen/list_margin"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/walletNameInHome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="16dp"/>
+            android:gravity="center_horizontal">
+            <ImageView
+                android:id="@+id/imWallet"
+                android:layout_toLeftOf="@+id/walletNameInHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/wallet"
+                android:tint="#fff"/>
+            <TextView
+                android:layout_marginLeft="@dimen/list_margin"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/walletNameInHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="16dp"/>
+        </RelativeLayout>
+
+
         <TextView
             android:layout_marginTop="@dimen/list_margin"
-            android:layout_below="@+id/walletNameInHome"
+            android:layout_below="@+id/walletNameLay"
             android:text="@string/stan_konta_string"
             android:id="@+id/textViewStan"
             android:layout_width="wrap_content"
@@ -44,6 +52,22 @@
             android:textStyle="bold"
             android:textSize="28dp"
             />
+
+        <ImageView
+            android:id="@+id/leftArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/left_arrow"
+            android:tint="#fff"
+            android:layout_centerVertical="true"/>
+        <ImageView
+            android:id="@+id/rightArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/right_arrow"
+            android:tint="#fff"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
     </RelativeLayout>
 
 
