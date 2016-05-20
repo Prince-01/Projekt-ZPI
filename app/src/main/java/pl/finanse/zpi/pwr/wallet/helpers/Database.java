@@ -436,6 +436,7 @@ public class Database {
         values.put("CzyPrzychod", operacja.isIncome ? 1 : 0);
         values.put("KategorieNazwa", operacja.category);
         values.put("PortfeleNazwa", operacja.wallet);
+        values.put("CzyStale","1");
         db.insert("Pozycje", null, values);
         Close();
     }
