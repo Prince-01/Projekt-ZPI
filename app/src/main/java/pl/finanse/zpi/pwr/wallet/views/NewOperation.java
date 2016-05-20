@@ -72,7 +72,7 @@ public class NewOperation extends Fragment implements View.OnClickListener {
                 Database.GetAllWallets(getActivity()));
         walletsSpinner.setAdapter(walletArrayAdapter);
 
-        int walletIndex = 0;
+         int walletIndex = 0;
         Wallet[] temp = Database.GetAllWallets(getActivity());
         for(int i = 0; i < temp.length ; i++) {
             if(temp[i].getName().equals(Wallet.GetActiveWallet(getActivity()).getName())) {
