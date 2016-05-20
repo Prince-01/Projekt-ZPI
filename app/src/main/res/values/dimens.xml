@@ -7,4 +7,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="list_margin">4dp</dimen>
+    <dimen name="category_icon_dim">24dp</dimen>
+    <dimen name="ten_dp">10dp</dimen>
+    <dimen name="forty_dim">40dp</dimen>
 </resources>
