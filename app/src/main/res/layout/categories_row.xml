@@ -1,21 +1,19 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight">
-
     <RelativeLayout
-        android:layout_margin="@dimen/fab_margin"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_margin="@dimen/list_margin"
         android:id="@+id/categoryRowLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?android:attr/listPreferredItemHeight">
         android:layout_marginTop="@dimen/list_margin">
         <ImageView
             android:id="@+id/categoryIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="left"
-            android:tint="#ffffff"
+            android:contentDescription="@string/desc_category_icon"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/category_icon_dim"
+            android:layout_height="@dimen/category_icon_dim"
+            android:layout_gravity="start"
+            android:tint="@color/white"
             android:src="@drawable/ic_menu_send" />
-
         <TextView
             android:id="@+id/categoryText"
             android:layout_width="wrap_content"
@@ -23,11 +21,6 @@
             android:textColor="#ffffff"
             android:textSize="16sp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/fab_margin"
-            android:layout_toRightOf="@+id/categoryIcon" />
-
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_toEndOf="@+id/categoryIcon" />
     </RelativeLayout>
-
-
-
-</FrameLayout>

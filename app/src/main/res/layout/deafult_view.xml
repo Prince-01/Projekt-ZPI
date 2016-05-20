@@ -7,15 +7,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Coming soon!"
-        android:id="@+id/textView3"
+        android:text="@string/coming_soon"
         android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Sweet home Alabama"
-        android:id="@+id/textView4"
+        android:text="@string/sweet_home_alabama"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>
