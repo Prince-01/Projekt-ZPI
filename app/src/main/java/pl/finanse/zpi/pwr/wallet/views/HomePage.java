@@ -39,6 +39,7 @@ import pl.finanse.zpi.pwr.wallet.model.Wallet;
 public class HomePage extends Fragment {
     private Wallet[] wallets;
     private Wallet activeWallet;
+    private int activeWalletIndex;
     private Operation operationsData[];
     public final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
 
@@ -68,8 +69,7 @@ public class HomePage extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
         walletName.setText(Wallet.GetActiveWallet(getActivity()).getName());
-        wallets = Database.GetAllWallets(getActivity());
-        activeWallet = Wallet.GetActiveWallet(getActivity());
+        checkWalletIndex();
 
         ReloadList();
 
@@ -84,6 +84,17 @@ public class HomePage extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+    }
+
+    private void checkWalletIndex() {
+        wallets = Database.GetAllWallets(getActivity());
+        activeWallet = Wallet.GetActiveWallet(getActivity());
+        for(int i = 0; i < wallets.length ; i++) {
+            if(activeWallet.getName().equals(wallets[i].getName())) {
+                activeWalletIndex = i;
+                break;
+            }
+        }
     }
 
     /**
@@ -154,11 +165,22 @@ public class HomePage extends Fragment {
 
     @OnClick(R.id.rightArrow)
     public void setWalletRight() {
-        Toast.makeText(getActivity(), "W PRAWO", Toast.LENGTH_SHORT).show();
+        setActiveWallet(1);
+        //Toast.makeText(getActivity(), "W PRAWO", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.leftArrow)
     public void setWalletLeft() {
-        Toast.makeText(getActivity(), "W LEWO", Toast.LENGTH_SHORT).show();
+        setActiveWallet(-1);
+        //Toast.makeText(getActivity(), "W LEWO", Toast.LENGTH_SHORT).show();
+    }
+    /*
+    Zmienia aktywny porfetl i wyświetla go na stronie głównej po naciśnięciu strzałki
+     */
+    private void setActiveWallet(int plus){
+        activeWalletIndex = (activeWalletIndex+plus+wallets.length)%wallets.length;
+        Wallet.SetActiveWallet(getActivity(),wallets[activeWalletIndex].getName());
+        walletName.setText(Wallet.GetActiveWallet(getActivity()).getName());
+        ReloadList();
     }
 }
