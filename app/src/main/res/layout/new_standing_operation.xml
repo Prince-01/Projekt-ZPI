@@ -44,7 +44,7 @@
         android:singleLine="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/standingOperationTitle"
+        android:id="@+id/standingOperationTitleTemp"
         android:hint="Tytuł(opcjonalnie)"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"

@@ -1,5 +1,6 @@
 package pl.finanse.zpi.pwr.wallet.helpers;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import pl.finanse.zpi.pwr.wallet.MainActivity;
 import pl.finanse.zpi.pwr.wallet.model.Category;
 import pl.finanse.zpi.pwr.wallet.model.Operation;
+import pl.finanse.zpi.pwr.wallet.model.StandingOperation;
 import pl.finanse.zpi.pwr.wallet.model.Wallet;
 
 import java.text.DateFormat;
@@ -420,6 +422,9 @@ public class Database {
                 return w;
             }
 
+    public static void AddNewStandingOperation(Activity activity, StandingOperation standingOperation) {
+
+    }
 
 
     private static class DatabaseHelper extends SQLiteOpenHelper {

@@ -157,7 +157,7 @@ public class NewStandingOperation extends Fragment implements View.OnClickListen
     public void onAddStandingOperation(View mainView) {
         Toast.makeText(getActivity(), "NOT FULLY IMPLEMENTED", Toast.LENGTH_SHORT).show();
         EditText kwota = (EditText) mainView.findViewById(R.id.standingOperationCost);
-        EditText tytul = (EditText) mainView.findViewById(R.id.standingOperationTitle);
+        EditText tytul = (EditText) mainView.findViewById(R.id.standingOperationTitleTemp);
         Button start = (Button) mainView.findViewById(R.id.startDatePickerBtn);
         Button end = (Button) mainView.findViewById(R.id.endDatePickerBtn);
         CheckBox czyDataZak = (CheckBox) mainView.findViewById(R.id.checkBox);

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,10 @@ import java.util.Calendar;
 
 import org.w3c.dom.Text;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Category;
@@ -32,28 +37,53 @@ import pl.finanse.zpi.pwr.wallet.model.Wallet;
  * Created by Robert on 2016-04-01.
  */
 public class HomePage extends Fragment {
-    //2ECC71
-    private ListView lastOperationsListView;
-    //TO DO
-    Operation operationsData[];
-    TextView totalBalance;
+    private Wallet[] wallets;
+    private Wallet activeWallet;
+    private Operation operationsData[];
     public final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
 
-    public HomePage() {
-        // Required empty public constructor
-    }
+    private Unbinder unbinder;
+    // UI components
+    @BindView(R.id.lastOperationsListView)
+    ListView lastOperationsListView;
+    @BindView(R.id.TotalBalance)
+    TextView totalBalance;
+    @BindView(R.id.walletNameInHome)
+    TextView walletName;
+    @BindView(R.id.leftArrow)
+    ImageView leftArrow;
+    @BindView(R.id.rightArrow)
+    ImageView rightArrow;
+
+    // Required empty public constructor
+    public HomePage() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //long temp = System.currentTimeMillis();
+
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        totalBalance = (TextView) view.findViewById(R.id.TotalBalance);
-        lastOperationsListView = (ListView) view.findViewById(R.id.lastOperationsListView);
-        TextView walletName = (TextView) view.findViewById(R.id.walletNameInHome);
+        unbinder = ButterKnife.bind(this, view);
+
         walletName.setText(Wallet.GetActiveWallet(getActivity()).getName());
-        ReloadList();//robi nam liste
-        UpdateTotalBalance();
+        wallets = Database.GetAllWallets(getActivity());
+        activeWallet = Wallet.GetActiveWallet(getActivity());
+
+        ReloadList();
+
+        /*long time = System.currentTimeMillis();
+        time = time - temp;
+        Toast.makeText(getActivity(), " " + time, Toast.LENGTH_SHORT).show();*/
+
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
     }
 
     /**
@@ -61,7 +91,6 @@ public class HomePage extends Fragment {
      */
     public void ReloadList() {
         makeData();
-        UpdateTotalBalance();
         OperationsAdapter adapter = new OperationsAdapter(getActivity(), R.layout.operation_row, operationsData);
         lastOperationsListView.setAdapter(adapter);
         lastOperationsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -101,7 +130,7 @@ public class HomePage extends Fragment {
                 drawer.closeDrawer(GravityCompat.START);
             }
         });
-
+        UpdateTotalBalance();
     }
 
     private void UpdateTotalBalance() {
@@ -113,14 +142,23 @@ public class HomePage extends Fragment {
 
         totalBalance.setText(decimalFormat.format(sum) + " zł");
         totalBalance.setTextColor(sum > 0 ? Color.rgb(46, 204, 113) : sum == 0 ? Color.WHITE : Color.rgb(217, 30, 24));
-        //Color.GREEN
     }
 
     /*
     Tutaj tworzę operacje na sztywno, to ma być wczytywane z bazy danych
      */
     private void makeData() {
-        operationsData = Database.GetAllPositions(getActivity().getApplicationContext());
+        operationsData = Database.GetAllPositions(getActivity());
         //Toast.makeText(getActivity(),"Ilosc portfeli "+Database.GetAllWallets(getActivity())[0],Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.rightArrow)
+    public void setWalletRight() {
+        Toast.makeText(getActivity(), "W PRAWO", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.leftArrow)
+    public void setWalletLeft() {
+        Toast.makeText(getActivity(), "W LEWO", Toast.LENGTH_SHORT).show();
     }
 }
