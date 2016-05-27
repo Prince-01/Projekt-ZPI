@@ -31,6 +31,7 @@ import pl.finanse.zpi.pwr.wallet.model.Wallet;
  */
 public class NewStandingOperation extends Fragment implements View.OnClickListener {
     FloatingActionButton fab;
+    View mainView;
 
     public NewStandingOperation() {
     }
@@ -39,14 +40,15 @@ public class NewStandingOperation extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.new_standing_operation, container, false);
+        mainView = view;
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setVisibility(View.INVISIBLE);
-        Spinner categoriesSpinner = (Spinner) view.findViewById(R.id.spinner);
+        Spinner categoriesSpinner = (Spinner) view.findViewById(R.id.spinnerCategoryNewStandingOperation);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, Category.getAllFormattedCategoriesWithDepth(getActivity()));
         categoriesSpinner.setAdapter(adapter);
 
-        Spinner walletsSpinner = (Spinner) view.findViewById(R.id.walletsSpinner);
+        Spinner walletsSpinner = (Spinner) view.findViewById(R.id.spinnerWalletNewStandingOperation);
 
         ArrayAdapter<Wallet> walletArrayAdapter = new ArrayAdapter<Wallet>(getActivity(), android.R.layout.simple_spinner_item,
                 Database.GetAllWallets(getActivity()));
@@ -154,15 +156,15 @@ public class NewStandingOperation extends Fragment implements View.OnClickListen
         Toast.makeText(getActivity(), "date picker dialog", Toast.LENGTH_SHORT).show();
     }
 
-    public void onAddStandingOperation(View mainView) {
+    public void onAddStandingOperation(View v) {
         Toast.makeText(getActivity(), "NOT FULLY IMPLEMENTED", Toast.LENGTH_SHORT).show();
         EditText kwota = (EditText) mainView.findViewById(R.id.standingOperationCost);
         EditText tytul = (EditText) mainView.findViewById(R.id.standingOperationTitleTemp);
         Button start = (Button) mainView.findViewById(R.id.startDatePickerBtn);
         Button end = (Button) mainView.findViewById(R.id.endDatePickerBtn);
         CheckBox czyDataZak = (CheckBox) mainView.findViewById(R.id.checkBox);
-        Spinner categories = (Spinner) mainView.findViewById(R.id.spinner);
-        Spinner wallets = (Spinner) mainView.findViewById(R.id.walletsSpinner);
+        Spinner categories = (Spinner) mainView.findViewById(R.id.spinnerCategoryNewStandingOperation);
+        Spinner wallets = (Spinner) mainView.findViewById(R.id.spinnerWalletNewStandingOperation);
         RadioButton wydatek = (RadioButton) mainView.findViewById(R.id.wydatekNowejOperacji);
         SeekBar tisb = (SeekBar) mainView.findViewById(R.id.timeInterval);
         String cat = (String) categories.getSelectedItem();

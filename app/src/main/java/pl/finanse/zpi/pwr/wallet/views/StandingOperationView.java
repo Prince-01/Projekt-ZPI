@@ -2,6 +2,7 @@ package pl.finanse.zpi.pwr.wallet.views;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ListView;
 
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.adapters.StandingOperationsAdapter;
+import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.StandingOperation;
 
 /**
@@ -32,7 +34,7 @@ public class StandingOperationView extends Fragment {
         return view;
     }
     private void makeData() {
-        standingOperations = new StandingOperation[0];
+        standingOperations = Database.GetAllStandingOperations(getActivity());
     }
 
 }

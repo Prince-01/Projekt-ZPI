@@ -96,7 +96,7 @@ public class HistoryView extends Fragment implements View.OnClickListener {
     Wypełniamy listę dla wybranego przedzialu daty operacje
      */
     public static void makeData(Context context, Date from, Date to) {
-        operationsData = Database.GetChoosenPositions(context, from, to);
+        operationsData = Database.GetChosenPositions(context, from, to);
         OperationsAdapter adapter = new OperationsAdapter(context, R.layout.operation_row, operationsData);
         operationsListView.setAdapter(adapter);
     }

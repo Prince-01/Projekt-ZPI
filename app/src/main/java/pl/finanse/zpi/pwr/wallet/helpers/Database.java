@@ -171,7 +171,39 @@ public class Database {
         return operations;
     }
 
-    public static Operation[] GetChoosenPositions(Context context, Date from, Date to){
+    public static StandingOperation[] GetAllStandingOperations(Context context){
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = null;
+        query = "SELECT P.IdPozycji, P.Nazwa, P.Wartosc, P.Data, P.CzyPrzychod, P.KategorieNazwa, P.PortfeleNazwa, ZS.DataOd, ZS.DataDo, ZS.Interwal FROM Pozycje P JOIN ZleceniaStale ZS ON P.IdPozycji = ZS.PozycjeIdPozycji WHERE PortfeleNazwa = ? AND CzyStale = 1 ORDER BY Data DESC, IdPozycji DESC";
+        String[] arr = {Wallet.GetActiveWallet(context).getName()};
+        Cursor c = db.rawQuery(query,arr);
+        int idIndex = c.getColumnIndex("IdPozycji");
+        int nazIndex = c.getColumnIndex("Nazwa");
+        int wartIndex = c.getColumnIndex("Wartosc");
+        int datIndex = c.getColumnIndex("Data");
+        int przIndex = c.getColumnIndex("CzyPrzychod");
+        int knazIndex = c.getColumnIndex("KategorieNazwa");
+        int portIndex = c.getColumnIndex("PortfeleNazwa");
+        int odIndex = c.getColumnIndex("DataOd");
+        int doIndex = c.getColumnIndex("DataDo");
+        int interwalIndex = c.getColumnIndex("Interwal");
+        StandingOperation[] standingOperations = new StandingOperation[ c.getCount()];
+//        Toast.makeText(context,"Liczba pozycji: "+operations.length,Toast.LENGTH_SHORT).show();
+        int i=0;
+        while(c.moveToNext()){
+            try {
+                standingOperations[i++] = new StandingOperation(c.getInt(idIndex),c.getString(portIndex), c.getString(nazIndex),c.getFloat(wartIndex),(new SimpleDateFormat("yyyy-MM-dd")).parse(c.getString(odIndex)), c.getString (doIndex) != null ? (new SimpleDateFormat("yyyy-MM-dd")).parse(c.getString(doIndex)) : null, Enum.valueOf(StandingOperation.INTERVAL.class, c.getString(interwalIndex)), c.getInt(przIndex) == 0 ? false : true, c.getString(knazIndex));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        Toast.makeText(context, String.valueOf(i), Toast.LENGTH_SHORT).show();
+        Close();
+        return standingOperations;
+    }
+
+    public static Operation[] GetChosenPositions(Context context, Date from, Date to){
         if(!Open(context))
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = null;
@@ -432,7 +464,7 @@ public class Database {
         ContentValues values = new ContentValues();
         values.put("Nazwa", operacja.operationName);
         values.put("Wartosc", operacja.cost);
-        values.put("Data", (new SimpleDateFormat("yyyy-MM-dd")).format(operacja.date));
+        values.put("Data", (new SimpleDateFormat("yyyy-MM-dd")).format(Calendar.getInstance().getTime()));
         values.put("CzyPrzychod", operacja.isIncome ? 1 : 0);
         values.put("KategorieNazwa", operacja.category);
         values.put("PortfeleNazwa", operacja.wallet);
@@ -440,8 +472,8 @@ public class Database {
         long idPoz = db.insert("Pozycje", null, values);//dodanie do tablicy pozycji
         values = new ContentValues();
         values.put("Nazwa",operacja.operationName);
-        values.put("DataOd",operacja.begin.toString());
-        values.put("DataDo",operacja.end.toString());
+        values.put("DataOd",(new SimpleDateFormat("yyyy-MM-dd")).format(operacja.begin));
+        values.put("DataDo",operacja.end != null ? (new SimpleDateFormat("yyyy-MM-dd")).format(operacja.end) : null);
         values.put("Interwal",operacja.interval.toString());
         values.put("PozycjeIdPozycji",idPoz);
         db.insert("ZleceniaStale",null,values);//dodanie do zlecen stalych
@@ -501,7 +533,7 @@ public class Database {
                     "CREATE TABLE IF NOT EXISTS Pozycje (IdPozycji INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255), Wartosc double(10) NOT NULL, Data date, Komentarz integer(511), CzyPrzychod INTEGER DEFAULT 0 NOT NULL, CzySzablon INTEGER DEFAULT 0 NOT NULL, CzyStale INTEGER DEFAULT 0 NOT NULL, KategorieNazwa varchar(255) NOT NULL, PortfeleNazwa varchar(255) NOT NULL, ListyZakupowIdListy integer(10), FOREIGN KEY(KategorieNazwa) REFERENCES Kategorie(Nazwa), FOREIGN KEY(PortfeleNazwa) REFERENCES Portfele(Nazwa));",
                     "CREATE TABLE IF NOT EXISTS ListyZakupow (IdListy INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255) NOT NULL UNIQUE, Pozycje varchar(4095) NOT NULL, CzyKupiono varchar(1023) NOT NULL, CzyUkryte INTEGER DEFAULT 0, PozycjeIdPozycji integer(10) NOT NULL, FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));",
                     "CREATE TABLE IF NOT EXISTS Porady (IdPorady INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255) NOT NULL, Link varchar(255) NOT NULL);",
-                    "CREATE TABLE IF NOT EXISTS ZleceniaStale (Nazwa varchar(255) NOT NULL, DataOd date NOT NULL, DataDo date, PozycjeIdPozycji integer(10) NOT NULL, Interwal varchar(10), PRIMARY KEY (Nazwa), FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));",
+                    "CREATE TABLE IF NOT EXISTS ZleceniaStale (Nazwa varchar(255) NOT NULL, DataOd date NOT NULL, DataDo date, PozycjeIdPozycji integer(10) NOT NULL, Interwal varchar(20), PRIMARY KEY (Nazwa), FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));",
                     "CREATE UNIQUE INDEX ListyZakupow_IdListy ON ListyZakupow (IdListy);",
                     "CREATE UNIQUE INDEX Porady_IdPorady ON Porady (IdPorady);",
                     "CREATE UNIQUE INDEX Pozycje_IdPozycji ON Pozycje (IdPozycji);" };
