@@ -110,7 +110,7 @@ public class HistoryView extends Fragment implements View.OnClickListener {
         for(Operation o : operationsData) {
             sum += o.isIncome ? o.cost : -o.cost;
         }
-        balance.setText(sum + "");
+        balance.setText(HomePage.decimalFormat.format(sum) + "");
     }
 
 
