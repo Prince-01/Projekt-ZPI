@@ -17,8 +17,8 @@
             android:textSize="30sp"
             android:ems="10"
             android:id="@+id/kwotaEdytowanejOperacji"
-            android:hint="Kwota"
-            android:gravity="right"
+            android:hint="@string/amount_txt"
+            android:gravity="end"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
@@ -32,7 +32,6 @@
             android:textSize="40sp"
             android:singleLine="true"
             android:gravity="bottom"
-            android:layout_alignBottom="@+id/editText"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/kwotaEdytowanejOperacji" />
@@ -43,17 +42,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tytulEdytowanejOperacji"
-        android:hint="Tytuł(opcjonalnie)"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:hint="@string/txt_tytu_opcjonalnie"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin">
+        android:layout_marginStart="@dimen/activity_horizontal_margin">
     <ImageView
+        android:contentDescription="@string/desc_category_icon"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,7 +59,7 @@
         android:tint="#fff"
         android:id="@+id/imageView3" />
         <Spinner
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:id="@+id/categoriesSpinner"
@@ -73,8 +71,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin">
+        android:layout_marginStart="@dimen/activity_horizontal_margin">
     <ImageView
+        android:contentDescription="@string/desc_ikona_portfela"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -82,41 +81,39 @@
         android:tint="#fff"
         android:id="@+id/imageView4" />
         <Spinner
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:id="@+id/walletsSpinner"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/imageView4" />
+            android:layout_toEndOf="@+id/imageView4" />
     </RelativeLayout>
 
 
     <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_marginTop="@dimen/list_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/wplywLubWydatekEdytowanejOperacji">
         <ImageView
+            android:contentDescription="@string/czy_jest_wydatkiem"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_is_income"
             android:tint="#fff"/>
         <RadioButton
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Wpływ"
-            android:id="@+id/radioButton"
-            android:layout_below="@+id/wplywEdytowanejOperacji"
-            android:layout_alignLeft="@+id/datePicker3"
-            android:layout_alignStart="@+id/datePicker3" />
+            android:text="@string/influecne"
+            android:id="@+id/radioButton" />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Wydatek"
+            android:text="@string/spendings"
             android:id="@+id/wydatekEdytowanejOperacji"
             android:checked="true"/>
     </RadioGroup>
@@ -127,6 +124,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
+            android:contentDescription="@string/desc_data"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"

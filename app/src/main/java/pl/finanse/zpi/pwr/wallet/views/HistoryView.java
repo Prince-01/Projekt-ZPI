@@ -13,28 +13,45 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.adapters.OperationsAdapter;
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Operation;
+import pl.finanse.zpi.pwr.wallet.model.Wallet;
 
 /**
  * Created by sebastiankotarski on 05.05.16.
  */
 public class HistoryView extends Fragment implements View.OnClickListener {
+    private Unbinder unbinder;
+
     private static ListView operationsListView;
-    private Button dateFromButton;
-    private Button dateToButton;
     public static Date fromDate;
     public static Date toDate;
     private FloatingActionButton fab;
     public static boolean isFrom = true;
+
+    // UI components
+    @BindView(R.id.dateFromButton)
+    Button dateFromButton;
+    @BindView(R.id.dateToButton)
+    Button dateToButton;
+    @BindView(R.id.walletName)
+    TextView walletName;
+    @BindView(R.id.timeRange)
+    TextView timeRange;
+    @BindView(R.id.balance)
+    TextView balance;
 
     //TO DO
     static Operation operationsData[];
@@ -44,6 +61,8 @@ public class HistoryView extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
+        unbinder = ButterKnife.bind(this, view);
+
         operationsListView = (ListView)view.findViewById(R.id.history_operations);
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setVisibility(View.INVISIBLE);
@@ -51,10 +70,12 @@ public class HistoryView extends Fragment implements View.OnClickListener {
         Calendar fC = Calendar.getInstance();
         fC.add(Calendar.MONTH, -1);
         fromDate = fC.getTime();
-        dateFromButton = (Button)view.findViewById(R.id.dateFromButton);
-        System.out.println("Btn" + dateFromButton);
-        dateToButton = (Button)view.findViewById(R.id.dateToButton);
-        System.out.println("Btn" + dateToButton);
+
+        walletName.setText(Wallet.GetActiveWallet(getActivity()).getName());
+        // Do wypełniania miesiącami
+        timeRange.setText("Marzec");
+        // Do okodowania
+        balance.setText("131.49");
 
         makeData(getActivity(),fromDate, toDate);
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getActivity());
@@ -64,9 +85,16 @@ public class HistoryView extends Fragment implements View.OnClickListener {
         dateToButton.setOnClickListener(this);
         return view;
     }
-/*
-Wypełniamy listę dla wybranego przedzialu daty operacje
- */
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
+    }
+
+    /*
+    Wypełniamy listę dla wybranego przedzialu daty operacje
+     */
     public static void makeData(Context context, Date from, Date to) {
         operationsData = Database.GetChoosenPositions(context, from, to);
         OperationsAdapter adapter = new OperationsAdapter(context, R.layout.operation_row, operationsData);
@@ -86,7 +114,6 @@ Wypełniamy listę dla wybranego przedzialu daty operacje
                 showDatePickerDialog(v);
                 break;
         }
-
     }
 
     @Override
@@ -135,8 +162,5 @@ Wypełniamy listę dla wybranego przedzialu daty operacje
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "datePicker");
-
-
     }
-
 }

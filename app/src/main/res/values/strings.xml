@@ -30,6 +30,17 @@
     <string name="coming_soon">Coming soon!</string>
     <string name="sweet_home_alabama">Sweet home Alabama</string>
     <string name="desc_user_icon">user icon</string>
+    <string name="amount_txt">Kwota</string>
+    <string name="txt_tytu_opcjonalnie">Tytuł(opcjonalnie)</string>
+    <string name="desc_ikona_portfela">ikona portfela</string>
+    <string name="czy_jest_wydatkiem">czy jest wydatkiem</string>
+    <string name="influecne">Wpływ</string>
+    <string name="spendings">Wydatek</string>
+    <string name="desc_data">data</string>
+    <string name="from_txt">Od:</string>
+    <string name="date_txt">data</string>
+    <string name="to_txt">Do:</string>
+    <string name="balance_txt">Saldo:</string>
     <string-array name="examples">
         <item>Array item</item>
         <item>Array item</item>

@@ -53,12 +53,12 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        System.out.println("APPLICATION RUNNING");
-        FontsOverride.setDefaultFont(this, "DEFAULT", "fonts/Montserrat-Light.otf");
-        FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/Montserrat-Light.otf");
-        FontsOverride.setDefaultFont(this, "MONTSERRAT", "fonts/Montserrat-Light.otf");
-        FontsOverride.setDefaultFont(this, "SERIF", "fonts/Montserrat-Light.otf");
-        FontsOverride.setDefaultFont(this, "SANS_SERIF", "fonts/Montserrat-Light.otf");
+/*        System.out.println("APPLICATION RUNNING");
+        FontsOverride.setDefaultFont(this, "DEFAULT", "fonts/Montserrat-Regular.otf");
+        FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/Montserrat-Regular.otf");
+        FontsOverride.setDefaultFont(this, "MONTSERRAT", "fonts/Montserrat-Regular.otf");
+        FontsOverride.setDefaultFont(this, "SERIF", "fonts/Montserrat-Regular.otf");
+        FontsOverride.setDefaultFont(this, "SANS_SERIF", "fonts/Montserrat-Regular.otf");*/
 
 
 
