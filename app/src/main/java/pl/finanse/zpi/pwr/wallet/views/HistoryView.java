@@ -20,6 +20,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +43,8 @@ public class HistoryView extends Fragment implements View.OnClickListener {
     public static Date toDate;
     private FloatingActionButton fab;
     public static boolean isFrom = true;
+
+    private Calendar arrowCalendar = Calendar.getInstance();
 
     // UI components
     @BindView(R.id.dateFromButton)
@@ -76,8 +79,6 @@ public class HistoryView extends Fragment implements View.OnClickListener {
 
         walletName.setText(Wallet.GetActiveWallet(getActivity()).getName());
         // Do wypełniania miesiącami
-        timeRange.setText("Marzec");
-
 
         makeData(getActivity(),fromDate, toDate);
         updateBalance(balance);
@@ -127,6 +128,8 @@ public class HistoryView extends Fragment implements View.OnClickListener {
                 break;
         }
         updateBalance(balance);
+        timeRange.setText("");
+        arrowCalendar = Calendar.getInstance();
     }
 
     @Override
@@ -181,19 +184,29 @@ public class HistoryView extends Fragment implements View.OnClickListener {
 
     @OnClick(R.id.rightArrow)
     public void setMonthRight() {
-        Date tFromDate = new Date();
-        Date tToDate = new Date();
+        arrowCalendar.add(Calendar.MONTH, 1);
+        Date tFromDate = arrowCalendar.getTime();
+        tFromDate.setDate(1);
+        Date tToDate = arrowCalendar.getTime();
+        tToDate.setDate(arrowCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         makeData(getActivity(), tFromDate, tToDate);
-        timeRange.setText("ala");
+        timeRange.setText(arrowCalendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + " " +
+                arrowCalendar.get(Calendar.YEAR));
         Toast.makeText(getActivity(), "W PRAWO", Toast.LENGTH_SHORT).show();
+        updateBalance(balance);
     }
 
     @OnClick(R.id.leftArrow)
     public void setMonthLeft() {
-        Date tFromDate = new Date();
-        Date tToDate = new Date();
+        arrowCalendar.add(Calendar.MONTH, -1);
+        Date tFromDate = arrowCalendar.getTime();
+        tFromDate.setDate(1);
+        Date tToDate = arrowCalendar.getTime();
+        tToDate.setDate(arrowCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         makeData(getActivity(), tFromDate, tToDate);
-        timeRange.setText("ala");
+        timeRange.setText(arrowCalendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + " " +
+                arrowCalendar.get(Calendar.YEAR));
         Toast.makeText(getActivity(), "W LEWO", Toast.LENGTH_SHORT).show();
+        updateBalance(balance);
     }
 }
