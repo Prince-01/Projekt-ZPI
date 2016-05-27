@@ -41,6 +41,7 @@
     <string name="date_txt">data</string>
     <string name="to_txt">Do:</string>
     <string name="balance_txt">Saldo:</string>
+    <string name="Add">Dodaj</string>
     <string-array name="examples">
         <item>Array item</item>
         <item>Array item</item>

@@ -38,6 +38,7 @@ import pl.finanse.zpi.pwr.wallet.views.NewOperation;
 import pl.finanse.zpi.pwr.wallet.views.NewStandingOperation;
 import pl.finanse.zpi.pwr.wallet.views.NewTemplate;
 import pl.finanse.zpi.pwr.wallet.views.RaportPage;
+import pl.finanse.zpi.pwr.wallet.views.ShoppingListView;
 import pl.finanse.zpi.pwr.wallet.views.StandingOperationView;
 import pl.finanse.zpi.pwr.wallet.views.TemplatesView;
 import pl.finanse.zpi.pwr.wallet.views.WalletView;
@@ -174,6 +175,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_history:
                 toolbar.setTitle("Historia");
                 fragment = new HistoryView();
+                break;
+            case R.id.nav_shop_list:
+                toolbar.setTitle("Lista zakupów");
+                fragment = new ShoppingListView();
                 break;
             default:
                 toolbar.setTitle("Default");
