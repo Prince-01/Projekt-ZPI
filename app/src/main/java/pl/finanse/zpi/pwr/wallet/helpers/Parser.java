@@ -1,5 +1,7 @@
 package pl.finanse.zpi.pwr.wallet.helpers;
 
+import java.util.Calendar;
+
 /**
  * Created by Kamil on 01.04.2016.
  */
@@ -36,5 +38,34 @@ public class Parser {
             sb.append(b ? "1" : "0").append('\n');
 
         return sb.substring(0, sb.length() - 1);
+    }
+    public static String GetNameOfMonth(int number){
+        switch(number){
+            case Calendar.JANUARY:
+                return "Styczeń";
+            case Calendar.FEBRUARY:
+                return "Luty";
+            case Calendar.MARCH:
+                return "Marzec";
+            case Calendar.APRIL:
+                return "Kwiecień";
+            case Calendar.MAY:
+                return "Maj";
+            case Calendar.JUNE:
+                return "Czerwiec";
+            case Calendar.JULY:
+                return "Lipiec";
+            case Calendar.AUGUST:
+                return "Sierpień";
+            case Calendar.SEPTEMBER:
+                return "Wrzesień";
+            case Calendar.OCTOBER:
+                return "Piździernik";
+            case Calendar.NOVEMBER:
+                return "Listopad";
+            case Calendar.DECEMBER:
+                return "Grudzień";
+        }
+        throw new RuntimeException("Nie ma miesiąca o numerze "+number);
     }
 }
