@@ -46,13 +46,27 @@ public class StandingOperationsAdapter  extends ArrayAdapter<StandingOperation> 
             holder = (RowBeanHolder) row.getTag();
         }
         StandingOperation object = data[position];
-        holder.nameLabel.setText("Nazwa");
-        holder.categoryName.setText("Kategoria");
-        holder.cost.setText(String.valueOf(527) + " zł");
-        holder.startDateLabel.setText("Data rozpoczęcia: 22.04.2016");
-        holder.endDateLabel.setText("Data zakończenia: 22.04.2017");
+        holder.nameLabel.setText(object.operationName);
+        holder.categoryName.setText(object.category);
+        holder.cost.setText(object.cost + " zł");
+        holder.startDateLabel.setText("Data rozpoczęcia: " + object.begin);
+        if(object.end != null) holder.endDateLabel.setText("Data zakończenia: " + object.end);
         holder.timeInterval.setText("Co miesiąc");
-        holder.wallet.setText("nazwa portfela");
+        if(object.interval == StandingOperation.INTERVAL.week)
+            holder.timeInterval.setText("Co tydzień");
+        else if(object.interval == StandingOperation.INTERVAL.twoweeks)
+            holder.timeInterval.setText("Co dwa tygodnie");
+        else if(object.interval == StandingOperation.INTERVAL.month)
+            holder.timeInterval.setText("Co miesiąc");
+        else if(object.interval == StandingOperation.INTERVAL.twomonths)
+            holder.timeInterval.setText("Co dwa miesiące");
+        else if(object.interval == StandingOperation.INTERVAL.quarter)
+            holder.timeInterval.setText("Co kwartał");
+        else if(object.interval == StandingOperation.INTERVAL.halfyear)
+            holder.timeInterval.setText("Co pół roku");
+        else
+            holder.timeInterval.setText("Co rok");
+        holder.wallet.setText(object.wallet);
         return row;
     }
 

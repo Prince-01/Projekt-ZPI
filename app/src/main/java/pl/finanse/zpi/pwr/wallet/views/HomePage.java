@@ -41,7 +41,7 @@ public class HomePage extends Fragment {
     private Wallet activeWallet;
     private int activeWalletIndex;
     private Operation operationsData[];
-    public final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+    public static final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
 
     private Unbinder unbinder;
     // UI components

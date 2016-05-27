@@ -20,6 +20,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +29,7 @@ import butterknife.Unbinder;
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.adapters.OperationsAdapter;
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
+import pl.finanse.zpi.pwr.wallet.helpers.Parser;
 import pl.finanse.zpi.pwr.wallet.model.Operation;
 import pl.finanse.zpi.pwr.wallet.model.Wallet;
 
@@ -42,6 +44,8 @@ public class HistoryView extends Fragment implements View.OnClickListener {
     public static Date toDate;
     private FloatingActionButton fab;
     public static boolean isFrom = true;
+
+    private Calendar arrowCalendar = Calendar.getInstance();
 
     // UI components
     @BindView(R.id.dateFromButton)
@@ -76,14 +80,14 @@ public class HistoryView extends Fragment implements View.OnClickListener {
 
         walletName.setText(Wallet.GetActiveWallet(getActivity()).getName());
         // Do wypełniania miesiącami
-        timeRange.setText("Marzec");
 
-
-        makeData(getActivity(),fromDate, toDate);
+        makeData(getActivity(), fromDate, toDate);
         updateBalance(balance);
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getActivity());
         dateFromButton.setText(dateFormat.format(fromDate));
+        dateFromButton.setTag(fC);
         dateToButton.setText(dateFormat.format(toDate));
+        dateToButton.setTag(Calendar.getInstance());
         dateFromButton.setOnClickListener(this);
         dateToButton.setOnClickListener(this);
         return view;
@@ -99,7 +103,7 @@ public class HistoryView extends Fragment implements View.OnClickListener {
     Wypełniamy listę dla wybranego przedzialu daty operacje
      */
     public static void makeData(Context context, Date from, Date to) {
-        operationsData = Database.GetChoosenPositions(context, from, to);
+        operationsData = Database.GetChosenPositions(context, from, to);
         OperationsAdapter adapter = new OperationsAdapter(context, R.layout.operation_row, operationsData);
         operationsListView.setAdapter(adapter);
     }
@@ -109,7 +113,7 @@ public class HistoryView extends Fragment implements View.OnClickListener {
         for(Operation o : operationsData) {
             sum += o.isIncome ? o.cost : -o.cost;
         }
-        balance.setText(sum + "");
+        balance.setText(HomePage.decimalFormat.format(sum) + "");
     }
 
 
@@ -127,6 +131,8 @@ public class HistoryView extends Fragment implements View.OnClickListener {
                 break;
         }
         updateBalance(balance);
+        timeRange.setText("");
+        arrowCalendar = Calendar.getInstance();
     }
 
     @Override
@@ -142,18 +148,17 @@ public class HistoryView extends Fragment implements View.OnClickListener {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             Button from = (Button)getActivity().findViewById(R.id.dateFromButton);
             Button to = (Button)getActivity().findViewById(R.id.dateToButton);
-            String date;
+            Calendar date;
             if(HistoryView.isFrom) {
-                date = from.getText().toString();
+                date = (Calendar)from.getTag();
             } else {
-                date = to.getText().toString();
+                date = (Calendar)to.getTag();
             }
-            final Calendar c = Calendar.getInstance();
-            int year = Integer.parseInt(date.substring(6));
-            int month = Integer.parseInt(date.substring(3,5));// c.get(Calendar.MONTH);
-            int day = Integer.parseInt(date.substring(0,2));
+            int year = date.get(Calendar.YEAR);
+            int month = date.get(Calendar.MONTH);
+            int day = date.get(Calendar.DAY_OF_MONTH);
             // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, year, month-1, day);
+            return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
@@ -181,19 +186,29 @@ public class HistoryView extends Fragment implements View.OnClickListener {
 
     @OnClick(R.id.rightArrow)
     public void setMonthRight() {
-        Date tFromDate = new Date();
-        Date tToDate = new Date();
+        arrowCalendar.add(Calendar.MONTH, 1);
+        Date tFromDate = arrowCalendar.getTime();
+        tFromDate.setDate(1);
+        Date tToDate = arrowCalendar.getTime();
+        tToDate.setDate(arrowCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         makeData(getActivity(), tFromDate, tToDate);
-        timeRange.setText("ala");
+        timeRange.setText(Parser.GetNameOfMonth(arrowCalendar.get(Calendar.MONTH)) + " " +
+                arrowCalendar.get(Calendar.YEAR));
         Toast.makeText(getActivity(), "W PRAWO", Toast.LENGTH_SHORT).show();
+        updateBalance(balance);
     }
 
     @OnClick(R.id.leftArrow)
     public void setMonthLeft() {
-        Date tFromDate = new Date();
-        Date tToDate = new Date();
+        arrowCalendar.add(Calendar.MONTH, -1);
+        Date tFromDate = arrowCalendar.getTime();
+        tFromDate.setDate(1);
+        Date tToDate = arrowCalendar.getTime();
+        tToDate.setDate(arrowCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         makeData(getActivity(), tFromDate, tToDate);
-        timeRange.setText("ala");
+        timeRange.setText(Parser.GetNameOfMonth(arrowCalendar.get(Calendar.MONTH)) + " " +
+                arrowCalendar.get(Calendar.YEAR));
         Toast.makeText(getActivity(), "W LEWO", Toast.LENGTH_SHORT).show();
+        updateBalance(balance);
     }
 }

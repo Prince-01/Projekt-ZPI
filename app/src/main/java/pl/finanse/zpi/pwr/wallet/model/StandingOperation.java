@@ -27,6 +27,14 @@ public class StandingOperation extends Operation {
         else
             this.interval = INTERVAL.year;
     }
+    public StandingOperation(int id, String wallet, String title, float cost, Date beginning, Date ending, INTERVAL progress, boolean income, String category) {
+        super(id,wallet,title,cost,null, income, category);
+        this.begin = beginning;
+        this.end = ending;
+
+        this.interval = progress;
+    }
+
 
     public enum INTERVAL {
         week,
