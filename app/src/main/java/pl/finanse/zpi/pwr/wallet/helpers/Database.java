@@ -198,7 +198,6 @@ public class Database {
                 e.printStackTrace();
             }
         }
-        Toast.makeText(context, String.valueOf(i), Toast.LENGTH_SHORT).show();
         Close();
         return standingOperations;
     }

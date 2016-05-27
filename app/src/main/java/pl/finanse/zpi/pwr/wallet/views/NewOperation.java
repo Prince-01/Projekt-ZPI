@@ -153,6 +153,7 @@ public class NewOperation extends Fragment implements View.OnClickListener {
 
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
+        Button butt;
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -167,16 +168,16 @@ public class NewOperation extends Fragment implements View.OnClickListener {
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Do something with the date chosen by the user
-            Button button = (Button)getActivity().findViewById(R.id.datePickerBtn);
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, month, day);
             DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getActivity());
-            button.setText(dateFormat.format(calendar.getTime()));
+            butt.setText(dateFormat.format(calendar.getTime()));
         }
     }
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
+        DatePickerFragment newFragment = new DatePickerFragment();
+        newFragment.butt = (Button)v.findViewById(R.id.datePickerBtn);
         newFragment.show(getFragmentManager(), "datePicker");
     }
 

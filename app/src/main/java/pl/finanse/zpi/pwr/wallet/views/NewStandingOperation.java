@@ -1,6 +1,7 @@
 package pl.finanse.zpi.pwr.wallet.views;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
@@ -65,8 +66,10 @@ public class NewStandingOperation extends Fragment implements View.OnClickListen
         /*TextView text = (TextView) view.findViewById(R.id.NewOperationLabel);
         Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Montserrat-Regular.otf");
         text.setTypeface(tf);*/
-        Button startDateButton = (Button)view.findViewById(R.id.startDatePickerBtn);
+        final Button startDateButton = (Button)view.findViewById(R.id.startDatePickerBtn);
         final Button endDateButton = (Button)view.findViewById(R.id.endDatePickerBtn);
+        startDateButton.setOnClickListener(this);
+        endDateButton.setOnClickListener(this);
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getActivity());
         startDateButton.setText(dateFormat.format(date));
@@ -157,7 +160,6 @@ public class NewStandingOperation extends Fragment implements View.OnClickListen
     }
 
     public void onAddStandingOperation(View v) {
-        Toast.makeText(getActivity(), "NOT FULLY IMPLEMENTED", Toast.LENGTH_SHORT).show();
         EditText kwota = (EditText) mainView.findViewById(R.id.standingOperationCost);
         EditText tytul = (EditText) mainView.findViewById(R.id.standingOperationTitleTemp);
         Button start = (Button) mainView.findViewById(R.id.startDatePickerBtn);
@@ -219,6 +221,21 @@ public class NewStandingOperation extends Fragment implements View.OnClickListen
         switch(v.getId()) {
             case R.id.button2:
                 onAddStandingOperation(v);
+                break;
+            case R.id.startDatePickerBtn:
+                Button startDateButton = (Button)v.findViewById(R.id.startDatePickerBtn);
+                showDatePickerDialog(v, startDateButton);
+                break;
+            case R.id.endDatePickerBtn:
+                Button endDateButton = (Button)v.findViewById(R.id.endDatePickerBtn);
+                showDatePickerDialog(v, endDateButton);
+                break;
+
         }
+    }
+    public void showDatePickerDialog(View v, Button b) {
+        NewOperation.DatePickerFragment newFragment = new NewOperation.DatePickerFragment();
+        newFragment.butt = b;
+        newFragment.show(getFragmentManager(), "datePicker");
     }
 }

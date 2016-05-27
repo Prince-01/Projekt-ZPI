@@ -10,6 +10,10 @@ import android.widget.TextView;
 
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.model.StandingOperation;
+import pl.finanse.zpi.pwr.wallet.views.HomePage;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by sebastiankotarski on 21.04.16.
@@ -48,9 +52,9 @@ public class StandingOperationsAdapter  extends ArrayAdapter<StandingOperation> 
         StandingOperation object = data[position];
         holder.nameLabel.setText(object.operationName);
         holder.categoryName.setText(object.category);
-        holder.cost.setText(object.cost + " zł");
-        holder.startDateLabel.setText("Data rozpoczęcia: " + object.begin);
-        if(object.end != null) holder.endDateLabel.setText("Data zakończenia: " + object.end);
+        holder.cost.setText(HomePage.decimalFormat.format(object.cost) + " zł");
+        holder.startDateLabel.setText("Data rozpoczęcia: " + SimpleDateFormat.getInstance().format(object.begin));
+        if(object.end != null) holder.endDateLabel.setText("Data zakończenia: " + SimpleDateFormat.getInstance().format(object.end));
         holder.timeInterval.setText("Co miesiąc");
         if(object.interval == StandingOperation.INTERVAL.week)
             holder.timeInterval.setText("Co tydzień");
