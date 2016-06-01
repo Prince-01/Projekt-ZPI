@@ -211,6 +211,11 @@ public class NewStandingOperation extends Fragment implements View.OnClickListen
         Database.AddNewStandingOperation(getActivity(), standingOperation);
         Wallet.SetActiveWallet(getActivity(), standingOperation.wallet);
 
+        Calendar from = Calendar.getInstance();
+        from.setTimeInMillis(beg.getTime());
+        Calendar to = Calendar.getInstance();
+        Database.UpdateStandingOperationFromDateToDate(getActivity(), standingOperation, from, to);
+
         HomePage newFragment = new HomePage();
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.mainContent, newFragment).commit();

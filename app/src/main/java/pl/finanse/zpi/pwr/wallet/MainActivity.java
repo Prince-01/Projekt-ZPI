@@ -65,6 +65,9 @@ public class MainActivity extends AppCompatActivity
 
         if(Wallet.GetActiveWallet(this) == null)
             Wallet.SetActiveWallet(this, Database.GetAllWallets(this)[0].getName());
+
+        Database.CheckIfStandingOperationsUpdateIsNeededAndUpdate(this);
+
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
