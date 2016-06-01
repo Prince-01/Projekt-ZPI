@@ -230,8 +230,8 @@ public class Database {
         Calendar begin = Calendar.getInstance();
         begin.setTimeInMillis(c1.getTimeInMillis());
 
-        while(begin.get(Calendar.DATE) <= end.get(Calendar.DATE)) {
-            if (CheckIfAddInDay(so, c1)) {
+        while(begin.getTimeInMillis() / (1000 * 60 * 60 * 24) <= end.getTimeInMillis() / (1000 * 60 * 60 * 24)) {
+            if (CheckIfAddInDay(so, begin)) {
                 Operation op = new Operation(-1, so.wallet, so.operationName, so.cost, begin.getTime(), so.isIncome, so.category);
                 AddQuickNewPosition(context, op);
             }
@@ -247,32 +247,38 @@ public class Database {
         if(so.end != null && c.getTimeInMillis() > so.end.getTime())
             return false;
 
-        long differenceInDaysFromBeginning = (c.getTimeInMillis() - so.begin.getTime()) / (1000 * 60 * 60 * 24);
-        if(differenceInDaysFromBeginning == 0) return false;
-        long differenceInYearsFromBeginning = (c.get(Calendar.YEAR) - so.begin.getYear());
-        long differenceInMonthsFromBeginning = differenceInYearsFromBeginning * 12 + ((c.get(Calendar.MONTH) - so.begin.getMonth()));
+        long differenceInDaysFromBeginning = (c.getTimeInMillis() - soc.getTimeInMillis()) / (1000 * 60 * 60 * 24);
+        long differenceInYearsFromBeginning = (c.get(Calendar.YEAR) - soc.get(Calendar.YEAR));
+        long differenceInMonthsFromBeginning = differenceInYearsFromBeginning * 12 + ((c.get(Calendar.MONTH) - soc.get(Calendar.MONTH)));
 
         switch (so.interval) {
             case week:
-                if(differenceInDaysFromBeginning % 7 == 0) return true;
+                if(differenceInDaysFromBeginning % 7 == 0)
+                    return true;
                 break;
             case twoweeks:
-                if(differenceInDaysFromBeginning % 14 == 0) return true;
+                if(differenceInDaysFromBeginning % 14 == 0)
+                    return true;
                 break;
             case month:
-                if(c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH))) return true;
+                if(c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH)))
+                    return true;
                 break;
             case twomonths:
-                if(differenceInMonthsFromBeginning % 2 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH))) return true;
+                if(differenceInMonthsFromBeginning % 2 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH)))
+                    return true;
                 break;
             case quarter:
-                if(differenceInMonthsFromBeginning % 3 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH))) return true;
+                if(differenceInMonthsFromBeginning % 3 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH)))
+                    return true;
                 break;
             case halfyear:
-                if(differenceInMonthsFromBeginning % 6 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH))) return true;
+                if(differenceInMonthsFromBeginning % 6 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH)))
+                    return true;
                 break;
             case year:
-                if(differenceInMonthsFromBeginning % 12 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH))) return true;
+                if(differenceInMonthsFromBeginning % 12 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH)))
+                    return true;
                 break;
         }
         return false;

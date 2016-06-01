@@ -208,6 +208,8 @@ public class NewStandingOperation extends Fragment implements View.OnClickListen
         }
         StandingOperation standingOperation = new StandingOperation(-1, wal.getName(), ty, fkw, beg, ending, tisb.getProgress(), wp, cat.trim());
 
+        Database.CheckIfStandingOperationsUpdateIsNeededAndUpdate(getActivity());
+
         Database.AddNewStandingOperation(getActivity(), standingOperation);
         Wallet.SetActiveWallet(getActivity(), standingOperation.wallet);
 
