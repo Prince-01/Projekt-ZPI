@@ -2,14 +2,14 @@ package pl.finanse.zpi.pwr.wallet.views;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -18,41 +18,33 @@ import java.util.Comparator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import butterknife.Unbinder;
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.adapters.ShoppingItemAdapter;
+import pl.finanse.zpi.pwr.wallet.adapters.ShoppingListAdapter;
+import pl.finanse.zpi.pwr.wallet.adapters.StandingOperationsAdapter;
 import pl.finanse.zpi.pwr.wallet.model.ShoppingItem;
 import pl.finanse.zpi.pwr.wallet.model.ShoppingList;
 
 /**
- * Created by sebastiankotarski on 27.05.16.
+ * Created by sebastiankotarski on 01.06.16.
  */
-public class ShoppingListView extends Fragment {
+public class ShoppingListsView extends Fragment {
     FloatingActionButton fab;
 
+    private ArrayList<ShoppingList>data;
     private Unbinder unbinder;
-    private ArrayList<ShoppingItem>data;
-    public ShoppingList selectedShoppingList;
-    @BindView(R.id.ShoppingListView)
-    ListView shoppingListView;
-    @BindView(R.id.newItemEditText)
-    EditText newItemEditText;
-    private static final StrikethroughSpan STRIKE_THROUGH_SPAN = new StrikethroughSpan();
-
+    @BindView(R.id.shoppingListsView)
+    ListView shoppingListsView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //long temp = System.currentTimeMillis();
-        data = new ArrayList<>();
-        View view = inflater.inflate(R.layout.shopping_list_view, container, false);
-        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        fab.setVisibility(View.INVISIBLE);
+        View view = inflater.inflate(R.layout.fragment_shopping_lists, container, false);
         unbinder = ButterKnife.bind(this, view);
-        getActivity().setTitle(selectedShoppingList.name);
+        reloadData();
         return view;
     }
 
@@ -62,16 +54,31 @@ public class ShoppingListView extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick(R.id.addShoppingItemButton)
-    public void addShoppingItemButton() {
-        ShoppingItem newItem = new ShoppingItem(newItemEditText.getText().toString());
-        data.add(newItem);
+    public void reloadData() {
+
+        //TODO LOAD FROM DATABASE
+        data = new ArrayList<>();
+        data.add(new ShoppingList(null,"Lista1"));
+        data.add(new ShoppingList(null, "Lista2"));
+        ShoppingListAdapter adapter = new ShoppingListAdapter(getActivity(), data, R.layout.shopping_list_row);
+        shoppingListsView.setAdapter(adapter);
+    }
+
+    @OnItemClick(R.id.shoppingListsView)
+    public void navigateToShoppingList(int pos) {
+        ShoppingListView fragment = new ShoppingListView();
+        fragment.selectedShoppingList = data.get(pos);
+        FragmentManager fragmentManager = getActivity().getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.mainContent, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
         reloadData();
     }
 
-    @OnItemLongClick(R.id.ShoppingListView)
+    @OnItemLongClick(R.id.shoppingListsView)
     public boolean removeItem(int pos) {
-        final ShoppingItem op = data.get(pos);
+        final ShoppingList op = data.get(pos);
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
         b.setMessage("Czy na pewno chcesz usunąć?");
         b.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
@@ -88,24 +95,5 @@ public class ShoppingListView extends Fragment {
         });
         b.create().show();
         return true;
-    }
-
-    @OnItemClick(R.id.ShoppingListView)
-    public void crossItem(int pos) {
-        data.get(pos).isChecked = !data.get(pos).isChecked;
-        reloadData();
-    }
-
-    public void reloadData() {
-        Collections.sort(data, new Comparator<ShoppingItem>() {
-            @Override
-            public int compare(ShoppingItem lhs, ShoppingItem rhs) {
-                if(lhs.isChecked == rhs.isChecked )return 0;
-                if(lhs.isChecked) return 1;
-                else return -1;
-            }
-        });
-        ShoppingItemAdapter adapter = new ShoppingItemAdapter(getActivity(), data, R.layout.shopping_item_row);
-        shoppingListView.setAdapter(adapter);
     }
 }

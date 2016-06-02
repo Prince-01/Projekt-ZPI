@@ -5,5 +5,5 @@ package pl.finanse.zpi.pwr.wallet.model;
  */
 //enum oznaczajacy co ma robic + na danym fragmencie
 public enum FabState {
-    NEW_OPERATION, NEW_STANDING_OPERATION, NEW_CATEGORY, NEW_WALLET, NEW_TEMPLATE
+    NEW_OPERATION, NEW_STANDING_OPERATION, NEW_CATEGORY, NEW_WALLET, NEW_TEMPLATE, NEW_SHOPPING_LIST
 }

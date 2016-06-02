@@ -1,9 +1,13 @@
 package pl.finanse.zpi.pwr.wallet;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -21,14 +25,17 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.reflect.Field;
 
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Category;
 import pl.finanse.zpi.pwr.wallet.model.FabState;
+import pl.finanse.zpi.pwr.wallet.model.ShoppingList;
 import pl.finanse.zpi.pwr.wallet.model.Wallet;
 import pl.finanse.zpi.pwr.wallet.views.CategoriesView;
 import pl.finanse.zpi.pwr.wallet.views.DefaultPage;
@@ -39,6 +46,7 @@ import pl.finanse.zpi.pwr.wallet.views.NewStandingOperation;
 import pl.finanse.zpi.pwr.wallet.views.NewTemplate;
 import pl.finanse.zpi.pwr.wallet.views.RaportPage;
 import pl.finanse.zpi.pwr.wallet.views.ShoppingListView;
+import pl.finanse.zpi.pwr.wallet.views.ShoppingListsView;
 import pl.finanse.zpi.pwr.wallet.views.StandingOperationView;
 import pl.finanse.zpi.pwr.wallet.views.TemplatesView;
 import pl.finanse.zpi.pwr.wallet.views.WalletView;
@@ -180,8 +188,9 @@ public class MainActivity extends AppCompatActivity
                 fragment = new HistoryView();
                 break;
             case R.id.nav_shop_list:
-                toolbar.setTitle("Lista zakupów");
-                fragment = new ShoppingListView();
+                toolbar.setTitle("Listy zakupów");
+                fabState = FabState.NEW_SHOPPING_LIST;
+                fragment = new ShoppingListsView();
                 break;
             default:
                 toolbar.setTitle("Default");
@@ -223,6 +232,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case NEW_TEMPLATE:
                 addNewTemplate();
+                break;
+            case NEW_SHOPPING_LIST:
+                addNewShoppingList();
                 break;
         }
     }
@@ -327,6 +339,44 @@ public class MainActivity extends AppCompatActivity
             }
         });
         dialog.show();
+    }
+
+    public void addNewShoppingList() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        alertDialog.setTitle("Nowa lista zakupów");
+        alertDialog.setMessage("Podaj tytuł nowej listy zakupów");
+
+        final EditText input = new EditText(MainActivity.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        alertDialog.setView(input);
+        alertDialog.setIcon(R.drawable.ic_add_shopping_cart_24dp);
+
+        alertDialog.setPositiveButton("Dodaj",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //TODO ADD TO DATABASE
+                        String newShoppingListTitle = input.getText().toString();
+                        ShoppingListView fragment = new ShoppingListView();
+                        fragment.selectedShoppingList = new ShoppingList(null, newShoppingListTitle);
+                        FragmentManager fragmentManager = getFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.mainContent, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                        //SHOW SHOPPING LIST
+                    }
+                });
+
+        alertDialog.setNegativeButton("Cofnij",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        alertDialog.show();
     }
 
 
