@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import org.w3c.dom.Text;
@@ -158,6 +159,7 @@ public class HomePage extends Fragment {
      */
     private void makeData() {
         operationsData = Database.GetAllPositions(getActivity());
+        operationsData = Arrays.copyOfRange(operationsData,0,30<operationsData.length?30:operationsData.length);
         //Toast.makeText(getActivity(),"Ilosc portfeli "+Database.GetAllWallets(getActivity())[0],Toast.LENGTH_SHORT).show();
     }
 

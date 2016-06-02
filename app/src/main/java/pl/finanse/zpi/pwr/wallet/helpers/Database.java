@@ -230,8 +230,8 @@ public class Database {
         Calendar begin = Calendar.getInstance();
         begin.setTimeInMillis(c1.getTimeInMillis());
 
-        while(begin.get(Calendar.DATE) <= end.get(Calendar.DATE)) {
-            if (CheckIfAddInDay(so, c1)) {
+        while(begin.getTimeInMillis() / (1000 * 60 * 60 * 24) <= end.getTimeInMillis() / (1000 * 60 * 60 * 24)) {
+            if (CheckIfAddInDay(so, begin)) {
                 Operation op = new Operation(-1, so.wallet, so.operationName, so.cost, begin.getTime(), so.isIncome, so.category);
                 AddQuickNewPosition(context, op);
             }
@@ -247,32 +247,38 @@ public class Database {
         if(so.end != null && c.getTimeInMillis() > so.end.getTime())
             return false;
 
-        long differenceInDaysFromBeginning = (c.getTimeInMillis() - so.begin.getTime()) / (1000 * 60 * 60 * 24);
-        if(differenceInDaysFromBeginning == 0) return false;
-        long differenceInYearsFromBeginning = (c.get(Calendar.YEAR) - so.begin.getYear());
-        long differenceInMonthsFromBeginning = differenceInYearsFromBeginning * 12 + ((c.get(Calendar.MONTH) - so.begin.getMonth()));
+        long differenceInDaysFromBeginning = (c.getTimeInMillis() - soc.getTimeInMillis()) / (1000 * 60 * 60 * 24);
+        long differenceInYearsFromBeginning = (c.get(Calendar.YEAR) - soc.get(Calendar.YEAR));
+        long differenceInMonthsFromBeginning = differenceInYearsFromBeginning * 12 + ((c.get(Calendar.MONTH) - soc.get(Calendar.MONTH)));
 
         switch (so.interval) {
             case week:
-                if(differenceInDaysFromBeginning % 7 == 0) return true;
+                if(differenceInDaysFromBeginning % 7 == 0)
+                    return true;
                 break;
             case twoweeks:
-                if(differenceInDaysFromBeginning % 14 == 0) return true;
+                if(differenceInDaysFromBeginning % 14 == 0)
+                    return true;
                 break;
             case month:
-                if(c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH))) return true;
+                if(c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH)))
+                    return true;
                 break;
             case twomonths:
-                if(differenceInMonthsFromBeginning % 2 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH))) return true;
+                if(differenceInMonthsFromBeginning % 2 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH)))
+                    return true;
                 break;
             case quarter:
-                if(differenceInMonthsFromBeginning % 3 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH))) return true;
+                if(differenceInMonthsFromBeginning % 3 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH)))
+                    return true;
                 break;
             case halfyear:
-                if(differenceInMonthsFromBeginning % 6 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH))) return true;
+                if(differenceInMonthsFromBeginning % 6 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH)))
+                    return true;
                 break;
             case year:
-                if(differenceInMonthsFromBeginning % 12 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH))) return true;
+                if(differenceInMonthsFromBeginning % 12 == 0 && c.get(Calendar.DAY_OF_MONTH) == soc.get(Calendar.DAY_OF_MONTH) || (soc.get(Calendar.DAY_OF_MONTH) > c.getActualMaximum(Calendar.DAY_OF_MONTH) && c.getActualMaximum(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH)))
+                    return true;
                 break;
         }
         return false;
@@ -568,31 +574,34 @@ public class Database {
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Samochód',NULL); ");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Przychody',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Wynagrodzenie','Przychody');");
-            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Roszczenia żydowskie','Przychody');");
-            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Lapowki','Wynagrodzenie');");
-            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Jedzenie poza domem',NULL);");
+            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Jedzenie poza domem','Artykuły spożywcze');");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Transport',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Rozrywka',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Odzież',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Osobiste',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Dzieci',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Zwierzęta',NULL);");
-            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Dom',NULL);");
-            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Telefon i internet',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Rachunki',NULL);");
-            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Wakacje',NULL);");
-            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Alkohol',NULL);");
+            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Dom','Rachunki');");
+            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Telefon i internet','Rachunki');");
+            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Wakacje','Rozrywka');");
+            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Alkohol','Rozrywka');");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Inne',NULL);");
-            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Abrakadabra','Inne');");
 
-            db.execSQL("INSERT INTO Portfele ('Nazwa', 'Stan', 'Waluta') VALUES ('Moj portfel', 1280.0, 'PLN');");
+            db.execSQL("INSERT INTO Portfele ('Nazwa', 'Stan', 'Waluta') VALUES ('Moj portfel', 0, 'PLN');");
+            db.execSQL("INSERT INTO Portfele ('Nazwa', 'Stan', 'Waluta') VALUES ('Moja firma', 0, 'PLN');");
 
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Chleb', 'Artykuły spożywcze', 'Moj portfel', '2016-04-21', 200, 1)");
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Murzyn', 'Zwierzęta', 'Moj portfel', '2016-03-12', 100, 1)");
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Ziemia', 'Roszczenia żydowskie', 'Moj portfel', '2016-04-12', 200000, 0)");
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Różdżka', 'Abrakadabra', 'Moj portfel', '2016-04-21', 1500, 1)");
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Grenlandia', 'Lapowki', 'Moj portfel', '2016-04-21', 150000, 1)");
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wakacje 2012', 'Wakacje', 'Moj portfel', '2016-04-21', 12000, 1)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wypłata', 'Przychody', 'Moj portfel', '2016-04-05', 20000, 0)");
+
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Chleb', 'Artykuły spożywcze', 'Moj portfel', '2016-04-21', 200, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Pies-karma', 'Zwierzęta', 'Moj portfel', '2016-03-12', 100, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Ziemia', 'Dom', 'Moj portfel', '2016-04-12', 20000, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Numizmaty', 'Inne', 'Moj portfel', '2016-04-21', 1500, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Grenlandia 2190', 'Wakacje', 'Moj portfel', '2016-04-21', 15000, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Cypr 2301', 'Wakacje', 'Moj portfel', '2016-04-21', 12000, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wino', 'Alkohol', 'Moj portfel', '2016-04-21', 345, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Piwo', 'Alkohol', 'Moj portfel', '2016-04-21', 56, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wódka', 'Alkohol', 'Moj portfel', '2016-04-21', 178, 0)");
 
             //  db.execSQL("INSERT INTO Pozycje ('Nazwa', 'Wartosc', 'Data', 'Komentarz', 'CzyPrzychod','CzyUlubiona','CzyStale','KategorieNazwa','PortfeleNazwa','ListyZakupowIdListy') VALUES ('',12.5,'2015')");
         }
