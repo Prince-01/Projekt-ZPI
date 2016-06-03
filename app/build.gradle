@@ -42,3 +42,10 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
 }
 
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.5'
+}
