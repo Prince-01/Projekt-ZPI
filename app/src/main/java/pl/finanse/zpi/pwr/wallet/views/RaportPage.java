@@ -96,7 +96,8 @@ public class RaportPage extends Fragment {
         PieData data = new PieData(categoriesNames, dataset); // initialize Piedata
         wykresKolowy.setData(data); // set data into chart
         wykresKolowy.setDescription("Description");  // set the description
-        wykresKolowy.getData().setValueTextSize(20);
+        wykresKolowy.getData().setValueTextSize(12);
+        wykresKolowy.getLegend().setTextSize(12);
         dataset.setColors(ColorTemplate.COLORFUL_COLORS);
 
         return view;
