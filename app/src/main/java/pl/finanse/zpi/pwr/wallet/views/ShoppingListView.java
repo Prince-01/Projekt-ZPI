@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import javax.sql.DataSource;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -24,6 +26,7 @@ import butterknife.OnItemLongClick;
 import butterknife.Unbinder;
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.adapters.ShoppingItemAdapter;
+import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.ShoppingItem;
 import pl.finanse.zpi.pwr.wallet.model.ShoppingList;
 
@@ -34,7 +37,6 @@ public class ShoppingListView extends Fragment {
     FloatingActionButton fab;
 
     private Unbinder unbinder;
-    private ArrayList<ShoppingItem>data;
     public ShoppingList selectedShoppingList;
     @BindView(R.id.ShoppingListView)
     ListView shoppingListView;
@@ -47,12 +49,12 @@ public class ShoppingListView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //long temp = System.currentTimeMillis();
-        data = new ArrayList<>();
         View view = inflater.inflate(R.layout.shopping_list_view, container, false);
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setVisibility(View.INVISIBLE);
         unbinder = ButterKnife.bind(this, view);
         getActivity().setTitle(selectedShoppingList.name);
+        reloadData();
         return view;
     }
 
@@ -62,22 +64,35 @@ public class ShoppingListView extends Fragment {
         unbinder.unbind();
     }
 
+    /**
+     * wywolywanie przycisku dodaj
+     */
     @OnClick(R.id.addShoppingItemButton)
     public void addShoppingItemButton() {
-        ShoppingItem newItem = new ShoppingItem(newItemEditText.getText().toString());
-        data.add(newItem);
+        ShoppingItem newItem = new ShoppingItem(newItemEditText.getText().toString(),false);
+        if(newItem.name.equals(""))
+            return;//pustych nie przyjmujemy
+        newItemEditText.setText("");
+        selectedShoppingList.items.add(newItem);
+        Database.UpdateShoppingList(getActivity(),selectedShoppingList);
         reloadData();
     }
 
+    /**
+     * dlugie przycisniecie na liscie, sluzy do usuwania
+     * @param pos
+     * @return
+     */
     @OnItemLongClick(R.id.ShoppingListView)
     public boolean removeItem(int pos) {
-        final ShoppingItem op = data.get(pos);
+        final ShoppingItem op = selectedShoppingList.items.get(pos);
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
         b.setMessage("Czy na pewno chcesz usunąć?");
         b.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                data.remove(op);
+                selectedShoppingList.items.remove(op);
+                Database.UpdateShoppingList(getActivity(), selectedShoppingList);
                 reloadData();
             }
         });
@@ -90,22 +105,30 @@ public class ShoppingListView extends Fragment {
         return true;
     }
 
+    /**
+     * krotkie przycisniecie na liscie, check/uncheck napisu
+     * @param pos
+     */
     @OnItemClick(R.id.ShoppingListView)
     public void crossItem(int pos) {
-        data.get(pos).isChecked = !data.get(pos).isChecked;
+        selectedShoppingList.items.get(pos).isChecked = !selectedShoppingList.items.get(pos).isChecked;
+        Database.UpdateShoppingList(getActivity(),selectedShoppingList);
         reloadData();
     }
 
+    /**
+     * odswierzanie danych wyswietlanych na ekranie, nie obejmuje update w bazie danych
+     */
     public void reloadData() {
-        Collections.sort(data, new Comparator<ShoppingItem>() {
+        Collections.sort(selectedShoppingList.items, new Comparator<ShoppingItem>() {
             @Override
             public int compare(ShoppingItem lhs, ShoppingItem rhs) {
-                if(lhs.isChecked == rhs.isChecked )return 0;
+                if(lhs.isChecked == rhs.isChecked) return lhs.name.compareTo(rhs.name);
                 if(lhs.isChecked) return 1;
                 else return -1;
             }
         });
-        ShoppingItemAdapter adapter = new ShoppingItemAdapter(getActivity(), data, R.layout.shopping_item_row);
+        ShoppingItemAdapter adapter = new ShoppingItemAdapter(getActivity(), selectedShoppingList.items, R.layout.shopping_item_row);
         shoppingListView.setAdapter(adapter);
     }
 }

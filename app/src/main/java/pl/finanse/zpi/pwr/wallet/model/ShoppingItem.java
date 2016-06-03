@@ -7,7 +7,8 @@ public class ShoppingItem {
     public boolean isChecked;
     public String name;
 
-    public ShoppingItem(String name) {
+    public ShoppingItem(String name,boolean isChecked) {
         this.name = name;
+        this.isChecked = isChecked;
     }
 }

@@ -14,14 +14,20 @@ import android.widget.Toast;
 import pl.finanse.zpi.pwr.wallet.MainActivity;
 import pl.finanse.zpi.pwr.wallet.model.Category;
 import pl.finanse.zpi.pwr.wallet.model.Operation;
+import pl.finanse.zpi.pwr.wallet.model.ShoppingItem;
+import pl.finanse.zpi.pwr.wallet.model.ShoppingList;
 import pl.finanse.zpi.pwr.wallet.model.StandingOperation;
 import pl.finanse.zpi.pwr.wallet.model.Wallet;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Kamil on 01.04.2016.
@@ -103,7 +109,7 @@ public class Database {
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = null;
         query = "SELECT Nazwa, NazwaNadkategorii FROM Kategorie";
-        Cursor c = db.rawQuery(query,null);
+        Cursor c = db.rawQuery(query, null);
         int nazIndex = c.getColumnIndex("Nazwa");
         int nazNadkatInd = c.getColumnIndex("NazwaNadkategorii");
         Category[] cat = new Category[ c.getCount()];
@@ -125,7 +131,7 @@ public class Database {
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = null;
         query = "SELECT Nazwa, Stan, Waluta FROM Portfele";
-        Cursor c = db.rawQuery(query,null);
+        Cursor c = db.rawQuery(query, null);
         int nazIndex = c.getColumnIndex("Nazwa");
         int stIndex = c.getColumnIndex("Stan");
         int walIndex = c.getColumnIndex("Waluta");
@@ -150,7 +156,7 @@ public class Database {
         String query = null;
         query = "SELECT IdPozycji, Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje WHERE PortfeleNazwa = ? AND CzyStale = 0 ORDER BY Data DESC, IdPozycji DESC";
         String[] arr = {Wallet.GetActiveWallet(context).getName()};
-        Cursor c = db.rawQuery(query,arr);
+        Cursor c = db.rawQuery(query, arr);
         int idIndex = c.getColumnIndex("IdPozycji");
         int nazIndex = c.getColumnIndex("Nazwa");
         int wartIndex = c.getColumnIndex("Wartosc");
@@ -556,11 +562,127 @@ public class Database {
         values.put("DataOd",(new SimpleDateFormat("yyyy-MM-dd")).format(operacja.begin));
         values.put("DataDo",operacja.end != null ? (new SimpleDateFormat("yyyy-MM-dd")).format(operacja.end) : null);
         values.put("Interwal",operacja.interval.toString());
-        values.put("PozycjeIdPozycji",idPoz);
+        values.put("PozycjeIdPozycji", idPoz);
         db.insert("ZleceniaStale",null,values);//dodanie do zlecen stalych
         Close();
     }
 
+    /**
+     * zwraca listy zakupow dla widoku list zakupow
+     * @return
+     */
+    public static ArrayList<ShoppingList> GetAllShoppingLists(Context context){
+
+        ArrayList<ShoppingList> wynik = new ArrayList<ShoppingList>();
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = "SELECT IdListy,Nazwa,Pozycje,CzyKupiono FROM ListyZakupow WHERE CzyUkryte = 0";//wszystkie nieukryte listy zakupow
+        Cursor c = db.rawQuery(query, null);
+        //Toast.makeText(context,"GetAllShoppingLists "+c.getCount(),Toast.LENGTH_SHORT).show();
+        int idIndex = c.getColumnIndex("IdListy");
+        int nazIndex = c.getColumnIndex("Nazwa");
+        int pozIndex = c.getColumnIndex("Pozycje");
+        int czyKupIndex = c.getColumnIndex("CzyKupiono");
+        while(c.moveToNext()){
+            String[] poz = Parser.Split(c.getString(pozIndex));
+            boolean[] czy = Parser.SplitToBoolean(c.getString(czyKupIndex));
+            LinkedList<ShoppingItem> sis = new LinkedList<ShoppingItem>();
+            for(int i=0;i<poz.length;i++)
+                sis.add(new ShoppingItem(poz[i],czy[i]));
+            wynik.add(new ShoppingList(c.getInt(idIndex),c.getString(nazIndex), sis));
+        }
+        Close();
+        return wynik;
+    }
+
+    /**
+     * ukrywa liste zakupow zeby ne byla widoczna, bo moze sie okazac, ze zostala juz gdzies zapisana do operacji
+     * @param context
+     * @param idListy
+     */
+    public static void RemoveShoppingList(Context context, int idListy){
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = "UPDATE ListyZakupow SET CzyUkryte=1 WHERE IdListy= ?";
+        String[] arr = {Integer.toString(idListy)};
+        db.execSQL(query, arr);
+        Close();
+    }
+
+    /**
+     * updajtuje liste zakupow  w bazie danych, najlepiej wywolywac te metode po kazdej zmianie w liscie, nie kusztuje to zbyt duzo
+     * @param context
+     * @param lista
+     */
+    public static void UpdateShoppingList(Context context, ShoppingList lista){
+        String[] pozycje = new String[lista.items.size()];
+        boolean[] czyKupiono = new boolean[lista.items.size()];
+        List<ShoppingItem> listaItemow = lista.items;
+        int kup = 0;
+        for(int i=0;i<pozycje.length;i++){
+            pozycje[i] = listaItemow.get(i).name;
+            czyKupiono[i] = listaItemow.get(i).isChecked;
+            if(czyKupiono[i])
+                kup++;
+        }
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = "UPDATE ListyZakupow SET Nazwa = ?,Pozycje = ?,CzyKupiono = ? WHERE IdListy= ?";
+
+        String[] arr = {lista.name,Parser.Join(pozycje),Parser.Join(czyKupiono),Integer.toString(lista.id)};
+        db.execSQL(query, arr);
+        //Toast.makeText(context,""+Parser.Join(czyKupiono)+" Kupne: "+kup,Toast.LENGTH_SHORT).show();
+        Close();
+    }
+
+    /**
+     * zwraca pojedyncza liste zakupow, bedzie uzywane w innym widoku niz listy zakupow
+     * @param context
+     * @param idListy
+     * @return
+     */
+    public static ShoppingList GetShoppingList(Context context, int idListy){
+        ShoppingList wynik = null;
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        String query = "SELECT IdListy,Nazwa,Pozycje,CzyKupiono FROM ListyZakupow WHERE IdListy=?";//wszystkie nieukryte listy zakupow
+        String[] arr = {Integer.toString(idListy)};
+        Cursor c = db.rawQuery(query, arr);
+        int idIndex = c.getColumnIndex("IdListy");
+        int nazIndex = c.getColumnIndex("Nazwa");
+        int pozIndex = c.getColumnIndex("Pozycje");
+        int czyKupIndex = c.getColumnIndex("CzyKupiono");
+        while(c.moveToNext()){
+            String[] poz = Parser.Split(c.getString(pozIndex));
+           // Toast.makeText(context,""+c.getString(czyKupIndex),Toast.LENGTH_SHORT).show();
+            boolean[] czy = Parser.SplitToBoolean(c.getString(czyKupIndex));
+            LinkedList<ShoppingItem> sis = new LinkedList<ShoppingItem>();
+            for(int i=0;i<poz.length;i++)
+                sis.add(new ShoppingItem(poz[i],czy[i]));
+            wynik = new ShoppingList(c.getInt(idIndex),c.getString(nazIndex), sis);
+        }
+        Close();
+        return wynik;
+    }
+
+    /**
+     * dodaje nowa pusta liste zakupow do bazy danych, tkora potemjak sie uzywa to sie odswieza
+     * @param context
+     * @param name
+     * @return
+     */
+    public static int AddNewShoppingList(Context context, String name){
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+        ContentValues cv = new ContentValues();
+        cv.put("Nazwa", name);
+        cv.put("Pozycje","");
+        cv.put("CzyKupiono","");
+        int id = (int)db.insert("ListyZakupow",null,cv);
+       // Toast.makeText(context,"AddNewShoppingList new id: "+id,Toast.LENGTH_SHORT).show();
+        Close();
+        return id;
+    }
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -615,7 +737,7 @@ public class Database {
                     "CREATE TABLE IF NOT EXISTS Kategorie (Nazwa varchar(255) NOT NULL, NazwaNadkategorii varchar(255), CzyUsunieto INTEGER DEFAULT 0  NOT NULL, IdObrazka integer(20), PRIMARY KEY (Nazwa), FOREIGN KEY(NazwaNadkategorii) REFERENCES Kategorie(Nazwa));",
                     "CREATE TABLE IF NOT EXISTS Portfele (Nazwa varchar(255) NOT NULL, Stan double(10) DEFAULT 0 NOT NULL, Waluta varchar(3) DEFAULT 'PLN' NOT NULL, PRIMARY KEY (Nazwa));",
                     "CREATE TABLE IF NOT EXISTS Pozycje (IdPozycji INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255), Wartosc double(10) NOT NULL, Data date, Komentarz integer(511), CzyPrzychod INTEGER DEFAULT 0 NOT NULL, CzySzablon INTEGER DEFAULT 0 NOT NULL, CzyStale INTEGER DEFAULT 0 NOT NULL, KategorieNazwa varchar(255) NOT NULL, PortfeleNazwa varchar(255) NOT NULL, ListyZakupowIdListy integer(10), FOREIGN KEY(KategorieNazwa) REFERENCES Kategorie(Nazwa), FOREIGN KEY(PortfeleNazwa) REFERENCES Portfele(Nazwa));",
-                    "CREATE TABLE IF NOT EXISTS ListyZakupow (IdListy INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255) NOT NULL UNIQUE, Pozycje varchar(4095) NOT NULL, CzyKupiono varchar(1023) NOT NULL, CzyUkryte INTEGER DEFAULT 0, PozycjeIdPozycji integer(10) NOT NULL, FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));",
+                    "CREATE TABLE IF NOT EXISTS ListyZakupow (IdListy INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255) NOT NULL, Pozycje varchar(4095) NOT NULL, CzyKupiono varchar(1023) NOT NULL, CzyUkryte INTEGER DEFAULT 0);",
                     "CREATE TABLE IF NOT EXISTS Porady (IdPorady INTEGER PRIMARY KEY AUTOINCREMENT, Nazwa varchar(255) NOT NULL, Link varchar(255) NOT NULL);",
                     "CREATE TABLE IF NOT EXISTS ZleceniaStale (Nazwa varchar(255) NOT NULL, DataOd date NOT NULL, DataDo date, PozycjeIdPozycji integer(10) NOT NULL, Interwal varchar(20), PRIMARY KEY (Nazwa), FOREIGN KEY(PozycjeIdPozycji) REFERENCES Pozycje(IdPozycji));",
                     "CREATE UNIQUE INDEX ListyZakupow_IdListy ON ListyZakupow (IdListy);",

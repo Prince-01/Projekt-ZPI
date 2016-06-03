@@ -15,6 +15,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +26,7 @@ import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.adapters.ShoppingItemAdapter;
 import pl.finanse.zpi.pwr.wallet.adapters.ShoppingListAdapter;
 import pl.finanse.zpi.pwr.wallet.adapters.StandingOperationsAdapter;
+import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.ShoppingItem;
 import pl.finanse.zpi.pwr.wallet.model.ShoppingList;
 
@@ -34,7 +36,7 @@ import pl.finanse.zpi.pwr.wallet.model.ShoppingList;
 public class ShoppingListsView extends Fragment {
     FloatingActionButton fab;
 
-    private ArrayList<ShoppingList>data;
+    private ArrayList<ShoppingList> data;
     private Unbinder unbinder;
     @BindView(R.id.shoppingListsView)
     ListView shoppingListsView;
@@ -57,11 +59,7 @@ public class ShoppingListsView extends Fragment {
     }
 
     public void reloadData() {
-
-        //TODO LOAD FROM DATABASE
-        data = new ArrayList<>();
-        data.add(new ShoppingList(null,"Lista1"));
-        data.add(new ShoppingList(null, "Lista2"));
+        data = Database.GetAllShoppingLists(getActivity());
         ShoppingListAdapter adapter = new ShoppingListAdapter(getActivity(), data, R.layout.shopping_list_row);
         shoppingListsView.setAdapter(adapter);
     }
@@ -86,7 +84,7 @@ public class ShoppingListsView extends Fragment {
         b.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                data.remove(op);
+                Database.RemoveShoppingList(getActivity(),op.id);
                 reloadData();
             }
         });

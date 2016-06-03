@@ -31,10 +31,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Field;
+import java.util.LinkedList;
 
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Category;
 import pl.finanse.zpi.pwr.wallet.model.FabState;
+import pl.finanse.zpi.pwr.wallet.model.ShoppingItem;
 import pl.finanse.zpi.pwr.wallet.model.ShoppingList;
 import pl.finanse.zpi.pwr.wallet.model.Wallet;
 import pl.finanse.zpi.pwr.wallet.views.CategoriesView;
@@ -108,7 +110,15 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             Fragment f = this.getFragmentManager().findFragmentById(R.id.mainContent);
-            if(!(f instanceof HomePage)) {
+            if(f instanceof ShoppingListView){
+               // ShoppingListsView slv = null;
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.mainContent,new ShoppingListsView()).commit();
+                fabState = FabState.NEW_SHOPPING_LIST;
+                toolbar.setTitle("Listy zakupów");
+               // slv.reloadData();
+            }
+            else if(!(f instanceof HomePage)) {
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.mainContent, new HomePage()).commit();
                 fabState = FabState.NEW_OPERATION;
@@ -353,16 +363,18 @@ public class MainActivity extends AppCompatActivity
         alertDialog.setPositiveButton("Dodaj",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO ADD TO DATABASE
+                        //Toast.makeText(getApplicationContext(),"Kliknieto na dodawanie nowej listy",Toast.LENGTH_SHORT).show();
                         String newShoppingListTitle = input.getText().toString();
+                        int idNewShoppingList = Database.AddNewShoppingList(getApplicationContext(),newShoppingListTitle);
                         ShoppingListView fragment = new ShoppingListView();
-                        fragment.selectedShoppingList = new ShoppingList(null, newShoppingListTitle);
+                        fragment.selectedShoppingList = new ShoppingList(idNewShoppingList, newShoppingListTitle,new LinkedList<ShoppingItem>());
                         FragmentManager fragmentManager = getFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.mainContent, fragment);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
                         //SHOW SHOPPING LIST
+
                     }
                 });
 

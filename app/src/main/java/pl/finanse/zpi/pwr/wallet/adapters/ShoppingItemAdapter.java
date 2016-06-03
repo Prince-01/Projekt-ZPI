@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.model.ShoppingItem;
@@ -22,10 +23,10 @@ import pl.finanse.zpi.pwr.wallet.model.ShoppingItem;
 public class ShoppingItemAdapter extends ArrayAdapter<ShoppingItem> {
     Context context;
     int layoutResourceId;
-    ArrayList<ShoppingItem>data = null;
+    List<ShoppingItem>data = null;
     private static final StrikethroughSpan STRIKE_THROUGH_SPAN = new StrikethroughSpan();
 
-    public ShoppingItemAdapter(Context context, ArrayList<ShoppingItem> data, int layoutResourceId) {
+    public ShoppingItemAdapter(Context context, List<ShoppingItem> data, int layoutResourceId) {
         super(context, layoutResourceId, data);
         this.context = context;
         this.data = data;

@@ -48,8 +48,13 @@ public class ShoppingListAdapter extends ArrayAdapter<ShoppingList> {
             holder = (RowBeanHolder) row.getTag();
         }
         ShoppingList object = data.get(position);
+        int kupione = 0;
+        for (ShoppingItem si:object.items) {
+            if(si.isChecked)
+                kupione++;
+        }
         holder.shoppingListName.setText(object.name);
-
+        ((TextView)row.findViewById(R.id.shoppingListInfo)).setText("Ilość kupionych:"+kupione+"/"+object.items.size());
         //TODO
         //set items
         return row;
