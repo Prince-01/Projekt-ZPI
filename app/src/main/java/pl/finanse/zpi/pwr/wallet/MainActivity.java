@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar;
     SearchView mSearchView;
     FloatingActionButton fab;
-    private FabState fabState = FabState.NEW_OPERATION;
+    public static FabState fabState = FabState.NEW_OPERATION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +69,6 @@ public class MainActivity extends AppCompatActivity
         FontsOverride.setDefaultFont(this, "SERIF", "fonts/Montserrat-Regular.otf");
         FontsOverride.setDefaultFont(this, "SANS_SERIF", "fonts/Montserrat-Regular.otf");*/
 
-
-
         if(Wallet.GetActiveWallet(this) == null)
             Wallet.SetActiveWallet(this, Database.GetAllWallets(this)[0].getName());
 
@@ -80,9 +78,7 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         fab = (FloatingActionButton) findViewById(R.id.fab);
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

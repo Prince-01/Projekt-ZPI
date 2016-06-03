@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.*;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -19,9 +21,11 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
+import pl.finanse.zpi.pwr.wallet.MainActivity;
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
 import pl.finanse.zpi.pwr.wallet.model.Category;
+import pl.finanse.zpi.pwr.wallet.model.FabState;
 import pl.finanse.zpi.pwr.wallet.model.Operation;
 import pl.finanse.zpi.pwr.wallet.model.StandingOperation;
 import pl.finanse.zpi.pwr.wallet.model.Wallet;
@@ -221,6 +225,9 @@ public class NewStandingOperation extends Fragment implements View.OnClickListen
         HomePage newFragment = new HomePage();
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.mainContent, newFragment).commit();
+
+        MainActivity.fabState = FabState.NEW_OPERATION;
+
     }
 
     @Override
