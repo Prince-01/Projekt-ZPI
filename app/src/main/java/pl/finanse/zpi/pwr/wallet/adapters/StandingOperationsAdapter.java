@@ -13,6 +13,7 @@ import pl.finanse.zpi.pwr.wallet.model.StandingOperation;
 import pl.finanse.zpi.pwr.wallet.views.HomePage;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -21,9 +22,9 @@ import java.util.Calendar;
 public class StandingOperationsAdapter  extends ArrayAdapter<StandingOperation> {
     Context context;
     int layoutResourceId;
-    StandingOperation data[] = null;
+    ArrayList<StandingOperation> data = null;
 
-    public StandingOperationsAdapter(Context context, int layoutResourceId, StandingOperation[] data) {
+    public StandingOperationsAdapter(Context context, int layoutResourceId, ArrayList<StandingOperation> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
@@ -49,7 +50,7 @@ public class StandingOperationsAdapter  extends ArrayAdapter<StandingOperation> 
         } else {
             holder = (RowBeanHolder) row.getTag();
         }
-        StandingOperation object = data[position];
+        StandingOperation object = data.get(position);
         holder.nameLabel.setText(object.operationName);
         holder.categoryName.setText(object.category);
         holder.cost.setText(HomePage.decimalFormat.format(object.cost) + " zł");
