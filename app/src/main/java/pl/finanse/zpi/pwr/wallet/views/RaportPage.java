@@ -89,7 +89,7 @@ public class RaportPage extends Fragment {
 
         PieChart wykresKolowy = (PieChart) view.findViewById(R.id.wykresKolowy);
         ArrayList<Entry> entries = new ArrayList<>();
-        for(int i = 0; i < categoriesValues.size(); i++)
+        for(int i = categoriesValues.size() - 1; i >= 0; i--)
             entries.add(new Entry(categoriesValues.get(i), categoriesValues.size() - 1 - i));
         PieDataSet dataset = new PieDataSet(entries, "# of Calls");
 
@@ -98,6 +98,7 @@ public class RaportPage extends Fragment {
         wykresKolowy.setDescription("Description");  // set the description
         wykresKolowy.getData().setValueTextSize(12);
         wykresKolowy.getLegend().setTextSize(12);
+        wykresKolowy.setDrawSliceText(false);
         dataset.setColors(ColorTemplate.COLORFUL_COLORS);
 
         return view;
