@@ -43,6 +43,16 @@ public class Category implements Comparable<Category> {
     }
 
     public static List<String> getAllFormattedCategoriesWithDepth(Context context) {
+        List<Category> formattedCategories = getAllCategoriesWithDepth(context);
+
+        List<String> categoriesStrings = new ArrayList<>();
+        for(Category c : formattedCategories)
+            categoriesStrings.add(CategoryFormattedWithDepth(c));
+
+        return categoriesStrings;
+    }
+
+    private static List<Category> getAllCategoriesWithDepth(Context context) {
         Category[] categories = Database.GetAllCategories(context);
         Arrays.sort(categories);
 
@@ -61,12 +71,7 @@ public class Category implements Comparable<Category> {
             List<Category> cat = GetSubcategoriesOf(categories, c);
             formattedCategories.addAll(i + 1, cat);
         }
-
-        List<String> categoriesStrings = new ArrayList<>();
-        for(Category c : formattedCategories)
-            categoriesStrings.add(CategoryFormattedWithDepth(c));
-
-        return categoriesStrings;
+        return formattedCategories;
     }
 
     public static List<Category> GetSubcategoriesOf(Category[] categories, Category category) {

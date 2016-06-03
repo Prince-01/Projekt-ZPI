@@ -27,18 +27,10 @@
             android:gravity="center"
             android:layout_weight="0.13" />
 
-        <ImageView
-            android:layout_width="1229dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView"
-            android:src="@mipmap/report_mockup"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.15" />
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/wykresKolowy"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <ImageView
             android:layout_width="481dp"
