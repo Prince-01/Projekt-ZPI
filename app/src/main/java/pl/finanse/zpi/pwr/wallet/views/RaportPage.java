@@ -1,6 +1,7 @@
 package pl.finanse.zpi.pwr.wallet.views;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -71,8 +72,8 @@ public class RaportPage extends Fragment {
         }
 
         float sum = 0.0f;
-        int index = 0;
-        ListIterator<Category> iterator = categoriesWithDepth.listIterator(categoriesWithDepth.size() - 1);
+        int index = categoriesNames.size() - 1;
+        ListIterator<Category> iterator = categoriesWithDepth.listIterator(categoriesWithDepth.size());
         while(iterator.hasPrevious()) {
             Category c = iterator.previous();
 
@@ -81,9 +82,9 @@ public class RaportPage extends Fragment {
                 if(sum != 0)
                     categoriesValues.add(sum);
                 else
-                    categoriesNames.remove(index--);
+                    categoriesNames.remove(index);
                 sum = 0.0f;
-                index++;
+                index--;
             }
         }
 
@@ -96,8 +97,9 @@ public class RaportPage extends Fragment {
         PieData data = new PieData(categoriesNames, dataset); // initialize Piedata
         wykresKolowy.setData(data); // set data into chart
         wykresKolowy.setDescription("Description");  // set the description
-        wykresKolowy.getData().setValueTextSize(12);
-        wykresKolowy.getLegend().setTextSize(12);
+        wykresKolowy.getData().setValueTextSize(13);
+        wykresKolowy.getLegend().setTextSize(13);
+        wykresKolowy.getLegend().setTextColor(Color.WHITE);
         wykresKolowy.setDrawSliceText(false);
         dataset.setColors(ColorTemplate.COLORFUL_COLORS);
 
