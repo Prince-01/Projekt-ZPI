@@ -52,7 +52,7 @@ public class Category implements Comparable<Category> {
         return categoriesStrings;
     }
 
-    private static List<Category> getAllCategoriesWithDepth(Context context) {
+    public static List<Category> getAllCategoriesWithDepth(Context context) {
         Category[] categories = Database.GetAllCategories(context);
         Arrays.sort(categories);
 
