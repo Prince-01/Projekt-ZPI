@@ -227,7 +227,6 @@ public class NewStandingOperation extends Fragment implements View.OnClickListen
         fragmentManager.beginTransaction().replace(R.id.mainContent, newFragment).commit();
 
         MainActivity.fabState = FabState.NEW_OPERATION;
-
     }
 
     @Override
