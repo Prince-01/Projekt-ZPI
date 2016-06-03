@@ -44,6 +44,8 @@ public class ShoppingListsView extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shopping_lists, container, false);
         unbinder = ButterKnife.bind(this, view);
+        fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
         reloadData();
         return view;
     }
