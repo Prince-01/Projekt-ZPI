@@ -33,21 +33,5 @@
             android:id="@+id/nav_shop_list"
             android:icon="@drawable/ic_add_shopping_cart_24dp"
             android:title="Listy zakupów" />
-        <item
-            android:id="@+id/nav_eksport"
-            android:icon="@drawable/ic_import_export_24dp"
-            android:title="Import i eksport" />
-        <item
-            android:id="@+id/nav_edit"
-            android:icon="@drawable/ic_account_box_24dp"
-            android:title="Personalizacja" />
-        <item
-            android:id="@+id/nav_help"
-            android:icon="@drawable/ic_menu_share"
-            android:title="Pomoc &amp; opinia" />
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_settings_24dp"
-            android:title="Ustawienia" />
     </group>
 </menu>
