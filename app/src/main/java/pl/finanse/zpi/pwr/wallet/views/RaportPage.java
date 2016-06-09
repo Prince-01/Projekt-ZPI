@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -31,6 +32,7 @@ import java.util.ListIterator;
  * Created by Robert on 2016-04-01.
  */
 public class RaportPage extends Fragment {
+
     FloatingActionButton fab;
 
     public RaportPage() {
@@ -40,12 +42,10 @@ public class RaportPage extends Fragment {
     public float getSumOfOperationsForCategory(Operation[] operations, String category) {
         float result = 0.0f;
 
-        for (Operation o :
-             operations) {
+        for (Operation o : operations) {
             if(o.category.equals(category))
                 result += o.isIncome ? 0 : o.cost;
         }
-
         return result;
     }
 
@@ -58,15 +58,13 @@ public class RaportPage extends Fragment {
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setVisibility(View.INVISIBLE);
 
-
         // Inflate the layout for this fragment
         List<Category> categoriesWithDepth = Category.getAllCategoriesWithDepth(getActivity());
         Operation[] operations = Database.GetAllPositions(getActivity());
         List<String> categoriesNames = new ArrayList<>();
         List<Float> categoriesValues = new ArrayList<>();
 
-        for (Category c :
-             categoriesWithDepth) {
+        for (Category c : categoriesWithDepth) {
             if(c.depth == 0)
                 categoriesNames.add(c.categoryName);
         }
@@ -102,6 +100,12 @@ public class RaportPage extends Fragment {
         wykresKolowy.getLegend().setTextColor(Color.WHITE);
         wykresKolowy.setDrawSliceText(false);
         dataset.setColors(ColorTemplate.COLORFUL_COLORS);
+
+
+        /*
+        Wykres Liniowy
+         */
+        LineChart wykresLiniowy = (LineChart) view.findViewById(R.id.wykresLiniowy);
 
         return view;
     }
