@@ -15,6 +15,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.*;
 import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
@@ -99,7 +100,7 @@ public class RaportPage extends Fragment {
         ArrayList<Entry> pieEntries = new ArrayList<>();
         for(int i = categoriesValues.size() - 1; i >= 0; i--)
             pieEntries.add(new Entry(categoriesValues.get(i), categoriesValues.size() - 1 - i));
-        PieDataSet pieDataSet = new PieDataSet(pieEntries, "# of Calls");
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
 
         PieData pieData = new PieData(categoriesNames, pieDataSet); // initialize Piedata
         wykresKolowy.setData(pieData); // set data into chart
@@ -109,6 +110,11 @@ public class RaportPage extends Fragment {
         wykresKolowy.getLegend().setTextColor(Color.WHITE);
         wykresKolowy.setDrawSliceText(false);
         pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+
+        Legend legend = wykresKolowy.getLegend();
+        legend.setForm(Legend.LegendForm.SQUARE);
+        legend.setWordWrapEnabled(true);
+        legend.setStackSpace(20);
 
         calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -127,9 +133,17 @@ public class RaportPage extends Fragment {
     }
 
     private void RefreshLineChart(View view) {
+
+
+        /*
+        Wykres Liniowy
+         */
+
         LineChart wykresLiniowy = (LineChart) view.findViewById(R.id.wykresLiniowy);
         ArrayList<Entry> lineEntries = new ArrayList<>();
+        //for()
 
+        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
         float walletState = 0;
         List<Float> walletStates = new ArrayList<>();
         List<String> walletDatesStrings = new ArrayList<>();
@@ -153,10 +167,16 @@ public class RaportPage extends Fragment {
         for (int i = 0; i < walletStates.size(); i++)
             lineEntries.add(new Entry(walletStates.get(i), i));
 
-        LineDataSet lds = new LineDataSet(lineEntries, " # of cells");
+        LineDataSet lds = new LineDataSet(lineEntries, "");
         LineData ld = new LineData(walletDatesStrings, lds);
         wykresLiniowy.setData(ld);
+        wykresLiniowy.getLegend().setEnabled(false);
+        ld.setValueTextColor(Color.WHITE);
+        lds.setColor(Color.WHITE);
+        wykresLiniowy.getXAxis().setTextColor(Color.WHITE);
         wykresLiniowy.invalidate();
+
+        return view;
     }
 
     @Override
