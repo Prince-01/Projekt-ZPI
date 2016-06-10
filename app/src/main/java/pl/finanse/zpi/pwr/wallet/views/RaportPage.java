@@ -11,9 +11,7 @@ import android.view.ViewGroup;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.*;
 import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
@@ -23,10 +21,8 @@ import pl.finanse.zpi.pwr.wallet.model.Category;
 import pl.finanse.zpi.pwr.wallet.model.Operation;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.text.DateFormat;
+import java.util.*;
 
 /**
  * Created by Robert on 2016-04-01.
@@ -88,25 +84,48 @@ public class RaportPage extends Fragment {
         }
 
         PieChart wykresKolowy = (PieChart) view.findViewById(R.id.wykresKolowy);
-        ArrayList<Entry> entries = new ArrayList<>();
+        ArrayList<Entry> pieEntries = new ArrayList<>();
         for(int i = categoriesValues.size() - 1; i >= 0; i--)
-            entries.add(new Entry(categoriesValues.get(i), categoriesValues.size() - 1 - i));
-        PieDataSet dataset = new PieDataSet(entries, "# of Calls");
+            pieEntries.add(new Entry(categoriesValues.get(i), categoriesValues.size() - 1 - i));
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, "# of Calls");
 
-        PieData data = new PieData(categoriesNames, dataset); // initialize Piedata
-        wykresKolowy.setData(data); // set data into chart
+        PieData pieData = new PieData(categoriesNames, pieDataSet); // initialize Piedata
+        wykresKolowy.setData(pieData); // set data into chart
         wykresKolowy.setDescription("Description");  // set the description
         wykresKolowy.getData().setValueTextSize(13);
         wykresKolowy.getLegend().setTextSize(13);
         wykresKolowy.getLegend().setTextColor(Color.WHITE);
         wykresKolowy.setDrawSliceText(false);
-        dataset.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
 
+        LineChart wykresLiniowy = (LineChart) view.findViewById(R.id.wykresLiniowy);
+        ArrayList<Entry> lineEntries = new ArrayList<>();
+        //for()
+
+        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        float walletState = 0;
+        List<Float> walletStates = new ArrayList<>();
+        List<String> walletDatesStrings = new ArrayList<>();
+
+        for(int i = 0; i < operations.length && operations[i].date.getMonth() + 1 <= month; i++) {
+            walletState += operations[i].isIncome ? operations[i].cost : -operations[i].cost;
+
+            if(operations[i].date.getMonth() + 1 == month) {
+                walletStates.add(walletState);
+                walletDatesStrings.add(android.text.format.DateFormat.getDateFormat(getActivity()).format(operations[i].date));
+            }
+        }
+
+        for (int i = 0; i < walletStates.size(); i++)
+            lineEntries.add(new Entry(walletStates.get(i), i));
+
+        LineDataSet lds = new LineDataSet(lineEntries, " # of cells");
+        LineData ld = new LineData(walletDatesStrings, lds);
+        wykresLiniowy.setData(ld);
 
         /*
         Wykres Liniowy
          */
-        LineChart wykresLiniowy = (LineChart) view.findViewById(R.id.wykresLiniowy);
 
         return view;
     }

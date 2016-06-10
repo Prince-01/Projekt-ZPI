@@ -104,6 +104,8 @@ public class HomePage extends Fragment {
      */
     public void ReloadList() {
         makeData();
+        UpdateTotalBalance();
+        operationsData = Arrays.copyOfRange(operationsData,0,30<operationsData.length?30:operationsData.length);
         OperationsAdapter adapter = new OperationsAdapter(getActivity(), R.layout.operation_row, operationsData);
         lastOperationsListView.setAdapter(adapter);
         lastOperationsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -143,7 +145,6 @@ public class HomePage extends Fragment {
                 drawer.closeDrawer(GravityCompat.START);
             }
         });
-        UpdateTotalBalance();
     }
 
     private void UpdateTotalBalance() {
@@ -162,7 +163,6 @@ public class HomePage extends Fragment {
      */
     private void makeData() {
         operationsData = Database.GetAllPositions(getActivity());
-        operationsData = Arrays.copyOfRange(operationsData,0,30<operationsData.length?30:operationsData.length);
         //Toast.makeText(getActivity(),"Ilosc portfeli "+Database.GetAllWallets(getActivity())[0],Toast.LENGTH_SHORT).show();
     }
 
