@@ -147,6 +147,7 @@ public class RaportPage extends Fragment {
         float walletState = 0;
         List<Float> walletStates = new ArrayList<>();
         List<String> walletDatesStrings = new ArrayList<>();
+        Calendar lastDate = null;
 
         for(int i = operations.length - 1; i >= 0; i--) {
             Calendar c = Calendar.getInstance();
@@ -157,11 +158,19 @@ public class RaportPage extends Fragment {
 
             walletState += operations[i].isIncome ? operations[i].cost : -operations[i].cost;
 
-            if(c.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) &&
+            if(lastDate == null && c.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) &&
+                    c.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) ||
+                    lastDate != null && lastDate.get(Calendar.DAY_OF_MONTH) != c.get(Calendar.DAY_OF_MONTH) &&
+                    c.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) &&
                     c.get(Calendar.MONTH) == calendar.get(Calendar.MONTH)) {
+                lastDate = c;
                 walletStates.add(walletState);
                 walletDatesStrings.add(android.text.format.DateFormat.getDateFormat(getActivity()).format(operations[i].date));
             }
+            else if(lastDate != null && lastDate.get(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH) &&
+                    c.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) &&
+                    c.get(Calendar.MONTH) == calendar.get(Calendar.MONTH))
+                walletStates.set(walletStates.size() - 1, walletState);
         }
 
         for (int i = 0; i < walletStates.size(); i++)
