@@ -8,6 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.TextView;
+import android.widget.Toast;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.YAxis;
@@ -15,8 +20,10 @@ import com.github.mikephil.charting.data.*;
 import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import org.w3c.dom.Text;
 import pl.finanse.zpi.pwr.wallet.R;
 import pl.finanse.zpi.pwr.wallet.helpers.Database;
+import pl.finanse.zpi.pwr.wallet.helpers.Parser;
 import pl.finanse.zpi.pwr.wallet.model.Category;
 import pl.finanse.zpi.pwr.wallet.model.Operation;
 
@@ -28,8 +35,12 @@ import java.util.*;
  * Created by Robert on 2016-04-01.
  */
 public class RaportPage extends Fragment {
+    private Unbinder unbinder;
+
 
     FloatingActionButton fab;
+    Calendar calendar;
+    Operation[] operations;
 
     public RaportPage() {
         // Required empty public constructor
@@ -51,13 +62,14 @@ public class RaportPage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reports, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
         fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.setVisibility(View.INVISIBLE);
 
         // Inflate the layout for this fragment
         List<Category> categoriesWithDepth = Category.getAllCategoriesWithDepth(getActivity());
-        Operation[] operations = Database.GetAllPositions(getActivity());
+        operations = Database.GetAllPositions(getActivity());
         List<String> categoriesNames = new ArrayList<>();
         List<Float> categoriesValues = new ArrayList<>();
 
@@ -98,19 +110,41 @@ public class RaportPage extends Fragment {
         wykresKolowy.setDrawSliceText(false);
         pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
 
-        LineChart wykresLiniowy = (LineChart) view.findViewById(R.id.wykresLiniowy);
-        ArrayList<Entry> lineEntries = new ArrayList<>();
+        calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        TextView timeRange = (TextView) view.findViewById(R.id.timeRange);
+        timeRange.setText(Parser.GetNameOfMonth(calendar.get(Calendar.MONTH)) + " " + String.valueOf(calendar.get(Calendar.YEAR)));
+
+        RefreshLineChart(view);
         //for()
 
-        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        /*
+        Wykres Liniowy
+         */
+
+        return view;
+    }
+
+    private void RefreshLineChart(View view) {
+        LineChart wykresLiniowy = (LineChart) view.findViewById(R.id.wykresLiniowy);
+        ArrayList<Entry> lineEntries = new ArrayList<>();
+
         float walletState = 0;
         List<Float> walletStates = new ArrayList<>();
         List<String> walletDatesStrings = new ArrayList<>();
 
-        for(int i = 0; i < operations.length && operations[i].date.getMonth() + 1 <= month; i++) {
+        for(int i = operations.length - 1; i >= 0; i--) {
+            Calendar c = Calendar.getInstance();
+            c.setTime(operations[i].date);
+
+            if(!(c.get(Calendar.YEAR) <= calendar.get(Calendar.YEAR) ||
+                    c.get(Calendar.MONTH) <= calendar.get(Calendar.MONTH))) break;
+
             walletState += operations[i].isIncome ? operations[i].cost : -operations[i].cost;
 
-            if(operations[i].date.getMonth() + 1 == month) {
+            if(c.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) &&
+                    c.get(Calendar.MONTH) == calendar.get(Calendar.MONTH)) {
                 walletStates.add(walletState);
                 walletDatesStrings.add(android.text.format.DateFormat.getDateFormat(getActivity()).format(operations[i].date));
             }
@@ -122,17 +156,29 @@ public class RaportPage extends Fragment {
         LineDataSet lds = new LineDataSet(lineEntries, " # of cells");
         LineData ld = new LineData(walletDatesStrings, lds);
         wykresLiniowy.setData(ld);
-
-        /*
-        Wykres Liniowy
-         */
-
-        return view;
+        wykresLiniowy.invalidate();
     }
 
     @Override
     public void onDestroy() {
         fab.setVisibility(View.VISIBLE);
+        unbinder.unbind();
         super.onDestroy();
+    }
+
+    @OnClick(R.id.rightArrow)
+    public void setMonthRight() {
+        calendar.add(Calendar.MONTH, 1);
+        RefreshLineChart(getView());
+        TextView timeRange = (TextView) getView().findViewById(R.id.timeRange);
+        timeRange.setText(Parser.GetNameOfMonth(calendar.get(Calendar.MONTH)) + " " + String.valueOf(calendar.get(Calendar.YEAR)));
+    }
+
+    @OnClick(R.id.leftArrow)
+    public void setMonthLeft() {
+        calendar.add(Calendar.MONTH, -1);
+        RefreshLineChart(getView());
+        TextView timeRange = (TextView) getView().findViewById(R.id.timeRange);
+        timeRange.setText(Parser.GetNameOfMonth(calendar.get(Calendar.MONTH)) + " " + String.valueOf(calendar.get(Calendar.YEAR)));
     }
 }
