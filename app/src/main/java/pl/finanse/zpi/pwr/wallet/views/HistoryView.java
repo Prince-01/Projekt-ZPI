@@ -194,7 +194,6 @@ public class HistoryView extends Fragment implements View.OnClickListener {
         makeData(getActivity(), tFromDate, tToDate);
         timeRange.setText(Parser.GetNameOfMonth(arrowCalendar.get(Calendar.MONTH)) + " " +
                 arrowCalendar.get(Calendar.YEAR));
-        Toast.makeText(getActivity(), "W PRAWO", Toast.LENGTH_SHORT).show();
         updateBalance(balance);
     }
 
@@ -208,7 +207,6 @@ public class HistoryView extends Fragment implements View.OnClickListener {
         makeData(getActivity(), tFromDate, tToDate);
         timeRange.setText(Parser.GetNameOfMonth(arrowCalendar.get(Calendar.MONTH)) + " " +
                 arrowCalendar.get(Calendar.YEAR));
-        Toast.makeText(getActivity(), "W LEWO", Toast.LENGTH_SHORT).show();
         updateBalance(balance);
     }
 }
