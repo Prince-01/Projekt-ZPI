@@ -132,7 +132,10 @@ public class RaportPage extends Fragment {
         LineDataSet lds = new LineDataSet(lineEntries, "");
         LineData ld = new LineData(walletDatesStrings, lds);
         wykresLiniowy.setData(ld);
-
+        wykresLiniowy.getLegend().setEnabled(false);
+        ld.setValueTextColor(Color.WHITE);
+        lds.setColor(Color.WHITE);
+        wykresLiniowy.getXAxis().setTextColor(Color.WHITE);
 
         return view;
     }
