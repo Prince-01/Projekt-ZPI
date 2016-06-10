@@ -42,12 +42,12 @@
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/wykresLiniowy"
                 android:layout_width="match_parent"
-                android:layout_height="500dp" />
+                android:layout_height="268dp" />
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/wykresKolowy"
                 android:layout_width="match_parent"
-                android:layout_height="500dp" />
+                android:layout_height="268dp" />
 
         </LinearLayout>
     </ScrollView>
