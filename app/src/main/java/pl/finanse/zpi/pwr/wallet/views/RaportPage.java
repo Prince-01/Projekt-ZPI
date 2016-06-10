@@ -122,6 +122,7 @@ public class RaportPage extends Fragment {
         LineDataSet lds = new LineDataSet(lineEntries, " # of cells");
         LineData ld = new LineData(walletDatesStrings, lds);
         wykresLiniowy.setData(ld);
+        wykresLiniowy.siz
 
         /*
         Wykres Liniowy
