@@ -691,6 +691,9 @@ public class Database {
         }
         //wywolyane tylko raz, podczas tworzenia bazy danych
         private void CreateDataForFirstUse(SQLiteDatabase db){
+            db.execSQL("INSERT INTO Portfele ('Nazwa', 'Stan', 'Waluta') VALUES ('Moj portfel', 0, 'PLN');");
+            db.execSQL("INSERT INTO Portfele ('Nazwa', 'Stan', 'Waluta') VALUES ('Moja firma', 0, 'PLN');");
+
             //tutaj tworzenie kategorii wbudowanych
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Artykuły spożywcze',NULL); ");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Samochód',NULL); ");
@@ -699,6 +702,7 @@ public class Database {
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Jedzenie poza domem','Artykuły spożywcze');");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Transport',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Rozrywka',NULL);");
+            db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('AGD/RTV',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Odzież',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Osobiste',NULL);");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Dzieci',NULL);");
@@ -710,20 +714,33 @@ public class Database {
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Alkohol','Rozrywka');");
             db.execSQL("INSERT INTO Kategorie ('Nazwa','NazwaNadkategorii') VALUES ('Inne',NULL);");
 
-            db.execSQL("INSERT INTO Portfele ('Nazwa', 'Stan', 'Waluta') VALUES ('Moj portfel', 0, 'PLN');");
-            db.execSQL("INSERT INTO Portfele ('Nazwa', 'Stan', 'Waluta') VALUES ('Moja firma', 0, 'PLN');");
 
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wypłata', 'Przychody', 'Moj portfel', '2016-04-05', 20000, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wypłata', 'Przychody', 'Moj portfel', '2016-01-05', 9300.13, 1)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wypłata', 'Przychody', 'Moj portfel', '2016-02-05', 9300.13, 1)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wypłata', 'Przychody', 'Moj portfel', '2016-03-05', 9300.13, 1)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wypłata', 'Przychody', 'Moj portfel', '2016-04-05', 9300.13, 1)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wypłata', 'Przychody', 'Moj portfel', '2016-05-05', 9300.13, 1)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wypłata', 'Przychody', 'Moj portfel', '2016-06-05', 9300.13, 1)");
 
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Chleb', 'Artykuły spożywcze', 'Moj portfel', '2016-04-21', 200, 0)");
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Pies-karma', 'Zwierzęta', 'Moj portfel', '2016-03-12', 100, 0)");
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Ziemia', 'Dom', 'Moj portfel', '2016-04-12', 20000, 0)");
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Numizmaty', 'Inne', 'Moj portfel', '2016-04-21', 1500, 0)");
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Grenlandia 2190', 'Wakacje', 'Moj portfel', '2016-04-21', 15000, 0)");
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Cypr 2301', 'Wakacje', 'Moj portfel', '2016-04-21', 12000, 0)");
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wino', 'Alkohol', 'Moj portfel', '2016-04-21', 345, 0)");
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Piwo', 'Alkohol', 'Moj portfel', '2016-04-21', 56, 0)");
-            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wódka', 'Alkohol', 'Moj portfel', '2016-04-21', 178, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Biedronka', 'Artykuły spożywcze', 'Moj portfel', '2016-05-11', 137.21, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Żabka', 'Artykuły spożywcze', 'Moj portfel', '2016-05-17', 46.76, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Biedronka', 'Artykuły spożywcze', 'Moj portfel', '2016-05-23', 182.20, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Tecso', 'Artykuły spożywcze', 'Moj portfel', '2016-06-01', 359.43, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Chleb', 'Artykuły spożywcze', 'Moj portfel', '2016-06-08', 9.50, 0)");
+
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Paliwo', 'Samochód', 'Moj portfel', '2016-04-15', 109.50, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Paliwo', 'Samochód', 'Moj portfel', '2016-05-09', 158, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Paliwo', 'Samochód', 'Moj portfel', '2016-05-28', 132.22, 0)");
+
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Koncert', 'Rozrywka', 'Moj portfel', '2016-05-05', 250, 0)");
+
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Karma dla psa', 'Zwierzęta', 'Moj portfel', '2016-05-12', 36.87, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Lodówka', 'Dom', 'Moj portfel', '2016-05-12', 1245, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Numizmaty', 'Inne', 'Moj portfel', '2016-05-21', 1500, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Cypr', 'Wakacje', 'Moj portfel', '2016-06-03', 13999.99, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wino', 'Alkohol', 'Moj portfel', '2016-05-21', 20.33, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Piwo', 'Alkohol', 'Moj portfel', '2016-05-17', 13.66, 0)");
+            db.execSQL("INSERT INTO Pozycje ('Nazwa', 'KategorieNazwa', 'PortfeleNazwa', 'Data', 'Wartosc', 'CzyPrzychod') VALUES ('Wódka', 'Alkohol', 'Moj portfel', '2016-05-13', 45.55, 0)");
 
             //  db.execSQL("INSERT INTO Pozycje ('Nazwa', 'Wartosc', 'Data', 'Komentarz', 'CzyPrzychod','CzyUlubiona','CzyStale','KategorieNazwa','PortfeleNazwa','ListyZakupowIdListy') VALUES ('',12.5,'2015')");
         }
