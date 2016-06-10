@@ -84,7 +84,8 @@ public class StandingOperationView extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //todo remove standing operation
-                standingOperations.remove(op);
+                Database.RemoveStandingOperation(getActivity(), op);
+                // standingOperations.remove(op);
                 makeData();
             }
         });

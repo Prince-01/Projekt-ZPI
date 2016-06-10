@@ -295,7 +295,7 @@ public class Database {
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = null;
 
-        query = "SELECT IdPozycji, Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje WHERE PortfeleNazwa = ? AND Data >= ? AND Data <= ? ORDER BY Data DESC, IdPozycji DESC";
+        query = "SELECT IdPozycji, Nazwa, Wartosc, Data, CzyPrzychod, KategorieNazwa, PortfeleNazwa FROM Pozycje WHERE PortfeleNazwa = ? AND Data >= ? AND Data <= ? AND CzyStale = 0 ORDER BY Data DESC, IdPozycji DESC";
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         (new SimpleDateFormat("yyyy-MM-dd")).format(to);
@@ -511,6 +511,19 @@ public class Database {
             throw new RuntimeException("Blad podczas polaczenia z baza");
         String query = "DELETE FROM Pozycje WHERE IdPozycji= ?";
         String[] arr = {Integer.toString(operation.id)};
+        db.execSQL(query, arr);
+        Close();
+    }
+
+    /**
+     * usuwa zlecenie stałe z bazy danych
+     */
+    public static void RemoveStandingOperation(Context context, StandingOperation operation){
+        if(!Open(context))
+            throw new RuntimeException("Blad podczas polaczenia z baza");
+
+        String query = "DELETE FROM ZleceniaStale WHERE Nazwa = ?";
+        String[] arr = {operation.operationName};
         db.execSQL(query, arr);
         Close();
     }
