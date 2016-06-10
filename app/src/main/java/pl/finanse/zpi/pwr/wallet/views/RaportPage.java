@@ -183,6 +183,8 @@ public class RaportPage extends Fragment {
         ld.setValueTextColor(Color.WHITE);
         lds.setColor(Color.WHITE);
         wykresLiniowy.getXAxis().setTextColor(Color.WHITE);
+        wykresLiniowy.getAxisLeft().setEnabled(false);
+        wykresLiniowy.getAxisRight().setEnabled(false);
         wykresLiniowy.invalidate();
 
     }
