@@ -176,7 +176,6 @@ public class RaportPage extends Fragment {
         wykresLiniowy.getXAxis().setTextColor(Color.WHITE);
         wykresLiniowy.invalidate();
 
-        return view;
     }
 
     @Override
