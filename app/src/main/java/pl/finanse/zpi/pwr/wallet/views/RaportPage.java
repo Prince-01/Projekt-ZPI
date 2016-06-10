@@ -106,10 +106,14 @@ public class RaportPage extends Fragment {
         wykresKolowy.setData(pieData); // set data into chart
         wykresKolowy.setDescription("Description");  // set the description
         wykresKolowy.getData().setValueTextSize(13);
+        wykresKolowy.getData().setValueTextColor(Color.WHITE);
         wykresKolowy.getLegend().setTextSize(13);
         wykresKolowy.getLegend().setTextColor(Color.WHITE);
         wykresKolowy.setDrawSliceText(false);
         pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+
+
+        wykresKolowy.setHoleColor(Color.BLACK);
 
         Legend legend = wykresKolowy.getLegend();
         legend.setForm(Legend.LegendForm.SQUARE);
